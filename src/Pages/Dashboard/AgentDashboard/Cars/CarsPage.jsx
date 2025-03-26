@@ -65,13 +65,13 @@ const CarsPage = ({ update, setUpdate }) => {
 
       const filteredCar= cars.filter((car) => {
         const matchesSearch =
-        cars?.mode?.name?.toLowerCase().includes(searchText)
-        // employee?.user_name?.toLowerCase().includes(searchText) ||
-        // employee?.email?.toLowerCase().includes(searchText) ||
-        // employee?.address?.toLowerCase().includes(searchText) ||
-        // employee?.phone?.includes(searchText) ;
+        car?.mode?.name?.toLowerCase().includes(searchText)
+        // car?.user_name?.toLowerCase().includes(searchText) ||
+        // car?.email?.toLowerCase().includes(searchText) ||
+        // car?.address?.toLowerCase().includes(searchText) ||
+        // car?.phone?.includes(searchText) ;
 
-        // const departmentMatch = selectedDepartment ? employee.department?.name === selectedDepartment : true;
+        // const departmentMatch = selectedDepartment ? car.department?.name === selectedDepartment : true;
 
         return matchesSearch  ;
       });
@@ -87,7 +87,7 @@ const CarsPage = ({ update, setUpdate }) => {
         setCurrentPage(1); // Reset to first page when rows per page changes
       };
      
-      const headers = ['Name','Brand','Category',"Phone","Department","Address","Action"];
+      const headers = ['Name','Brand','Category',"Car Number","Action"];
 
   return (
     <div className="w-full pb-5 flex items-start justify-start overflow-x-scroll scrollSection">
@@ -148,14 +148,14 @@ const CarsPage = ({ update, setUpdate }) => {
                       </thead>
         
                      <tbody>
-                     {paginatedData.length === 0 ? (
+                     {cars.length === 0 ? (
                           <tr>
                           <td colSpan="4" className="text-center text-xl text-gray-500 py-4">
                             No Cars Found
                           </td>
                         </tr>
                       ) : (
-                        paginatedData.map((car, index) => ( // 👈 Use filteredleads
+                        cars.map((car, index) => ( // 👈 Use filteredleads
                           <tr
                             key={index}
                             className={`border-b ${index % 2 === 0 ? "bg-white" : "bg-gray-100"} transition hover:bg-gray-100`}
@@ -171,52 +171,22 @@ const CarsPage = ({ update, setUpdate }) => {
                                   )}
                                 </span>
                             </td> 
-                            <td className="text-center py-2 text-gray-600">
-                              <div className="flex justify-center">
-                                  <img src={employee.image_link}
-                                        className="rounded-md h-14 object-cover w-24"
-                                        alt="Logo"
-                                  />
-                              </div>
-                            </td>
-                            <td className="text-center py-2 text-gray-600 relative">
-                              <a
-                                href={`mailto:${employee?.email}`}
-                                className="truncate max-w-[120px] inline-block cursor-pointer group text-blue-500 hover:underline"
-                              >
-                                {employee?.email?.length > 15 ? employee?.email.slice(0, 15) + "..." : employee?.email || "-"}
-                                <span className="absolute bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-all left-1/2 transform -translate-x-1/2 mt-1">
-                                  {employee?.email}
-                                </span>
-                              </a>
-                            </td>
-                            <td className="text-center py-2 text-gray-600">
-                                {employee?.phone ? (
-                                  <div className="flex items-center justify-center gap-1">
-                                    <span>{employee.phone}</span>
-                                    <FaCopy
-                                      className="text-gray-500 hover:text-blue-500 cursor-pointer"
-                                      onClick={() => copyToClipboard(employee.phone)}
-                                    />
-                                  </div>
-                                ) : (
-                                  "-"
-                                )}
-                              {copiedPhone === employee.phone && <span className="text-green-500 text-xs ml-2">Copied!</span>}
-                            </td>
-                            {/* <td className="text-center py-2 text-gray-600">{employee?.department.name || "-"}</td>
-                            <td className="text-center py-2 text-gray-600">{employee?.address || "-"}</td>
+                            <td className="text-center py-2 text-gray-600">{car?.brand?.name || "-"}</td>
+                            <td className="text-center py-2 text-gray-600">{car?.category?.name || "-"}</td>
+                            <td className="text-center py-2 text-gray-600">{car?.car_number || "-"}</td>
+
+                          
                             <td className="text-center py-2">
                               <div className="flex items-center justify-center gap-1">
-                              <Link to={`edit/${employee.id}`}  ><FaEdit color='#4CAF50' size="24"/></Link>
+                              <Link to={`edit/${car.id}`}  ><FaEdit color='#4CAF50' size="24"/></Link>
                                 <button
                                   type="button"
-                                  onClick={() => handleOpenDelete(employee.id)}
+                                  onClick={() => handleOpenDelete(car.id)}
                                 >
                                   <MdDelete color='#D01025' size="24"/>
                                 </button>
                  
-                                {openDelete === employee.id && (
+                                {openDelete === car.id && (
                                   <Dialog
                                     open={true}
                                     onClose={handleCloseDelete}
@@ -232,12 +202,12 @@ const CarsPage = ({ update, setUpdate }) => {
                                             />
                                             <div className="flex items-center">
                                               <div className="mt-2 text-center">
-                                                You will delete employee {employee?.name || "-"}
+                                                You will delete car {car.model?.name || "-"}
                                               </div>
                                             </div>
                                           </div>
                                           <div className="px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                                            <button className="inline-flex w-full justify-center rounded-md bg-mainColor px-6 py-3 text-sm font-semibold text-white shadow-sm sm:ml-3 sm:w-auto" onClick={() => handleDelete(employee.id, employee?.name)}>
+                                            <button className="inline-flex w-full justify-center rounded-md bg-mainColor px-6 py-3 text-sm font-semibold text-white shadow-sm sm:ml-3 sm:w-auto" onClick={() => handleDelete(car.id, car?.name)}>
                                               Delete
                                             </button>
           
@@ -256,7 +226,7 @@ const CarsPage = ({ update, setUpdate }) => {
                                   </Dialog>
                                 )}
                               </div>
-                            </td> */}
+                            </td>
                           </tr>
                         ))
                       )}
