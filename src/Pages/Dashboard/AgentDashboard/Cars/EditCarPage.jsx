@@ -127,7 +127,7 @@ const EditCarPage = ({ update, setUpdate }) => {
    }
   };
 
-  if (loadingCarList) {
+  if (loadingCarList || loadingCarData) {
     return <StaticLoader />;
   }
 
