@@ -7,7 +7,7 @@ import LoginSuper from "./Pages/Authentication/LoginSuper";
 import { AdminHomePage,AgentHomePage } from "./Pages/AllPages";
 import SuperAdminLayout from "./Layouts/SuperAdminLayouts/SuperAdminLayout";
 import AgentLayout from "./Layouts/AgentLayouts/AgentLayout";
-import { AddBusesLayout, AddCarsLayout, BusesLayout, CarsLayout, EditBusesLayout, EditCarsLayout } from "./Layouts/AllLayouts";
+import { AddBusesLayout, AddCarsLayout, AddHiacesLayout, BusesLayout, CarsLayout, EditBusesLayout, EditCarsLayout, EditHiacesLayout, HiacesLayout } from "./Layouts/AllLayouts";
 
 const AppLayoutAdmin = () => (
   <>
@@ -96,6 +96,24 @@ export const router = createBrowserRouter([
                 {
                   path: 'edit/:busId',
                   element:<EditBusesLayout/>
+                }
+              ]          
+            },
+            {
+              path:'hiaces',
+              element: <Outlet/>,
+              children: [
+                {
+                  path: '',
+                  element: <HiacesLayout/>
+                },
+                {
+                  path: 'add',
+                  element:<AddHiacesLayout/>
+                },
+                {
+                  path: 'edit/:hiaceId',
+                  element:<EditHiacesLayout/>
                 }
               ]          
             }

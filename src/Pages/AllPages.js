@@ -12,3 +12,8 @@ export { default as EditCarPage } from './Dashboard/AgentDashboard/Cars/EditCarP
 export { default as BusesPage } from './Dashboard/AgentDashboard/Buses/BusesPage';
 export { default as AddBusesPage } from './Dashboard/AgentDashboard/Buses/AddBusesPage';
 export { default as EditBusesPage } from './Dashboard/AgentDashboard/Buses/EditBusesPage';
+
+//Hiaces
+export { default as HiacesPage } from './Dashboard/AgentDashboard/Hiaces/HiacesPage';
+export { default as AddHiacesPage } from './Dashboard/AgentDashboard/Hiaces/AddHiacesPage';
+export { default as EditHiacesPage } from './Dashboard/AgentDashboard/Hiaces/EditHiacesPage';

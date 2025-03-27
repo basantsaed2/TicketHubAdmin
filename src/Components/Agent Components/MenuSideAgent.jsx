@@ -9,6 +9,7 @@ import { IoCheckmarkDoneSharp } from "react-icons/io5";
 import { PiWalletFill } from "react-icons/pi";
 import { MdOutlineAttachMoney } from "react-icons/md";
 import { TbReportSearch } from "react-icons/tb";
+import { MdOutlineLocalShipping } from "react-icons/md";
 
 const MenuSideAgent = ({ isSidebarCollapsed, onLinkClick }) => {
   const auth = useAuth();
@@ -33,6 +34,14 @@ const MenuSideAgent = ({ isSidebarCollapsed, onLinkClick }) => {
   );
   const [isActiveBusesIcon, setIsActiveBusesIcon] = useState(
     stateLink.isActiveBusesIcon ?? false
+  );
+
+  /* Hiaces */
+  const [isActiveHiaces, setIsActiveHiaces] = useState(
+    stateLink.isActiveHiaces ?? false
+  );
+  const [isActiveHiacesIcon, setIsActiveHiacesIcon] = useState(
+    stateLink.isActiveHiacesIcon ?? false
   );
 
   /* Cars */
@@ -87,7 +96,7 @@ const MenuSideAgent = ({ isSidebarCollapsed, onLinkClick }) => {
 // Helper function to save the current active links state 
 const saveActiveLinksState = useCallback(() => {
   const activeLinks = { 
-    isActiveHome, isActiveHomeIcon,
+    isActiveHome, isActiveHomeIcon,isActiveHiaces,isActiveHiacesIcon,
     isActiveBuses, isActiveBusesIcon,isActiveCars,isActiveCarsIcon,
     isActiveBooking, isActiveBookingIcon,isActiveTrips,isActiveTripsIcon,
     isActiveWallet, isActiveWalletIcon,isActivePayment,isActivePaymentIcon,
@@ -95,7 +104,7 @@ const saveActiveLinksState = useCallback(() => {
   };
   auth.sidebar = JSON.stringify(activeLinks);
   }, [
-  isActiveHome, isActiveHomeIcon,
+  isActiveHome, isActiveHomeIcon,isActiveHiaces,isActiveHiacesIcon,
   isActiveBuses, isActiveBusesIcon,isActiveCars,isActiveCarsIcon,
   isActiveBooking, isActiveBookingIcon,isActiveTrips,isActiveTripsIcon,
   isActiveWallet, isActiveWalletIcon,isActivePayment,isActivePaymentIcon,
@@ -105,7 +114,7 @@ const saveActiveLinksState = useCallback(() => {
   useEffect(() => {
     saveActiveLinksState();
   }, [
-    isActiveHome, isActiveHomeIcon,
+    isActiveHome, isActiveHomeIcon,isActiveHiaces,isActiveHiacesIcon,
     isActiveBuses, isActiveBusesIcon,isActiveCars,isActiveCarsIcon,
     isActiveBooking, isActiveBookingIcon,isActiveTrips,isActiveTripsIcon,
     isActiveWallet, isActiveWalletIcon,isActivePayment,isActivePaymentIcon,
@@ -121,6 +130,9 @@ const saveActiveLinksState = useCallback(() => {
     //Buses
     setIsActiveBuses(false);
     setIsActiveBusesIcon(false);
+    //Hiaces
+    setIsActiveHiaces(false);
+    setIsActiveHiacesIcon(false);
     //Cars
     setIsActiveCars(false);
     setIsActiveCarsIcon(false);
@@ -170,7 +182,21 @@ const saveActiveLinksState = useCallback(() => {
     }
   }, [location]);
 
-   /* Cars */
+  /* Hices */
+  const handleClickHices= useCallback(() => {
+    handleStateLinks();
+    setIsActiveHiaces(true);
+    setIsActiveHiacesIcon(true);
+  }, []);
+  useEffect(() => {
+    const part = pathName.split("/");
+    const result = part.slice(0, 3).join("/");
+    if (result == "/dashboard_operator/hiaces") {
+      handleClickHices();
+    }
+  }, [location]);
+
+  /* Cars */
    const handleClickCar = useCallback(() => {
     handleStateLinks();
     setIsActiveCars(true);
@@ -310,6 +336,35 @@ const saveActiveLinksState = useCallback(() => {
               }`}
             >
               Buses
+            </span>
+          )}
+        </div>
+      </Link>
+
+      {/* Hices */}
+      <Link
+        to="hiaces"
+        onMouseMove={() => setIsActiveHiacesIcon(true)}
+        onMouseOut={() => setIsActiveHiacesIcon(false)}
+        onClick={() => {
+          handleClickHices();
+          onLinkClick();
+        }}
+        className={`
+            ${isActiveHiaces ? "active" : ""}
+           flex items-center ${
+             isSidebarCollapsed ? "justify-center" : "justify-start"
+           } hover:rounded-xl p-2 hover:bg-white hover:text-mainColor group transition-all duration-300`}
+      >
+        <div className="flex font-semibold text-xl items-center gap-x-2">
+        <MdOutlineLocalShipping className={`${isActiveHiaces|| isActiveHiacesIcon ? 'text-mainColor': 'text-white'}`}/>
+          {!isSidebarCollapsed && (
+            <span
+              className={`text-base transition-all duration-300 group-hover:text-mainColor font-TextFontRegular ml-2 ${
+                isActiveHiaces ? "text-mainColor" : "text-white"
+              }`}
+            >
+              Hiaces
             </span>
           )}
         </div>
