@@ -2,7 +2,7 @@ import React,{useState} from "react";
 import { EditCarPage} from "../../../Pages/AllPages";
 import TitlePage from '../../../Components/TitlePage'
 import { useNavigate } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
+import { MdArrowBackIosNew } from "react-icons/md";
 
 const EditCarsLayout = () => {
       const [update, setUpdate] = useState(false)
@@ -14,7 +14,7 @@ const EditCarsLayout = () => {
             onClick={() => navigate(-1)}
             className=" top-2 text-mainColor text-2xl cursor-pointer hover:text-blue-500 transition-all"
         >
-            <FaArrowLeft/>
+        <MdArrowBackIosNew/>
     </button>
     <TitlePage text={'Edit Car'} />
     

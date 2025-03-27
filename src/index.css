@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .custom__control {
-  /* border: 2px solid #0D47A1; Darker border */
+  /* border: 2px solid #1E1E2F; Darker border */
   background-color: #edf2f7; /* Light gray background */
   border-radius: 0.375rem; 
   color:black;

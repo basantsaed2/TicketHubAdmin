@@ -151,7 +151,7 @@ const saveActiveLinksState = useCallback(() => {
   useEffect(() => {
     const part = pathName.split("/");
     const result = part.slice(0, 2).join("/");
-    if (result == "/dashboard_admin") {
+    if (result == "/dashboard_operator") {
       handleClickHome();
     }
   }, [location]);
@@ -164,8 +164,8 @@ const saveActiveLinksState = useCallback(() => {
   }, []);
   useEffect(() => {
     const part = pathName.split("/");
-    const result = part.slice(0, 2).join("/");
-    if (result == "/bus") {
+    const result = part.slice(0, 3).join("/");
+    if (result == "/dashboard_operator/buses") {
       handleClickBuses();
     }
   }, [location]);
@@ -178,8 +178,8 @@ const saveActiveLinksState = useCallback(() => {
   }, []);
   useEffect(() => {
     const part = pathName.split("/");
-    const result = part.slice(0, 2).join("/");
-    if (result == "/cars") {
+    const result = part.slice(0, 3).join("/");
+    if (result == "/dashboard_operator/cars") {
       handleClickCar();
     }
   }, [location]);
@@ -259,7 +259,7 @@ const saveActiveLinksState = useCallback(() => {
     <div className="space-y-4 w-full h-full">
       {/* Home */}
       <Link
-        to="/dashboard_admin"
+        to="/dashboard_operator"
         onMouseMove={() => setIsActiveHomeIcon(true)}
         onMouseOut={() => setIsActiveHomeIcon(false)}
         onClick={() => {
@@ -288,7 +288,7 @@ const saveActiveLinksState = useCallback(() => {
 
       {/* Bus */}
       <Link
-        to="bus"
+        to="buses"
         onMouseMove={() => setIsActiveBusesIcon(true)}
         onMouseOut={() => setIsActiveBusesIcon(false)}
         onClick={() => {
