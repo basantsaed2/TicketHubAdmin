@@ -1,20 +1,22 @@
-import React, { useEffect, useState } from 'react'; 
+import React, { useEffect, useState } from 'react';  
 import StaticLoader from '../../../../Components/StaticLoader';
 import { useGet } from '../../../../Hooks/useGet';
 import { useDelete } from '../../../../Hooks/useDelete';
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
 import { MdDelete } from "react-icons/md";
-import { PiWarningCircle } from "react-icons/pi";
 import { FaEdit, FaSearch } from "react-icons/fa";
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../../../Context/Auth';
-
+import { useAuth } from '../../../../Context/Auth'
+import { PiWarningCircle } from "react-icons/pi";;
+import { 
+    FaClock, FaCalendarAlt, FaMoneyBillWave, FaMapMarkerAlt, FaBus, FaPlaneDeparture, FaPlaneArrival 
+  } from 'react-icons/fa';
 const TripsPage = ({ update, setUpdate }) => {
   const apiUrl = import.meta.env.VITE_API_BASE_URL;
-  const { refetch: refetchHiaces, loading: loadingHiaces, data: hiacesData } = useGet({ url: `${apiUrl}/agent/hiace` });
-  const { deleteData, loadingDelete, responseDelete } = useDelete();
-  const [hiaces, setHiaces] = useState([]);
-  const [filteredHiaces, setFilteredHiaces] = useState([]); // Store filtered results
+  const { refetch: refetchTrips, loading: loadingTrips, data: tripsData } = useGet({ url: `${apiUrl}/agent/trip` });
+  const { deleteData, loadingDelete } = useDelete();
+  const [trips, setTrips] = useState([]);
+  const [filteredTrips, setFilteredTrips] = useState([]); // filtered results
   const [openDelete, setOpenDelete] = useState(null);
   const [searchText, setSearchText] = useState("");
   const auth = useAuth();
@@ -23,85 +25,98 @@ const TripsPage = ({ update, setUpdate }) => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // For viewing Amenities modal
-  const [amenitiesModalOpen, setAmenitiesModalOpen] = useState(false);
-  const [selectedAmenities, setSelectedAmenities] = useState([]);
+  // For viewing Details modal
+  const [tripDetailsModalOpen, setTripDetailsModalOpen] = useState(false);
+  const [selectedTrip, setSelectedTrip] = useState(null);
 
   useEffect(() => {
-    refetchHiaces();
-  }, [refetchHiaces, update]);
+    refetchTrips();
+  }, [refetchTrips, update]);
 
   useEffect(() => {
-    if (hiacesData && hiacesData.hiaces) {
-      console.log("hiaces Data:", hiacesData);
-      setHiaces(hiacesData.hiaces);
+    if (tripsData && tripsData.trips) {
+      console.log("trips Data:", tripsData);
+      setTrips(tripsData.trips);
     }
-  }, [hiacesData]);
+  }, [tripsData]);
 
-  const handleOpenDelete = (item) => {
-    setOpenDelete(item);
+  const handleOpenDelete = (id) => {
+    setOpenDelete(id);
   };
+
   const handleCloseDelete = () => {
     setOpenDelete(null);
   };
 
-  // Delete bus
+  // Delete trip
   const handleDelete = async (id, name) => {
-    const success = await deleteData(`${apiUrl}/agent/hiace/delete/${id}`, `${name} Deleted Success.`);
+    const success = await deleteData(`${apiUrl}/agent/trip/delete/${id}`, `${name} Deleted Success.`);
     if (success) {
-      setHiaces(hiaces.filter((hiace) => hiace.id !== id));
+      setTrips(trips.filter((trip) => trip.id !== id));
     }
   };
 
-  // Filtering Logic: search filter (case-insensitive)
+  // Filtering Logic: search filter (case-insensitive) on selected key fields
   useEffect(() => {
-    let filtered = hiaces;
+    let filtered = trips;
     if (searchText) {
       const lowerSearch = searchText.toLowerCase();
-      filtered = filtered.filter(hiace => {
+      filtered = filtered.filter(trip => {
         return (
-          (hiace.bus_number && bus.bus_number.toString().toLowerCase().includes(lowerSearch)) ||
-          (hiace.status && bus.status.toLowerCase().includes(lowerSearch)) ||
-          (hiace.type && bus.type.toLowerCase().includes(lowerSearch)) ||
-          (hiace.bus_type && bus.bus_type.name && bus.bus_type.name.toLowerCase().includes(lowerSearch))
-          // Add any additional properties you want to search
+          (trip.trip_type && trip.trip_type.toLowerCase().includes(lowerSearch)) ||
+          (trip.bus_number && trip.bus_number.toLowerCase().includes(lowerSearch)) ||
+          (trip.status && trip.status.toLowerCase().includes(lowerSearch)) ||
+          (trip.from_city && trip.from_city.toLowerCase().includes(lowerSearch)) ||
+          (trip.to_city && trip.to_city.toLowerCase().includes(lowerSearch))
         );
       });
     }
-    setFilteredHiaces(filtered);
+    setFilteredTrips(filtered);
     setCurrentPage(1); // Reset to first page on filter change
-  }, [searchText, hiaces]);
+  }, [searchText, trips]);
 
   const handleSearch = (e) => {
     setSearchText(e.target.value);
   };
 
   // Pagination Logic
-  const totalPages = Math.ceil(filteredHiaces.length / rowsPerPage);
+  const totalPages = Math.ceil(filteredTrips.length / rowsPerPage);
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = filteredHiaces.slice(indexOfFirstRow, indexOfLastRow);
+  const currentRows = filteredTrips.slice(indexOfFirstRow, indexOfLastRow);
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(prev => prev + 1);
     }
   };
+
   const handlePrevPage = () => {
     if (currentPage > 1) {
       setCurrentPage(prev => prev - 1);
     }
   };
+
   const handleRowsChange = (e) => {
     setRowsPerPage(Number(e.target.value));
     setCurrentPage(1);
   };
 
-  const headers = ['Type', "Image", 'Capacity', 'Available Seats', "Number", "Amenities", "Status", "Action"];
+  // Update headers to show only important columns in the table.
+  const headers = [
+    'Trip Type',
+    'Image',
+    'Available Seats',
+    'Price',
+    'From - To',
+    'Status',
+    'Details',
+    'Action'
+  ];
 
   return (
-    <div className="w-full pb-5 flex items-start justify-start scrollSection">
-      {loadingHiaces || loadingDelete ? (
+    <div className="w-full pb-5 flex flex-col items-start justify-start scrollSection">
+      {loadingTrips || loadingDelete ? (
         <div className="w-full h-56 flex justify-center items-center">
           <StaticLoader />
         </div>
@@ -157,67 +172,78 @@ const TripsPage = ({ update, setUpdate }) => {
                 {currentRows.length === 0 ? (
                   <tr>
                     <td colSpan="8" className="text-center text-xl text-gray-500 py-4">
-                      No Hiaces Found
+                      No Trips Found
                     </td>
                   </tr>
                 ) : (
-                  currentRows.map((bus, index) => (
+                  currentRows.map((trip, index) => (
                     <tr
-                      key={index}
+                      key={trip.id}
                       className={`border-b ${index % 2 === 0 ? "bg-white" : "bg-gray-100"} transition hover:bg-gray-100`}
                     >
                       <td className="text-center py-2 text-gray-600">{index + 1}</td>
+                      {/* Trip Type */}
                       <td className="text-center py-2 text-gray-600">
-                        <span className="block max-w-[150px] truncate mx-auto cursor-pointer">
-                          {bus?.bus_type?.name || "-"}
+                        <span className="block truncate mx-auto">
+                          {trip.trip_type || "-"}
                         </span>
                       </td>
+                      {/* Image */}
                       <td className="text-center py-2">
-                        {bus?.image_link ? (
-                          <img src={bus.image_link} alt="bus" className="mx-auto h-10" />
+                        {trip.image_link ? (
+                          <img src={trip.image_link} alt="trip" className="mx-auto h-10" />
                         ) : (
                           "-"
                         )}
                       </td>
-                      <td className="text-center py-2 text-gray-600">{bus?.capacity || "-"}</td>
-                      <td className="text-center py-2 text-gray-600">{bus?.bus_type?.seats_count || 0}</td>
-                      <td className="text-center py-2 text-gray-600">{bus?.bus_number || "-"}</td>
-                      {/* Amenities Column */}
-                      <td className="text-center py-2">
-                        {bus?.aminity && bus.aminity.length > 0 ? (
-                          <button
-                            onClick={() => {
-                              setSelectedAmenities(bus.aminity);
-                              setAmenitiesModalOpen(true);
-                            }}
-                            className="text-blue-500 underline"
-                          >
-                            View Amenities
-                          </button>
-                        ) : (
-                          "-"
-                        )}
+                      {/* Available Seats */}
+                      <td className="text-center py-2 text-gray-600">
+                        {trip.avalible_seats || "-"}
                       </td>
+                      {/* Price */}
+                      <td className="text-center py-2 text-gray-600">
+                        {trip.price ? `${trip.price} ${trip.currency}` : "-"}
+                      </td>
+                      {/* From - To */}
+                      <td className="text-center py-2 text-gray-600">
+                        {trip.from_city && trip.to_city
+                          ? `${trip.from_city} → ${trip.to_city}`
+                          : "-"}
+                      </td>
+                      {/* Status */}
                       <td className="text-center py-2">
                         <span
                           className={`inline-block px-3 py-1 rounded-lg ${
-                            bus?.status === "active"
+                            trip.status === "active"
                               ? "bg-green-100 text-green-600"
                               : "bg-red-100 text-red-600"
                           }`}
                         >
-                          {bus?.status || "-"}
+                          {trip.status || "-"}
                         </span>
                       </td>
+                      {/* Details */}
+                      <td className="text-center py-2">
+                        <button
+                          onClick={() => {
+                            setSelectedTrip(trip);
+                            setTripDetailsModalOpen(true);
+                          }}
+                          className="btn btn-sm btn-outline"
+                        >
+                          View Details
+                        </button>
+                      </td>
+                      {/* Action */}
                       <td className="text-center py-2">
                         <div className="flex items-center justify-center gap-1">
-                          <Link to={`edit/${bus.id}`}>
+                          <Link to={`edit/${trip.id}`}>
                             <FaEdit color="#4CAF50" size="24" />
                           </Link>
-                          <button type="button" onClick={() => handleOpenDelete(bus.id)}>
+                          <button type="button" onClick={() => handleOpenDelete(trip.id)}>
                             <MdDelete color="#D01025" size="24" />
                           </button>
-                          {openDelete === bus.id && (
+                          {openDelete === trip.id && (
                             <Dialog open={true} onClose={handleCloseDelete} className="relative z-10">
                               <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
                               <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -227,14 +253,14 @@ const TripsPage = ({ update, setUpdate }) => {
                                       <PiWarningCircle color="#1E1E2F" size="60" />
                                       <div className="flex items-center">
                                         <div className="mt-2 text-center">
-                                          You will delete bus type {bus.bus_type?.name || "-"}
+                                          You will delete trip {trip.trip_type || "-"}
                                         </div>
                                       </div>
                                     </div>
                                     <div className="px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                                       <button
                                         className="inline-flex w-full justify-center rounded-md bg-mainColor px-6 py-3 text-sm font-semibold text-white shadow-sm sm:ml-3 sm:w-auto"
-                                        onClick={() => handleDelete(bus.id, bus.bus_type?.name)}
+                                        onClick={() => handleDelete(trip.id, trip.trip_type)}
                                       >
                                         Delete
                                       </button>
@@ -265,7 +291,9 @@ const TripsPage = ({ update, setUpdate }) => {
             <button
               onClick={handlePrevPage}
               disabled={currentPage === 1}
-              className={`px-4 py-2 rounded-lg ${currentPage === 1 ? "bg-gray-300" : "bg-blue-500 text-white"}`}
+              className={`px-4 py-2 rounded-lg ${
+                currentPage === 1 ? "bg-gray-300" : "bg-blue-500 text-white"
+              }`}
             >
               Previous
             </button>
@@ -275,45 +303,144 @@ const TripsPage = ({ update, setUpdate }) => {
             <button
               onClick={handleNextPage}
               disabled={currentPage === totalPages || totalPages === 0}
-              className={`px-4 py-2 rounded-lg ${currentPage === totalPages || totalPages === 0 ? "bg-gray-300" : "bg-blue-500 text-white"}`}
+              className={`px-4 py-2 rounded-lg ${
+                currentPage === totalPages || totalPages === 0 ? "bg-gray-300" : "bg-blue-500 text-white"
+              }`}
             >
               Next
             </button>
           </div>
         </div>
       )}
-     {amenitiesModalOpen && (
-        <Dialog open={amenitiesModalOpen} onClose={() => setAmenitiesModalOpen(false)} className="relative z-50">
-            <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-            <div className="w-full fixed inset-0 flex items-center justify-center p-4">
-            <DialogPanel className="bg-white rounded-xl p-8 w-full max-w-4xl shadow-lg">
+      {/* Trip Details Modal */}
+      {tripDetailsModalOpen && selectedTrip && (
+        <Dialog open={tripDetailsModalOpen} onClose={() => setTripDetailsModalOpen(false)} className="relative z-50">
+            <DialogBackdrop className="fixed inset-0 bg-black opacity-50" />
+            <div className="fixed inset-0 flex items-center justify-center p-4">
+            <DialogPanel className="bg-white rounded-xl p-6 w-full max-w-4xl shadow-lg">
+                {/* Header */}
                 <div className="flex justify-between items-center mb-6 border-b pb-2">
-                <h3 className="text-2xl font-bold text-gray-800">Amenities</h3>
+                <h3 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                    <FaBus className="text-mainColor" /> Trip Details
+                </h3>
                 <button
-                    onClick={() => setAmenitiesModalOpen(false)}
+                    onClick={() => setTripDetailsModalOpen(false)}
                     className="text-gray-600 hover:text-gray-800 focus:outline-none"
                 >
-                    <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {selectedAmenities.map((amenity) => (
-                    <div key={amenity.id} className="flex flex-col items-center p-4 border rounded-lg transition hover:shadow-md">
-                    <img src={amenity.icon_link} alt={amenity.name} className="w-12 h-12 mb-2" />
-                    <span className="text-lg font-medium text-gray-700">{amenity.name}</span>
+                {/* Content */}
+                <div className="space-y-6">
+                {/* Section: Schedule */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center gap-2">
+                    <FaPlaneArrival className="text-mainColor" />
+                    <span className="font-semibold text-gray-700">Arrival Time:</span>
+                    <span className="text-gray-600">{selectedTrip.arrival_time || "-"}</span>
                     </div>
-                ))}
+                    <div className="flex items-center gap-2">
+                    <FaPlaneDeparture className="text-mainColor" />
+                    <span className="font-semibold text-gray-700">Departure Time:</span>
+                    <span className="text-gray-600">{selectedTrip.deputre_time || "-"}</span>
+                    </div>
                 </div>
+                {/* Section: Origin & Destination */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex flex-col">
+                    <div className="flex items-center gap-2">
+                        <FaMapMarkerAlt className="text-mainColor" />
+                        <span className="font-semibold text-gray-700">From:</span>
+                    </div>
+                    <div className="ml-6 text-gray-600">
+                        {selectedTrip.from_city}, {selectedTrip.from_country}
+                        <br />
+                        <span className="text-sm">Zone: {selectedTrip.from_zone || "-"}</span>
+                    </div>
+                    </div>
+                    <div className="flex flex-col">
+                    <div className="flex items-center gap-2">
+                        <FaMapMarkerAlt className="text-mainColor" />
+                        <span className="font-semibold text-gray-700">To:</span>
+                    </div>
+                    <div className="ml-6 text-gray-600">
+                        {selectedTrip.to_city}, {selectedTrip.to_country}
+                        <br />
+                        <span className="text-sm">Zone: {selectedTrip.to_zone || "-"}</span>
+                    </div>
+                    </div>
+                </div>
+                {/* Section: Stations */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center gap-2">
+                    <FaMapMarkerAlt className="text-mainColor" />
+                    <span className="font-semibold text-gray-700">Pickup:</span>
+                    <span className="text-gray-600">{selectedTrip.pickup_station || "-"}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                    <FaMapMarkerAlt className="text-mainColor" />
+                    <span className="font-semibold text-gray-700">Dropoff:</span>
+                    <span className="text-gray-600">{selectedTrip.dropoff_station || "-"}</span>
+                    </div>
+                </div>
+                {/* Section: Bus Info */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center gap-2">
+                    <FaBus className="text-mainColor" />
+                    <span className="font-semibold text-gray-700">Capacity:</span>
+                    <span className="text-gray-600">{selectedTrip.bus_capacity || "-"}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                    <FaBus className="text-mainColor" />
+                    <span className="font-semibold text-gray-700">Available Seats:</span>
+                    <span className="text-gray-600">{selectedTrip.avalible_seats || "-"}</span>
+                    </div>
+                </div>
+                {/* Section: Pricing & Cancellation */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center gap-2">
+                    <FaMoneyBillWave className="text-mainColor" />
+                    <span className="font-semibold text-gray-700">Price:</span>
+                    <span className="text-gray-600">
+                        {selectedTrip.price ? `${selectedTrip.price} ${selectedTrip.currency}` : "-"}
+                    </span>
+                    </div>
+                    <div className="flex flex-col">
+                    <div className="flex items-center gap-2">
+                        <FaCalendarAlt className="text-mainColor" />
+                        <span className="font-semibold text-gray-700">Cancellation Date:</span>
+                    </div>
+                    <div className="ml-6 text-gray-600">
+                        {selectedTrip.cancelation_date || "-"}
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <FaMoneyBillWave className="text-mainColor" />
+                        <span className="font-semibold text-gray-700">Policy:</span>
+                        <span className="text-gray-600">
+                        {selectedTrip.cancelation_pay_amount} ({selectedTrip.cancelation_pay_value})
+                        </span>
+                    </div>
+                    </div>
+                </div>
+                {/* Section: Additional Info */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center gap-2">
+                    <span className="font-semibold text-gray-700">Trip Type:</span>
+                    <span className="text-gray-600">{selectedTrip.trip_type || "-"}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                    <span className="font-semibold text-gray-700">Type:</span>
+                    <span className="text-gray-600">{selectedTrip.type || "-"}</span>
+                    </div>
+                </div>
+                </div>
+                {/* Modal Footer */}
                 <div className="mt-8 flex justify-end">
-                <button onClick={() => setAmenitiesModalOpen(false)} className="btn btn-primary bg-mainColor text-white">
+                <button onClick={() => setTripDetailsModalOpen(false)} className="btn btn-primary bg-mainColor text-white">
                     Close
                 </button>
                 </div>
@@ -321,7 +448,6 @@ const TripsPage = ({ update, setUpdate }) => {
             </div>
         </Dialog>
         )}
-
     </div>
   );
 };

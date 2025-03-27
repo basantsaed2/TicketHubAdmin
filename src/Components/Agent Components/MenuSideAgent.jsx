@@ -232,8 +232,8 @@ const saveActiveLinksState = useCallback(() => {
   }, []);
   useEffect(() => {
     const part = pathName.split("/");
-    const result = part.slice(0, 2).join("/");
-    if (result == "/booking") {
+    const result = part.slice(0, 3).join("/");
+    if (result == "/dashboard_operator/booking") {
       handleClickBooking();
     }
   }, [location]);
@@ -246,8 +246,8 @@ const saveActiveLinksState = useCallback(() => {
   }, []);
   useEffect(() => {
     const part = pathName.split("/");
-    const result = part.slice(0, 2).join("/");
-    if (result == "/wallet") {
+    const result = part.slice(0, 3).join("/");
+    if (result == "/dashboard_operator/wallet") {
       handleClickWallet();
     }
   }, [location]);
@@ -260,8 +260,8 @@ const saveActiveLinksState = useCallback(() => {
   }, []);
   useEffect(() => {
     const part = pathName.split("/");
-    const result = part.slice(0, 2).join("/");
-    if (result == "/payment") {
+    const result = part.slice(0, 3).join("/");
+    if (result == "/dashboard_operator/payout") {
       handleClickPayment();
     }
   }, [location]);
@@ -430,7 +430,7 @@ const saveActiveLinksState = useCallback(() => {
 
       {/* Booking */}
       <Link
-        to="/booking"
+        to="booking"
         onMouseMove={() => setIsActiveBookingIcon(true)}
         onMouseOut={() => setIsActiveBookingIcon(false)}
         onClick={() => {
@@ -459,7 +459,7 @@ const saveActiveLinksState = useCallback(() => {
 
       {/* Wallet */}
       <Link
-        to="/wallet"
+        to="wallet"
         onMouseMove={() => setIsActiveWalletIcon(true)}
         onMouseOut={() => setIsActiveWalletIcon(false)}
         onClick={() => {
@@ -488,7 +488,7 @@ const saveActiveLinksState = useCallback(() => {
 
       {/* Payment */}
       <Link
-        to="/payments"
+        to="payout"
         onMouseMove={() => setIsActivePaymentIcon(true)}
         onMouseOut={() => setIsActivePaymentIcon(false)}
         onClick={() => {
@@ -509,7 +509,7 @@ const saveActiveLinksState = useCallback(() => {
                 isActivePayment ? "text-mainColor" : "text-white"
               }`}
             >
-              Payments
+              Payout
             </span>
           )}
         </div>

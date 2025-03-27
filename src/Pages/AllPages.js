@@ -22,3 +22,13 @@ export { default as EditHiacesPage } from './Dashboard/AgentDashboard/Hiaces/Edi
 export { default as TripsPage } from './Dashboard/AgentDashboard/Trips/TripsPage';
 export { default as AddTripsPage } from './Dashboard/AgentDashboard/Trips/AddTripsPage';
 export { default as EditTripsPage } from './Dashboard/AgentDashboard/Trips/EditTripsPage';
+
+//Booking
+export { default as BookingPage } from './Dashboard/AgentDashboard/Booking/BookingPage';
+
+//Payout
+export { default as PayoutPage } from './Dashboard/AgentDashboard/Payout/PayoutPage';
+
+//Wallet
+export { default as WalletPage } from './Dashboard/AgentDashboard/Wallet/WalletPage';
+

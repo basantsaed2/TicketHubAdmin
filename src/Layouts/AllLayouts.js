@@ -18,3 +18,15 @@ export {default as EditHiacesLayout} from './AgentLayouts/Hiaces/EditHiacesLayou
 export {default as TripsLayout} from './AgentLayouts/Trips/TripsLayout';
 export {default as AddTripsLayout} from './AgentLayouts/Trips/AddTripsLayout';
 export {default as EditTripsLayout} from './AgentLayouts/Trips/EditTripsLayout';
+
+//Booking
+export {default as BookingLayout} from './AgentLayouts/Booking/BookingLayout';4
+
+//Payout
+export {default as PayoutLayout} from './AgentLayouts/Payout/PayoutLayout';
+
+//Wallet
+export {default as WalletLayout} from './AgentLayouts/Wallet/WalletLayout';
+
+
+
