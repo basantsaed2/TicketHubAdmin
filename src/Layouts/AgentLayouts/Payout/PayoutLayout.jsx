@@ -10,8 +10,8 @@ const PayoutLayout = () => {
     <>
     <div className='flex justify-between items-center mb-2'>
     <TitlePage text={'Payout Table'} />
-    <Link to='add'>
-        <AddButton text="Request"/>
+    <Link to='payout_request'>
+        <AddButton Text="Request"/>
     </Link>
     </div>
       <PayoutPage update={update} setUpdate={setUpdate}/>

@@ -24,6 +24,7 @@ export {default as BookingLayout} from './AgentLayouts/Booking/BookingLayout';4
 
 //Payout
 export {default as PayoutLayout} from './AgentLayouts/Payout/PayoutLayout';
+export {default as PayoutRequestLayout} from './AgentLayouts/Payout/PayoutRequestLayout';
 
 //Wallet
 export {default as WalletLayout} from './AgentLayouts/Wallet/WalletLayout';

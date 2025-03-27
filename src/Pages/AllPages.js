@@ -3,6 +3,10 @@ export { default as AdminHomePage } from './Dashboard/SuperAdminDashboard/Home/A
 
 //Agent
 export { default as AgentHomePage } from './Dashboard/AgentDashboard/Home/AgentHomePage';
+
+//Profile
+export { default as AgentProfilePage } from './Dashboard/AgentDashboard/AgentProfile/AgentProfilePage';
+
 //Cars
 export { default as CarsPage } from './Dashboard/AgentDashboard/Cars/CarsPage';
 export { default as AddCarPage } from './Dashboard/AgentDashboard/Cars/AddCarPage';
@@ -28,6 +32,7 @@ export { default as BookingPage } from './Dashboard/AgentDashboard/Booking/Booki
 
 //Payout
 export { default as PayoutPage } from './Dashboard/AgentDashboard/Payout/PayoutPage';
+export { default as PayoutRequestPage } from './Dashboard/AgentDashboard/Payout/PayoutRequestPage';
 
 //Wallet
 export { default as WalletPage } from './Dashboard/AgentDashboard/Wallet/WalletPage';
