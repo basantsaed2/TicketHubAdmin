@@ -3,59 +3,58 @@ import StaticLoader from '../../../../Components/StaticLoader';
 import { useGet } from '../../../../Hooks/useGet';
 import { usePost } from '../../../../Hooks/usePostJson';
 import { useAuth } from '../../../../Context/Auth';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import { IoCloudUpload } from 'react-icons/io5';
 
 const EditHiacesPage = ({ update, setUpdate }) => {
-    const { busId } = useParams();
+    const { hiaceId } = useParams();
     const apiUrl = import.meta.env.VITE_API_BASE_URL;
-    const { refetch: refetchBusData, loading: loadingBusData, data: BusData } = useGet({ url:`${apiUrl}/agent/bus/item/${busId}` });
-    const { refetch: refetchBusList, loading: loadingBusList, data: busList } = useGet({ url: `${apiUrl}/agent/bus` });
-    const { postData, loadingPost, response } = usePost({ url: `${apiUrl}/agent/bus/update/${busId}` });
+    const { refetch: refetchHiaceData, loading: loadingHiaceData, data: HiaceData } = useGet({ url:`${apiUrl}/agent/hiace/item/${hiaceId}` });
+    const { refetch: refetchHiaceList, loading: loadingHiaceList, data: hiaceList } = useGet({ url: `${apiUrl}/agent/hiace` });
+    const { postData, loadingPost, response } = usePost({ url: `${apiUrl}/agent/hiace/update/${hiaceId}` });
     const auth = useAuth();
     const navigate = useNavigate();
     const ImageRef = useRef();
 
-    const [busType, setBusType] = useState([]);
-    const [busAminities, setBusAminities] = useState([]);
-    const [selectedBusType, setSelectedBusType] = useState('');
-    const [selectedBusAminities, setSelectedBusAminities] = useState('');
+    const [hiaceType, setHiaceType] = useState([]);
+    const [hiaceAminities, setHiaceAminities] = useState([]);
+    const [selectedHiaceType, setSelectedHiaceType] = useState('');
+    const [selectedHiaceAminities, setSelectedHiaceAminities] = useState('');
 
-    const [busNumber, setBusNumber] = useState('');
-    const [busCapacity, setBusCapacity] = useState('');
+    const [hiaceNumber, setHiaceNumber] = useState('');
+    const [hiaceCapacity, setHiaceCapacity] = useState('');
     const [status, setStatus] = useState('active'); // default status
     const [imageFile, setImageFile] = useState(null); // state for uploaded image
     const [imageName, setImageName] = useState(''); // state for uploaded image name
 
   useEffect(() => {
-    refetchBusList();
-  }, [refetchBusList, update]);
+    refetchHiaceList();
+    refetchHiaceData();
+  }, [refetchHiaceList,refetchHiaceData,update]);
 
   useEffect(() => {
-    if (busList && busList.bus_type && busList.aminities) {
-      console.log("busList:", busList);
-      setBusType(busList.bus_type);
-      setBusAminities(busList.aminities);
+    if (hiaceList && hiaceList.hiace_type && hiaceList.aminities) {
+      console.log("hiaceList:", hiaceList);
+      setHiaceType(hiaceList.hiace_type);
+      setHiaceAminities(hiaceList.aminities);
     }
-  }, [busList]);
+  }, [hiaceList]);
 
   useEffect(() => {
-    if (BusData && BusData.bus) {
-      const bus = BusData.bus;
-      setSelectedBusType(bus.bus_type_id || '');
-      setBusNumber(bus.bus_number || '');
-      setBusCapacity(bus.capacity || '');
-      setStatus(bus.status || 'active');
-      setImageFile(bus.image_link || '');
-      setImageName(bus.bus_image || '');
-      if (bus.aminity && Array.isArray(bus.aminity)) {
-        setSelectedBusAminities(bus.aminity.map(item => item.id));
+    if (HiaceData && HiaceData.hiace) {
+      const hiace = HiaceData.hiace;
+      setSelectedHiaceType(hiace.bus_type_id || '');
+      setHiaceNumber(hiace.bus_number || '');
+      setHiaceCapacity(hiace.capacity || '');
+      setStatus(hiace.status || 'active');
+      setImageFile(hiace.image_link || '');
+      setImageName(hiace.bus_image || '');
+      if (hiace.aminity && Array.isArray(hiace.aminity)) {
+        setSelectedHiaceAminities(hiace.aminity.map(item => item.id));
       }
     }
-    console.log('BusData', BusData);
-  }, [BusData]);
+    console.log('HiaceData', HiaceData);
+  }, [HiaceData]);
   
   useEffect(() => {
     if (!loadingPost && response) {
@@ -79,27 +78,27 @@ const EditHiacesPage = ({ update, setUpdate }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!selectedBusType) {
+    if (!selectedHiaceType) {
       auth.toastError('Please Select Type');
       return;
     }
 
     const data = {
         bus_image:imageFile,
-        bus_type_id: selectedBusType,
-        aminities: selectedBusAminities,
-        capacity: busCapacity,
-        bus_number: busNumber,
+        bus_type_id: selectedHiaceType,
+        aminities: selectedHiaceAminities,
+        capacity: hiaceCapacity,
+        bus_number: hiaceNumber,
         status: status,
     };
-      postData(data, 'Bus Updated Success');
+      postData(data, 'Hiace Added Success');
   };
 
   const handleReset = () => {
-    setSelectedBusType('');
-    setSelectedBusAminities('');
-    setBusNumber('');
-    setBusCapacity('');
+    setSelectedHiaceType('');
+    setSelectedHiaceAminities('');
+    setHiaceNumber('');
+    setHiaceCapacity('');
     setStatus('available');
     setImageFile(null);
     setImageName('');
@@ -109,7 +108,7 @@ const EditHiacesPage = ({ update, setUpdate }) => {
     }
   };
 
-  if (loadingBusList) {
+  if (loadingHiaceList || loadingHiaceData) {
     return <StaticLoader />;
   }
 
@@ -121,12 +120,12 @@ const EditHiacesPage = ({ update, setUpdate }) => {
         <div>
           <label className="block text-gray-700 mb-1">Type</label>
           <select
-            value={selectedBusType}
-            onChange={(e) => setSelectedBusType(e.target.value)}
+            value={selectedHiaceType}
+            onChange={(e) => setSelectedHiaceType(e.target.value)}
             className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
           >
             <option value="">Select Type</option>
-            {busType.map((type) => (
+            {hiaceType.map((type) => (
               <option key={type.id} value={type.id}>
                 {type.name}
               </option>
@@ -145,13 +144,13 @@ const EditHiacesPage = ({ update, setUpdate }) => {
             >
               <span
                 className={`truncate ${
-                  selectedBusAminities.length === 0 ? "text-gray-500" : ""
+                  selectedHiaceAminities.length === 0 ? "text-gray-500" : ""
                 }`}
               >
-                {selectedBusAminities.length > 0
-                  ? selectedBusAminities
+                {selectedHiaceAminities.length > 0
+                  ? selectedHiaceAminities
                       .map((id) => {
-                        const amenity = busAminities.find((a) => a.id === id);
+                        const amenity = hiaceAminities.find((a) => a.id === id);
                         return amenity ? amenity.name : "";
                       })
                       .join(", ")
@@ -172,20 +171,20 @@ const EditHiacesPage = ({ update, setUpdate }) => {
               tabIndex="0"
               className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-full max-h-60 overflow-y-auto"
             >
-              {busAminities.map((amenity) => (
+              {hiaceAminities.map((amenity) => (
                 <li key={amenity.id}>
                   <label className="cursor-pointer flex items-center gap-2">
                     <input
                       type="checkbox"
-                      checked={selectedBusAminities.includes(amenity.id)}
+                      checked={selectedHiaceAminities.includes(amenity.id)}
                       onChange={(e) => {
                         if (e.target.checked) {
-                          setSelectedBusAminities((prev) => [
+                          setSelectedHiaceAminities((prev) => [
                             ...prev,
                             amenity.id,
                           ]);
                         } else {
-                          setSelectedBusAminities((prev) =>
+                          setSelectedHiaceAminities((prev) =>
                             prev.filter((id) => id !== amenity.id)
                           );
                         }
@@ -202,27 +201,27 @@ const EditHiacesPage = ({ update, setUpdate }) => {
           </div>
         </div>
   
-        {/* Bus Capacity Input */}
+        {/* Hiace Capacity Input */}
         <div>
-          <label className="block text-gray-700 mb-1">Bus Capacity</label>
+          <label className="block text-gray-700 mb-1">Hiace Capacity</label>
           <input
             type="number"
-            value={busCapacity}
-            onChange={(e) => setBusCapacity(e.target.value)}
-            placeholder="Enter bus capacity"
+            value={hiaceCapacity}
+            onChange={(e) => setHiaceCapacity(e.target.value)}
+            placeholder="Enter Hiace capacity"
             min="1"
             className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
           />
         </div>
   
-        {/* Bus Number Input */}
+        {/* Hiace Number Input */}
         <div>
-          <label className="block text-gray-700 mb-1">Bus Number</label>
+          <label className="block text-gray-700 mb-1">Hiace Number</label>
           <input
             type="text"
-            value={busNumber}
-            onChange={(e) => setBusNumber(e.target.value)}
-            placeholder="Enter bus number"
+            value={hiaceNumber}
+            onChange={(e) => setHiaceNumber(e.target.value)}
+            placeholder="Enter Hiace number"
             className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
           />
         </div>
@@ -251,12 +250,12 @@ const EditHiacesPage = ({ update, setUpdate }) => {
           </label>
         </div>
       </div>
-         {/* Image Upload */}
-         <div>
+          {/* Image Upload */}
+          <div>
           {/* Hidden file input */}
           <div className='w-full md:w-2/6 flex items-center gap-3'>
               <div className='w-full flex flex-col gap-2'>
-                <label className="text-gray-700 ">Upload Bus Image</label>
+                <label className="text-gray-700 ">Upload Hiace Image</label>
                 <input
                   type="file"
                   ref={ImageRef}
@@ -278,11 +277,11 @@ const EditHiacesPage = ({ update, setUpdate }) => {
               </div>
           {imageFile &&
             (typeof imageFile === "string" ? (
-              <img src={imageFile} alt="Bus" className="mt-2 w-32 h-auto" />
+              <img src={imageFile} alt="Hiace" className="mt-2 w-32 h-auto" />
             ) : (
               <img
                 src={URL.createObjectURL(imageFile)}
-                alt="Bus"
+                alt="Hiace"
                 className="mt-2 w-32 h-auto"
               />
             ))}

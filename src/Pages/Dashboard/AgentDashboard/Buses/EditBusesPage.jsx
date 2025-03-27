@@ -109,7 +109,7 @@ const EditBusesPage = ({ update, setUpdate }) => {
     }
   };
 
-  if (loadingBusList) {
+  if (loadingBusList || loadingBusData) {
     return <StaticLoader />;
   }
 

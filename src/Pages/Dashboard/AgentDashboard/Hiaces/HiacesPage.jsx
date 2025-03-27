@@ -11,10 +11,10 @@ import { useAuth } from '../../../../Context/Auth';
 
 const HiacesPage = ({ update, setUpdate }) => {
   const apiUrl = import.meta.env.VITE_API_BASE_URL;
-  const { refetch: refetchBuses, loading: loadingBuses, data: busData } = useGet({ url: `${apiUrl}/agent/bus` });
+  const { refetch: refetchHiaces, loading: loadingHiaces, data: hiacesData } = useGet({ url: `${apiUrl}/agent/hiace` });
   const { deleteData, loadingDelete, responseDelete } = useDelete();
-  const [buses, setBuses] = useState([]);
-  const [filteredBuses, setFilteredBuses] = useState([]); // Store filtered results
+  const [hiaces, setHiaces] = useState([]);
+  const [filteredHiaces, setFilteredHiaces] = useState([]); // Store filtered results
   const [openDelete, setOpenDelete] = useState(null);
   const [searchText, setSearchText] = useState("");
   const auth = useAuth();
@@ -28,15 +28,15 @@ const HiacesPage = ({ update, setUpdate }) => {
   const [selectedAmenities, setSelectedAmenities] = useState([]);
 
   useEffect(() => {
-    refetchBuses();
-  }, [refetchBuses, update]);
+    refetchHiaces();
+  }, [refetchHiaces, update]);
 
   useEffect(() => {
-    if (busData && busData.buses) {
-      // console.log("bus Data:", busData);
-      setBuses(busData.buses);
+    if (hiacesData && hiacesData.hiaces) {
+      console.log("hiaces Data:", hiacesData);
+      setHiaces(hiacesData.hiaces);
     }
-  }, [busData]);
+  }, [hiacesData]);
 
   const handleOpenDelete = (item) => {
     setOpenDelete(item);
@@ -47,40 +47,40 @@ const HiacesPage = ({ update, setUpdate }) => {
 
   // Delete bus
   const handleDelete = async (id, name) => {
-    const success = await deleteData(`${apiUrl}/agent/bus/delete/${id}`, `${name} Deleted Success.`);
+    const success = await deleteData(`${apiUrl}/agent/hiace/delete/${id}`, `${name} Deleted Success.`);
     if (success) {
-      setBuses(buses.filter((bus) => bus.id !== id));
+      setHiaces(hiaces.filter((hiace) => hiace.id !== id));
     }
   };
 
   // Filtering Logic: search filter (case-insensitive)
   useEffect(() => {
-    let filtered = buses;
+    let filtered = hiaces;
     if (searchText) {
       const lowerSearch = searchText.toLowerCase();
-      filtered = filtered.filter(bus => {
+      filtered = filtered.filter(hiace => {
         return (
-          (bus.bus_number && bus.bus_number.toString().toLowerCase().includes(lowerSearch)) ||
-          (bus.status && bus.status.toLowerCase().includes(lowerSearch)) ||
-          (bus.type && bus.type.toLowerCase().includes(lowerSearch)) ||
-          (bus.bus_type && bus.bus_type.name && bus.bus_type.name.toLowerCase().includes(lowerSearch))
+          (hiace.bus_number && bus.bus_number.toString().toLowerCase().includes(lowerSearch)) ||
+          (hiace.status && bus.status.toLowerCase().includes(lowerSearch)) ||
+          (hiace.type && bus.type.toLowerCase().includes(lowerSearch)) ||
+          (hiace.bus_type && bus.bus_type.name && bus.bus_type.name.toLowerCase().includes(lowerSearch))
           // Add any additional properties you want to search
         );
       });
     }
-    setFilteredBuses(filtered);
+    setFilteredHiaces(filtered);
     setCurrentPage(1); // Reset to first page on filter change
-  }, [searchText, buses]);
+  }, [searchText, hiaces]);
 
   const handleSearch = (e) => {
     setSearchText(e.target.value);
   };
 
   // Pagination Logic
-  const totalPages = Math.ceil(filteredBuses.length / rowsPerPage);
+  const totalPages = Math.ceil(filteredHiaces.length / rowsPerPage);
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = filteredBuses.slice(indexOfFirstRow, indexOfLastRow);
+  const currentRows = filteredHiaces.slice(indexOfFirstRow, indexOfLastRow);
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
@@ -101,7 +101,7 @@ const HiacesPage = ({ update, setUpdate }) => {
 
   return (
     <div className="w-full pb-5 flex items-start justify-start scrollSection">
-      {loadingBuses || loadingDelete ? (
+      {loadingHiaces || loadingDelete ? (
         <div className="w-full h-56 flex justify-center items-center">
           <StaticLoader />
         </div>
@@ -157,7 +157,7 @@ const HiacesPage = ({ update, setUpdate }) => {
                 {currentRows.length === 0 ? (
                   <tr>
                     <td colSpan="8" className="text-center text-xl text-gray-500 py-4">
-                      No Buses Found
+                      No Hiaces Found
                     </td>
                   </tr>
                 ) : (
