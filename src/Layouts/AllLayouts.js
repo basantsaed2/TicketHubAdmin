@@ -13,3 +13,8 @@ export {default as EditBusesLayout} from './AgentLayouts/Buses/EditBusesLayout';
 export {default as HiacesLayout} from './AgentLayouts/Hiaces/HiacesLayout';
 export {default as AddHiacesLayout} from './AgentLayouts/Hiaces/AddHiacesLayout';
 export {default as EditHiacesLayout} from './AgentLayouts/Hiaces/EditHiacesLayout';
+
+//Trips
+export {default as TripsLayout} from './AgentLayouts/Trips/TripsLayout';
+export {default as AddTripsLayout} from './AgentLayouts/Trips/AddTripsLayout';
+export {default as EditTripsLayout} from './AgentLayouts/Trips/EditTripsLayout';

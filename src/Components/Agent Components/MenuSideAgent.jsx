@@ -218,8 +218,8 @@ const saveActiveLinksState = useCallback(() => {
   }, []);
   useEffect(() => {
     const part = pathName.split("/");
-    const result = part.slice(0, 2).join("/");
-    if (result == "/trips") {
+    const result = part.slice(0, 3).join("/");
+    if (result == "/dashboard_operator/trips") {
       handleClickTrips();
     }
   }, [location]);
@@ -401,7 +401,7 @@ const saveActiveLinksState = useCallback(() => {
 
       {/* Trips */}
       <Link
-        to="/trips"
+        to="trips"
         onMouseMove={() => setIsActiveTripsIcon(true)}
         onMouseOut={() => setIsActiveTripsIcon(false)}
         onClick={() => {

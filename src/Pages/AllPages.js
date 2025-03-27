@@ -17,3 +17,8 @@ export { default as EditBusesPage } from './Dashboard/AgentDashboard/Buses/EditB
 export { default as HiacesPage } from './Dashboard/AgentDashboard/Hiaces/HiacesPage';
 export { default as AddHiacesPage } from './Dashboard/AgentDashboard/Hiaces/AddHiacesPage';
 export { default as EditHiacesPage } from './Dashboard/AgentDashboard/Hiaces/EditHiacesPage';
+
+//Trips
+export { default as TripsPage } from './Dashboard/AgentDashboard/Trips/TripsPage';
+export { default as AddTripsPage } from './Dashboard/AgentDashboard/Trips/AddTripsPage';
+export { default as EditTripsPage } from './Dashboard/AgentDashboard/Trips/EditTripsPage';
