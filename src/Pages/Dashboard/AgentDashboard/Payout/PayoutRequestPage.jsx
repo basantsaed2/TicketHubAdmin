@@ -1,42 +1,57 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect } from "react";
 import { usePost } from "../../../../Hooks/usePostJson";
 import { useAuth } from "../../../../Context/Auth";
 import StaticLoader from "../../../../Components/StaticLoader";
+import { useGet } from '../../../../Hooks/useGet';
+import { useNavigate } from 'react-router-dom';
 
-const PayoutRequestPage = () => {
+const PayoutRequestPage = ({ update, setUpdate }) => {
   const apiUrl = import.meta.env.VITE_API_BASE_URL;
   const { postData, loadingPost, response } = usePost({ url: `${apiUrl}/agent/payout/request` });
+  const { refetch: refetchPayout, loading: loadingPayout, data: payoutData } =useGet({ url:`${apiUrl}/agent/payout` });
   const auth = useAuth();
-
-  // Sample currencies (update or fetch as needed)
-  const currencies = [
-    { id: "1", name: "Dollar" },
-    { id: "2", name: "Euro" },
-  ];
-
+  const [payoutsCurrancy, setPayoutsCurrancy] = useState([])
+  const [selectedCurrancy, setSelectedCurrancy] = useState('')
   const [amount, setAmount] = useState("");
-  const [currencyId, setCurrencyId] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+      refetchPayout();
+    }, [refetchPayout, update]);
+
+  useEffect(() => {
+      if (payoutData && payoutData.currency) {
+              // console.log("car Data:", carData);
+              setPayoutsCurrancy(payoutData.currency);
+      }
+  }, [payoutData]); 
+
+  useEffect(() => {
+      if (!loadingPost && response) {
+        navigate(-1); // Navigate back only when the response is successful
+      }
+    }, [loadingPost, response, navigate]);
 
   const handleReset = () => {
     setAmount('');
-    setCurrencyId('')
+    setSelectedCurrancy('')
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!amount || !currencyId) {
+    if (!amount || !selectedCurrancy) {
       auth.toastError("Please enter an amount and select a currency");
       return;
     }
     const data = {
-        currency_id: currencyId,
+        currency_id: selectedCurrancy,
         amount: amount,
     };
     await postData(data, "Payout request submitted successfully");
   };
 
   // Optionally show a loader if your post hook is loading
-  // if (loadingPost) return <StaticLoader />;
+  if (loadingPayout || loadingPost) return <StaticLoader />;
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-lg">
@@ -58,12 +73,12 @@ const PayoutRequestPage = () => {
           <div>
             <label className="block text-gray-700 mb-1">Currency</label>
             <select
-              value={currencyId}
-              onChange={(e) => setCurrencyId(e.target.value)}
+              value={selectedCurrancy}
+              onChange={(e) => setSelectedCurrancy(e.target.value)}
               className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
             >
               <option value="">Select Currency</option>
-              {currencies.map((currency) => (
+              {payoutsCurrancy.map((currency) => (
                 <option key={currency.id} value={currency.id}>
                   {currency.name}
                 </option>

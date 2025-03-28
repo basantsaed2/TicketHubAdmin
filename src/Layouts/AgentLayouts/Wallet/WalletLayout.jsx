@@ -10,9 +10,9 @@ const WalletLayout = () => {
     <>
     <div className='flex justify-between items-center mb-2'>
     <TitlePage text={'Wallet Table'} />
-    <Link to='add'>
+    {/* <Link to='add'>
         <AddButton />
-      </Link>
+      </Link> */}
     </div>
       <WalletPage update={update} setUpdate={setUpdate}/>
     </>

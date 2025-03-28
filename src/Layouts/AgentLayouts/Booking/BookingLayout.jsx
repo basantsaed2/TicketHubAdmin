@@ -10,9 +10,9 @@ const BookingLayout = () => {
     <>
     <div className='flex justify-between items-center mb-2'>
     <TitlePage text={'Booking Table'} />
-    <Link to='add'>
+    {/* <Link to='add'>
         <AddButton />
-      </Link>
+      </Link> */}
     </div>
       <BookingPage update={update} setUpdate={setUpdate}/>
     </>

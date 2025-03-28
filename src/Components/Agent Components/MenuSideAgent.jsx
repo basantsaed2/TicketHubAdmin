@@ -516,7 +516,7 @@ const saveActiveLinksState = useCallback(() => {
       </Link>
 
       {/* Reports */}
-      <Link
+      {/* <Link
         to="/reports"
         onMouseMove={() => setIsActiveReportsIcon(true)}
         onMouseOut={() => setIsActiveReportsIcon(false)}
@@ -542,7 +542,7 @@ const saveActiveLinksState = useCallback(() => {
             </span>
           )}
         </div>
-      </Link>
+      </Link> */}
 
   
     </div>

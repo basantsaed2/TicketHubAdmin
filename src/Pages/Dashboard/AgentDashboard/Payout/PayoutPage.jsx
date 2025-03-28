@@ -1,10 +1,6 @@
 import React, { useEffect,useState } from 'react';
 import StaticLoader from '../../../../Components/StaticLoader';
 import { useGet } from '../../../../Hooks/useGet';
-import { useDelete } from '../../../../Hooks/useDelete';
-import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
-import { MdDelete } from "react-icons/md";
-import { PiWarningCircle } from "react-icons/pi";
 import { FaEdit,FaSearch } from "react-icons/fa";
 import { Link} from 'react-router-dom';
 import { useAuth } from '../../../../Context/Auth';
@@ -14,8 +10,6 @@ const PayoutPage = ({ update, setUpdate }) => {
     const { refetch: refetchPayout, loading: loadingPayout, data: payoutData } =useGet({ url:`${apiUrl}/agent/payout` });
     const [payouts, setPayouts] = useState([])
     const [filteredPayout, setFilteredPayout] = useState([]); // Store filtered results
-    const {deleteData, loadingDelete, responseDelete} = useDelete();
-    const [openDelete, setOpenDelete] = useState(null);
     const [searchText, setSearchText] = useState("");
     const auth = useAuth()
 
@@ -34,41 +28,20 @@ const PayoutPage = ({ update, setUpdate }) => {
         }
     }, [payoutData]); 
   
-      const handleOpenDelete = (item) => {
-          setOpenDelete(item);
-      };
-      const handleCloseDelete = () => {
-          setOpenDelete(null);
-      };
-  
-      // Delete Language
-      const handleDelete = async (id, name) => {
-              const success = await deleteData(`${apiUrl}/agent/payout/delete/${id}`, `${name} Deleted Success.`);
-  
-              if (success) {
-                  // Update Discounts only if changeState succeeded
-                  setPayouts(
-                    payouts.filter((car) =>
-                      car.id !== id
-                          )
-                  );
-              }
-      };
-
-      useEffect(() => {
-        let filtered = payouts;
-        if (searchText) {
-          const lowerSearch = searchText.toLowerCase();
-          filtered = filtered.filter(payout => {
-            return (
-              (payout.currency?.name && payout.currency?.name.toLowerCase().includes(lowerSearch)) || 
-              (payout.amount && payout.amount.toLowerCase().includes(lowerSearch))
-            );
-          });
-        }
-        setFilteredPayout(filtered);
-        setCurrentPage(1); // Reset to first page on filter change
-      }, [searchText, payouts]);      
+    useEffect(() => {
+      let filtered = payouts;
+      if (searchText) {
+        const lowerSearch = searchText.toLowerCase();
+        filtered = filtered.filter(payout => {
+          return (
+            (payout.currency?.name && payout.currency.name.toLowerCase().includes(lowerSearch)) || 
+            (payout.amount && payout.amount.toString().includes(lowerSearch)) // Convert number to string
+          );
+        });
+      }
+      setFilteredPayout(filtered);
+      setCurrentPage(1); // Reset to first page on filter change
+    }, [searchText, payouts]);    
 
       // Handlers for filters
       const handleSearch = (e) => {
@@ -99,7 +72,7 @@ const PayoutPage = ({ update, setUpdate }) => {
 
   return (
     <div className="w-full pb-5 flex items-start justify-start scrollSection">
-        {loadingPayout || loadingDelete ? (
+        {loadingPayout ? (
           <div className="w-full h-56 flex justify-center items-center">
             <StaticLoader />
           </div>
@@ -180,51 +153,6 @@ const PayoutPage = ({ update, setUpdate }) => {
                           {payout?.status || "-"}
                         </span>
                       </td>
-                      {/* <td className="text-center py-2">
-                        <div className="flex items-center justify-center gap-1">
-                          <Link to={`edit/${car.id}`}>
-                            <FaEdit color="#4CAF50" size="24" />
-                          </Link>
-                          <button type="button" onClick={() => handleOpenDelete(car.id)}>
-                            <MdDelete color="#D01025" size="24" />
-                          </button>
-                          {openDelete === car.id && (
-                            <Dialog open={true} onClose={handleCloseDelete} className="relative z-10">
-                              <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-                              <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-                                <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                                  <DialogPanel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                                    <div className="flex flex-col items-center justify-center bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                                      <PiWarningCircle color="#1E1E2F" size="60" />
-                                      <div className="flex items-center">
-                                        <div className="mt-2 text-center">
-                                          You will delete car {car.model?.name || "-"}
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div className="px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                                      <button
-                                        className="inline-flex w-full justify-center rounded-md bg-mainColor px-6 py-3 text-sm font-semibold text-white shadow-sm sm:ml-3 sm:w-auto"
-                                        onClick={() => handleDelete(car.id, car.model?.name)}
-                                      >
-                                        Delete
-                                      </button>
-                                      <button
-                                        type="button"
-                                        data-autofocus
-                                        onClick={handleCloseDelete}
-                                        className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-6 py-3 text-sm font-medium text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:mt-0 sm:w-auto"
-                                      >
-                                        Cancel
-                                      </button>
-                                    </div>
-                                  </DialogPanel>
-                                </div>
-                              </div>
-                            </Dialog>
-                          )}
-                        </div>
-                      </td> */}
                     </tr>                    
                     ))
                   )}

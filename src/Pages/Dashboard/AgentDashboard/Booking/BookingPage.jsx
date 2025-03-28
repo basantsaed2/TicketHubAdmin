@@ -7,11 +7,13 @@ import { MdDelete } from "react-icons/md";
 import { FaEdit, FaSearch } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../../../Context/Auth';
+import {useChangeState} from '../../../../Hooks/useChangeState';
 
 const BookingPage = ({ update, setUpdate }) => {
   const apiUrl = import.meta.env.VITE_API_BASE_URL;
   const { refetch: refetchBooking, loading: loadingBooking, data: bookingData } = useGet({ url: `${apiUrl}/agent/bookings` });
   const { deleteData, loadingDelete } = useDelete();
+  const { changeState, loadingChange, responseChange } = useChangeState();
   const [searchText, setSearchText] = useState("");
   const auth = useAuth();
 
@@ -34,6 +36,20 @@ const BookingPage = ({ update, setUpdate }) => {
     if (activeTab === "canceled") return bookingData.canceled_booking || [];
     return [];
   }, [bookingData, activeTab]);
+
+   // Change coupon status 
+   const handleChangeStatus = async (id,status) => {
+    const response = await changeState(
+           `${apiUrl}/agent/bookings/status/${id}`,
+            `Booking Changed Status.`,
+            { status } // Pass status as an object if changeState expects an object
+    );
+    if (response) {
+      // Update booking data state after changing status
+      setUpdate(prev => !prev); // Trigger re-fetch of booking data
+    }
+
+    };
 
   // Filtering Logic: search filter (case-insensitive)
   const filteredBooking = useMemo(() => {
@@ -73,7 +89,7 @@ const BookingPage = ({ update, setUpdate }) => {
     setCurrentPage(1);
   };
 
-  const headers = ['Date', "Amount", "Status"];
+  const headers = ['Date', "Seat Count", "Status"];
 
   return (
     <div className="w-full pb-5 flex flex-col items-start justify-start scrollSection">
@@ -168,19 +184,35 @@ const BookingPage = ({ update, setUpdate }) => {
                       <td className="text-center py-2 text-gray-600">{index + 1}</td>
                       <td className="text-center py-2 text-gray-600">{booking?.date || "-"}</td>
                       <td className="text-center py-2 text-gray-600">
-                        {booking?.amount || 0} {booking?.currency?.name}
+                        {booking?.seats_count || 0}
                       </td>
-                      <td className="text-center py-2">
-                        <span
-                          className={`inline-block px-3 py-1 rounded-lg ${
-                            booking?.status === "available"
-                              ? "bg-green-100 text-green-600"
-                              : "bg-red-100 text-red-600"
-                          }`}
-                        >
-                          {booking?.status || "-"}
-                        </span>
-                      </td>
+                   <td className="text-center py-2">
+                    <div className="relative">
+                      <select
+                        value={booking?.status}
+                        onChange={(e) => handleChangeStatus(booking.id, e.target.value)}
+                        className={`px-3 py-2 border rounded-lg shadow-sm font-medium text-center 
+                                  focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all duration-200 
+                                  ${
+                                    booking?.status === "pending"
+                                      ? "bg-yellow-100 text-yellow-700 border-yellow-400"
+                                      : booking?.status === "confirmed"
+                                      ? "bg-green-100 text-green-700 border-green-400"
+                                      : "bg-red-100 text-red-700 border-red-400"
+                                  }`}
+                      >
+                        <option value="pending" className="text-yellow-700 bg-yellow-100">
+                          🟡 Pending
+                        </option>
+                        <option value="confirmed" className="text-green-700 bg-green-100">
+                          ✅ Confirmed
+                        </option>
+                        <option value="canceled" className="text-red-700 bg-red-100">
+                          ❌ Canceled
+                        </option>
+                      </select>
+                    </div>
+                  </td>
                     </tr>
                   ))
                 )}
