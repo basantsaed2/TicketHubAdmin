@@ -12,7 +12,6 @@ const AddTripsPage = ({ update, setUpdate }) => {
   const { postData, loadingPost, response } = usePost({ url: `${apiUrl}/agent/trip/add` });
   const auth = useAuth();
   const navigate = useNavigate();
-  const ImageRef = useRef();
 
   // Drop-down data (populated from tripList)
   const [countries, setCountries] = useState([]);
@@ -62,23 +61,20 @@ const AddTripsPage = ({ update, setUpdate }) => {
   const [cancelationDate, setCancelationDate] = useState('');
   // Overall trip status: using a switch (active/inactive)
   const [status, setStatus] = useState('active');
-  // Image upload
-  const [imageFile, setImageFile] = useState(null);
-  const [imageName, setImageName] = useState('');
 
   useEffect(() => {
     refetchTripList();
   }, [refetchTripList, update]);
 
   useEffect(() => {
-    if (tripList && tripList.countries && tripList.cities && tripList.stations && tripList.zones && tripList.buses && tripList.currencies) {
+    if (tripList && tripList.countries && tripList.cities && tripList.stations && tripList.zones && tripList.buses && tripList.currency) {
       console.log("tripList:", tripList);
       setCountries(tripList.countries);
       setCities(tripList.cities);
       setStations(tripList.stations);
       setZones(tripList.zones);
       setBuses(tripList.buses);
-      setCurrencies(tripList.currencies);
+      setCurrencies(tripList.currency);
     }
   }, [tripList]);
 
@@ -88,49 +84,35 @@ const AddTripsPage = ({ update, setUpdate }) => {
     }
   }, [loadingPost, response, navigate]);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImageFile(file);
-      setImageName(file.name);
-    }
-  };
-
-  const handleImageClick = (ref) => {
-    if (ref.current) {
-      ref.current.click();
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = {
       trip_name: tripName,
+      trip_type: tripType, // "hiace", "bus", "train"
       bus_id: busId,
       pickup_station_id: pickupStationId,
       dropoff_station_id: dropoffStationId,
-      city_id: cityId,
-      zone_id: zoneId,
-      deputre_time: deputreTime,
-      arrival_time: arrivalTime,
       avalible_seats: avalibleSeats,
       country_id: countryId,
+      city_id: cityId,
+      zone_id: zoneId,
       to_country_id: toCountryId,
       to_city_id: toCityId,
       to_zone_id: toZoneId,
       date: date,
-      price: price,
-      status: status, // "active" or "inactive"
+      deputre_time: deputreTime,
+      arrival_time: arrivalTime,
       max_book_date: maxBookDate,
       type: type, // "limited" or "unlimited"
       fixed_date: fixedDate,
+      price: price,
+      min_cost: minCost,
+      currency_id: currencyId,
       cancellation_policy: cancellationPolicy,
       cancelation_pay_amount: cancelationPayAmountFixed ? "fixed" : "percentage",
       cancelation_pay_value: cancelationPayValue,
-      min_cost: minCost,
-      trip_type: tripType, // "hiace", "bus", "train"
-      currency_id: currencyId,
       cancelation_date: cancelationDate,
+      status: status, // "active" or "inactive"
     };
 
     // Optionally, you could handle image file upload here if needed.
@@ -164,11 +146,6 @@ const AddTripsPage = ({ update, setUpdate }) => {
     setTripType('hiace');
     setCurrencyId('');
     setCancelationDate('');
-    setImageFile(null);
-    setImageName('');
-    if (ImageRef.current) {
-      ImageRef.current.value = '';
-    }
   };
 
   if (loadingTripList) {
@@ -200,18 +177,6 @@ const AddTripsPage = ({ update, setUpdate }) => {
                 className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
               >
                 {tripTypes.map((option) => (
-                  <option key={option.id} value={option.id}>{option.name}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-gray-700 mb-1">Type</label>
-              <select
-                value={type}
-                onChange={(e) => setType(e.target.value)}
-                className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
-              >
-                {typeOptions.map((option) => (
                   <option key={option.id} value={option.id}>{option.name}</option>
                 ))}
               </select>
@@ -361,7 +326,7 @@ const AddTripsPage = ({ update, setUpdate }) => {
           </div>
         </div>
 
-        {/* Section: Schedule */}
+       {/* Section: Schedule */}
         <div className="border p-4 rounded-lg">
           <h2 className="text-xl font-bold text-gray-800 mb-4">Schedule</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -370,6 +335,7 @@ const AddTripsPage = ({ update, setUpdate }) => {
               <input
                 type="date"
                 value={date}
+                min={new Date().toISOString().split("T")[0]}
                 onChange={(e) => setDate(e.target.value)}
                 className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
               />
@@ -397,15 +363,29 @@ const AddTripsPage = ({ update, setUpdate }) => {
               <input
                 type="date"
                 value={maxBookDate}
+                min={new Date().toISOString().split("T")[0]} 
                 onChange={(e) => setMaxBookDate(e.target.value)}
                 className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
               />
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-1">Type</label>
+              <select
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+                className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+              >
+                {typeOptions.map((option) => (
+                  <option key={option.id} value={option.id}>{option.name}</option>
+                ))}
+              </select>
             </div>
             <div>
               <label className="block text-gray-700 mb-1">Fixed Date</label>
               <input
                 type="date"
                 value={fixedDate}
+                min={new Date().toISOString().split("T")[0]} 
                 onChange={(e) => setFixedDate(e.target.value)}
                 className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
               />
@@ -451,12 +431,12 @@ const AddTripsPage = ({ update, setUpdate }) => {
               </select>
             </div>
             <div>
-              <label className="block text-gray-700 mb-1">Cancellation Policy</label>
+              <label className="block text-gray-700 mb-1">Cancelation Date</label>
               <input
-                type="text"
-                value={cancellationPolicy}
-                onChange={(e) => setCancellationPolicy(e.target.value)}
-                placeholder="Enter cancellation policy"
+                type="date"
+                min={new Date().toISOString().split("T")[0]} 
+                value={cancelationDate}
+                onChange={(e) => setCancelationDate(e.target.value)}
                 className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
               />
             </div>
@@ -482,21 +462,22 @@ const AddTripsPage = ({ update, setUpdate }) => {
                 className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
               />
             </div>
-            <div>
-              <label className="block text-gray-700 mb-1">Cancelation Date</label>
+          </div>
+          <div>
+              <label className="block text-gray-700 mt-3">Cancellation Policy</label>
               <input
-                type="date"
-                value={cancelationDate}
-                onChange={(e) => setCancelationDate(e.target.value)}
+                type="text"
+                value={cancellationPolicy}
+                onChange={(e) => setCancellationPolicy(e.target.value)}
+                placeholder="Enter cancellation policy"
                 className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
               />
             </div>
-          </div>
         </div>
 
         {/* Section: Overall Status & Image */}
         <div className="border p-4 rounded-lg">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Status & Image</h2>
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Status</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Status Switch */}
             <div className="flex items-center gap-3">
@@ -512,33 +493,6 @@ const AddTripsPage = ({ update, setUpdate }) => {
                   {status}
                 </span>
               </label>
-            </div>
-            {/* Image Upload */}
-            <div>
-              <label className="block text-gray-700 mb-1">Trip Image</label>
-              <input
-                type="file"
-                ref={ImageRef}
-                accept="image/*"
-                onChange={handleImageChange}
-                className="hidden"
-              />
-              <button
-                type="button"
-                onClick={() => handleImageClick(ImageRef)}
-                className="btn btn-outline w-full flex justify-between items-center rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
-              >
-                <span className="truncate block w-full mr-2">
-                  {imageName || "Upload Image"}
-                </span>
-                <IoCloudUpload className="text-xl" />
-              </button>
-              {imageFile &&
-                (typeof imageFile === "string" ? (
-                  <img src={imageFile} alt="Trip" className="mt-2 w-32 h-auto" />
-                ) : (
-                  <img src={URL.createObjectURL(imageFile)} alt="Trip" className="mt-2 w-32 h-auto" />
-                ))}
             </div>
           </div>
         </div>

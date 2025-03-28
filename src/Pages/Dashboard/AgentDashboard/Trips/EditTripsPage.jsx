@@ -7,304 +7,554 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { IoCloudUpload } from 'react-icons/io5';
 
 const EditTripsPage = ({ update, setUpdate }) => {
-    const { hiaceId } = useParams();
-    const apiUrl = import.meta.env.VITE_API_BASE_URL;
-    const { refetch: refetchHiaceData, loading: loadingHiaceData, data: HiaceData } = useGet({ url:`${apiUrl}/agent/hiace/item/${hiaceId}` });
-    const { refetch: refetchHiaceList, loading: loadingHiaceList, data: hiaceList } = useGet({ url: `${apiUrl}/agent/hiace` });
-    const { postData, loadingPost, response } = usePost({ url: `${apiUrl}/agent/hiace/update/${hiaceId}` });
-    const auth = useAuth();
-    const navigate = useNavigate();
-    const ImageRef = useRef();
+  const { tripId } = useParams();
+  const apiUrl = import.meta.env.VITE_API_BASE_URL;
+  const { refetch: refetchTripData, loading: loadingTripData, data: TripData } = useGet({ url:`${apiUrl}/agent/trip/item/${tripId}` });
+  const { refetch: refetchTripList, loading: loadingTripList, data: tripList } = useGet({ url: `${apiUrl}/agent/trip` });
+  const { postData, loadingPost, response } = usePost({ url: `${apiUrl}/agent/trip/update/${tripId}` });
+  const auth = useAuth();
+  const navigate = useNavigate();
 
-    const [hiaceType, setHiaceType] = useState([]);
-    const [hiaceAminities, setHiaceAminities] = useState([]);
-    const [selectedHiaceType, setSelectedHiaceType] = useState('');
-    const [selectedHiaceAminities, setSelectedHiaceAminities] = useState('');
+  // Drop-down data (populated from tripList)
+  const [countries, setCountries] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [stations, setStations] = useState([]);
+  const [zones, setZones] = useState([]);
+  const [buses, setBuses] = useState([]);
+  const [currencies, setCurrencies] = useState([]);
 
-    const [hiaceNumber, setHiaceNumber] = useState('');
-    const [hiaceCapacity, setHiaceCapacity] = useState('');
-    const [status, setStatus] = useState('active'); // default status
-    const [imageFile, setImageFile] = useState(null); // state for uploaded image
-    const [imageName, setImageName] = useState(''); // state for uploaded image name
+  // Hardcoded options for some selects/switches
+  const tripTypes = [
+    { id: "hiace", name: "Hiace" },
+    { id: "bus", name: "Bus" },
+    { id: "train", name: "Train" },
+  ];
+  const typeOptions = [
+    { id: "limited", name: "Limited" },
+    { id: "unlimited", name: "Unlimited" },
+  ];
+
+  // Form state – keys as required by endpoint
+  const [tripName, setTripName] = useState('');
+  const [busId, setBusId] = useState('');
+  const [pickupStationId, setPickupStationId] = useState('');
+  const [dropoffStationId, setDropoffStationId] = useState('');
+  const [cityId, setCityId] = useState('');
+  const [zoneId, setZoneId] = useState('');
+  const [deputreTime, setDeputreTime] = useState('');
+  const [arrivalTime, setArrivalTime] = useState('');
+  const [avalibleSeats, setAvalibleSeats] = useState('');
+  const [countryId, setCountryId] = useState('');
+  const [toCountryId, setToCountryId] = useState('');
+  const [toCityId, setToCityId] = useState('');
+  const [toZoneId, setToZoneId] = useState('');
+  const [date, setDate] = useState('');
+  const [price, setPrice] = useState('');
+  const [maxBookDate, setMaxBookDate] = useState('');
+  const [type, setType] = useState('unlimited'); // limited or unlimited
+  const [fixedDate, setFixedDate] = useState('');
+  const [cancellationPolicy, setCancellationPolicy] = useState('');
+  // Using a switch for cancelation_pay_amount: true means "fixed", false means "percentage"
+  const [cancelationPayAmountFixed, setCancelationPayAmountFixed] = useState(true);
+  const [cancelationPayValue, setCancelationPayValue] = useState('');
+  const [minCost, setMinCost] = useState('');
+  const [tripType, setTripType] = useState('hiace'); // hiace, bus, train
+  const [currencyId, setCurrencyId] = useState('');
+  const [cancelationDate, setCancelationDate] = useState('');
+  // Overall trip status: using a switch (active/inactive)
+  const [status, setStatus] = useState('active');
 
   useEffect(() => {
-    refetchHiaceList();
-    refetchHiaceData();
-  }, [refetchHiaceList,refetchHiaceData,update]);
+    refetchTripList();
+    refetchTripData();
+  }, [refetchTripList, update]);
 
   useEffect(() => {
-    if (hiaceList && hiaceList.hiace_type && hiaceList.aminities) {
-      console.log("hiaceList:", hiaceList);
-      setHiaceType(hiaceList.hiace_type);
-      setHiaceAminities(hiaceList.aminities);
+    if (tripList && tripList.countries && tripList.cities && tripList.stations && tripList.zones && tripList.buses && tripList.currency) {
+      console.log("tripList:", tripList);
+      setCountries(tripList.countries);
+      setCities(tripList.cities);
+      setStations(tripList.stations);
+      setZones(tripList.zones);
+      setBuses(tripList.buses);
+      setCurrencies(tripList.currency);
     }
-  }, [hiaceList]);
+  }, [tripList]);
 
   useEffect(() => {
-    if (HiaceData && HiaceData.hiace) {
-      const hiace = HiaceData.hiace;
-      setSelectedHiaceType(hiace.bus_type_id || '');
-      setHiaceNumber(hiace.bus_number || '');
-      setHiaceCapacity(hiace.capacity || '');
-      setStatus(hiace.status || 'active');
-      setImageFile(hiace.image_link || '');
-      setImageName(hiace.bus_image || '');
-      if (hiace.aminity && Array.isArray(hiace.aminity)) {
-        setSelectedHiaceAminities(hiace.aminity.map(item => item.id));
-      }
+    // Populate form fields when TripData is available
+    if (TripData?.trip) {
+      const trip = TripData.trip;
+      setTripName(trip.trip_name || '');
+      setTripType(trip.trip_type || 'hiace');
+      setBusId(trip.bus_id || '');
+      setPickupStationId(trip.pickup_station_id || '');
+      setDropoffStationId(trip.dropoff_station_id || '');
+      setAvalibleSeats(trip.avalible_seats || '');
+      setCountryId(trip.country_id || '');
+      setCityId(trip.city_id || '');
+      setZoneId(trip.zone_id || '');
+      setToCountryId(trip.to_country_id || '');
+      setToCityId(trip.to_city_id || '');
+      setToZoneId(trip.to_zone_id || '');
+      setDate(trip.date || '');
+      setDeputreTime(trip.deputre_time || '');
+      setArrivalTime(trip.arrival_time || '');
+      setMaxBookDate(trip.max_book_date || '');
+      setType(trip.type || 'unlimited');
+      setFixedDate(trip.fixed_date || '');
+      setPrice(trip.price || '');
+      setMinCost(trip.min_cost || '');
+      setCurrencyId(trip.currency_id || '');
+      setCancellationPolicy(trip.cancellation_policy || '');
+      setCancelationPayAmountFixed(trip.cancelation_pay_amount === 'fixed');
+      setCancelationPayValue(trip.cancelation_pay_value || '');
+      setCancelationDate(trip.cancelation_date || '');
+      setStatus(trip.status || 'active');
     }
-    console.log('HiaceData', HiaceData);
-  }, [HiaceData]);
-  
+  }, [TripData]);
+
   useEffect(() => {
     if (!loadingPost && response) {
-      navigate(-1); // Navigate back only when the response is successful
+      navigate(-1);
     }
   }, [loadingPost, response, navigate]);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-           setImageFile(file);
-           setImageName(file.name);
-    }
-    }; 
-    const handleImageClick = (ref) => {
-        if (ref.current) {
-            ref.current.click();
-        }
-    };
+  const formatTime = (time) => {
+    if (!time) return '';
+    const date = new Date(`1970-01-01T${time}`);
+    return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false });
+  };  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!selectedHiaceType) {
-      auth.toastError('Please Select Type');
-      return;
-    }
-
     const data = {
-        bus_image:imageFile,
-        bus_type_id: selectedHiaceType,
-        aminities: selectedHiaceAminities,
-        capacity: hiaceCapacity,
-        bus_number: hiaceNumber,
-        status: status,
+      trip_name: tripName,
+      trip_type: tripType, // "hiace", "bus", "train"
+      bus_id: busId,
+      pickup_station_id: pickupStationId,
+      dropoff_station_id: dropoffStationId,
+      avalible_seats: avalibleSeats,
+      country_id: countryId,
+      city_id: cityId,
+      zone_id: zoneId,
+      to_country_id: toCountryId,
+      to_city_id: toCityId,
+      to_zone_id: toZoneId,
+      date: date,
+      deputre_time: formatTime(deputreTime),
+      arrival_time: formatTime(arrivalTime),
+      max_book_date: maxBookDate,
+      type: type, // "limited" or "unlimited"
+      fixed_date: fixedDate,
+      price: price,
+      min_cost: minCost,
+      currency_id: currencyId,
+      cancellation_policy: cancellationPolicy,
+      cancelation_pay_amount: cancelationPayAmountFixed ? "fixed" : "percentage",
+      cancelation_pay_value: cancelationPayValue,
+      cancelation_date: cancelationDate,
+      status: status, // "active" or "inactive"
     };
-      postData(data, 'Hiace Added Success');
+
+    // Optionally, you could handle image file upload here if needed.
+    postData(data, 'Trip Updated Success');
   };
 
   const handleReset = () => {
-    setSelectedHiaceType('');
-    setSelectedHiaceAminities('');
-    setHiaceNumber('');
-    setHiaceCapacity('');
-    setStatus('available');
-    setImageFile(null);
-    setImageName('');
-     // Reset file input value manually using the ref
-    if (ImageRef.current) {
-        ImageRef.current.value = '';
-    }
+    setTripName('');
+    setBusId('');
+    setPickupStationId('');
+    setDropoffStationId('');
+    setCityId('');
+    setZoneId('');
+    setDeputreTime('');
+    setArrivalTime('');
+    setAvalibleSeats('');
+    setCountryId('');
+    setToCountryId('');
+    setToCityId('');
+    setToZoneId('');
+    setDate('');
+    setPrice('');
+    setStatus('active');
+    setMaxBookDate('');
+    setType('unlimited');
+    setFixedDate('');
+    setCancellationPolicy('');
+    setCancelationPayAmountFixed(true);
+    setCancelationPayValue('');
+    setMinCost('');
+    setTripType('hiace');
+    setCurrencyId('');
+    setCancelationDate('');
   };
 
-  if (loadingHiaceList || loadingHiaceData) {
+  if (loadingTripList || loadingTripData) {
     return <StaticLoader />;
   }
-
   return (
-    <div className="p-6 bg-white rounded-lg shadow-lg">
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {/* Type Select */}
-        <div>
-          <label className="block text-gray-700 mb-1">Type</label>
-          <select
-            value={selectedHiaceType}
-            onChange={(e) => setSelectedHiaceType(e.target.value)}
-            className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
-          >
-            <option value="">Select Type</option>
-            {hiaceType.map((type) => (
-              <option key={type.id} value={type.id}>
-                {type.name}
-              </option>
-            ))}
-          </select>
-        </div>
-  
-        {/* Amenities Multi-Select */}
-        <div className="w-full">
-          <label className="block text-gray-700 mb-1">Amenities</label>
-          <div className="dropdown w-full">
-            {/* Dropdown button with placeholder */}
-            <label
-              tabIndex="0"
-              className="btn btn-bordered w-full flex justify-between items-center rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
-            >
-              <span
-                className={`truncate ${
-                  selectedHiaceAminities.length === 0 ? "text-gray-500" : ""
-                }`}
+    <div className="p-6 bg-white rounded-lg shadow-lg space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Section: Trip Information */}
+        <div className="border p-4 rounded-lg">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Trip Information</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-gray-700 mb-1">Trip Name</label>
+              <input
+                type="text"
+                value={tripName}
+                onChange={(e) => setTripName(e.target.value)}
+                placeholder="Enter trip name"
+                className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-1">Trip Type</label>
+              <select
+                value={tripType}
+                onChange={(e) => setTripType(e.target.value)}
+                className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
               >
-                {selectedHiaceAminities.length > 0
-                  ? selectedHiaceAminities
-                      .map((id) => {
-                        const amenity = hiaceAminities.find((a) => a.id === id);
-                        return amenity ? amenity.name : "";
-                      })
-                      .join(", ")
-                  : "Select Amenities"}
-              </span>
-              <svg
-                className="fill-current"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-              >
-                <path d="M7 10l5 5 5-5z" />
-              </svg>
-            </label>
-            {/* Dropdown menu */}
-            <ul
-              tabIndex="0"
-              className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-full max-h-60 overflow-y-auto"
-            >
-              {hiaceAminities.map((amenity) => (
-                <li key={amenity.id}>
-                  <label className="cursor-pointer flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={selectedHiaceAminities.includes(amenity.id)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setSelectedHiaceAminities((prev) => [
-                            ...prev,
-                            amenity.id,
-                          ]);
-                        } else {
-                          setSelectedHiaceAminities((prev) =>
-                            prev.filter((id) => id !== amenity.id)
-                          );
-                        }
-                      }}
-                      // Set accent color to mainColor (ensure --mainColor is defined in your CSS)
-                      style={{ accentColor: "var(--mainColor)" }}
-                      className="checkbox"
-                    />
-                    <span>{amenity.name}</span>
-                  </label>
-                </li>
-              ))}
-            </ul>
+                {tripTypes.map((option) => (
+                  <option key={option.id} value={option.id}>{option.name}</option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
-  
-        {/* Hiace Capacity Input */}
-        <div>
-          <label className="block text-gray-700 mb-1">Hiace Capacity</label>
-          <input
-            type="number"
-            value={hiaceCapacity}
-            onChange={(e) => setHiaceCapacity(e.target.value)}
-            placeholder="Enter Hiace capacity"
-            min="1"
-            className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
-          />
-        </div>
-  
-        {/* Hiace Number Input */}
-        <div>
-          <label className="block text-gray-700 mb-1">Hiace Number</label>
-          <input
-            type="text"
-            value={hiaceNumber}
-            onChange={(e) => setHiaceNumber(e.target.value)}
-            placeholder="Enter Hiace number"
-            className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
-          />
-        </div>
-  
-        {/* Status Switch */}
-        <div className="flex items-center gap-3 mt-0 md:mt-5">
-          <label className="block text-gray-700">Status</label>
-          <label className="cursor-pointer label">
-            <input
-              type="checkbox"
-              checked={status === "active"}
-              onChange={(e) =>
-                setStatus(e.target.checked ? "active" : "inactive")
-              }
-              className={`toggle ${
-                status === "active" ? "bg-mainColor" : "toggle-primary"
-              }`}
-            />
-            <span
-              className={`label-text mr-3 ${
-                status === "active" ? "text-green-600" : "text-gray-700"
-              }`}
-            >
-              {status}
-            </span>
-          </label>
-        </div>
-      </div>
-          {/* Image Upload */}
-          <div>
-          {/* Hidden file input */}
-          <div className='w-full md:w-2/6 flex items-center gap-3'>
-              <div className='w-full flex flex-col gap-2'>
-                <label className="text-gray-700 ">Upload Hiace Image</label>
-                <input
-                  type="file"
-                  ref={ImageRef}
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="hidden"
-                />
-                {/* Custom upload button */}
-                <button
-                  type="button"
-                  onClick={() => handleImageClick(ImageRef)}
-                  className="btn btn-outline w-full flex justify-between items-center rounded-lg shadow-md border-mainColor hover:border-mainColor focus:border-mainColor"
-                >
-                  <span className="truncate block w-full mr-2">
-                    {imageName || "Upload Image"}
-                  </span>
-                  <IoCloudUpload className="text-xl" />
-                </button>
-              </div>
-          {imageFile &&
-            (typeof imageFile === "string" ? (
-              <img src={imageFile} alt="Hiace" className="mt-2 w-32 h-auto" />
-            ) : (
-              <img
-                src={URL.createObjectURL(imageFile)}
-                alt="Hiace"
-                className="mt-2 w-32 h-auto"
+
+        {/* Section: Bus & Station Information */}
+        <div className="border p-4 rounded-lg">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Bus & Station Information</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-gray-700 mb-1">Select Bus</label>
+              <select
+                value={busId}
+                onChange={(e) => setBusId(e.target.value)}
+                className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+              >
+                <option value="">Select Bus</option>
+                {buses.map((bus) => (
+                  <option key={bus.id} value={bus.id}>{bus.bus_number}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-1">Pickup Station</label>
+              <select
+                value={pickupStationId}
+                onChange={(e) => setPickupStationId(e.target.value)}
+                className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+              >
+                <option value="">Select Pickup Station</option>
+                {stations.map((station) => (
+                  <option key={station.id} value={station.id}>{station.name}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-1">Dropoff Station</label>
+              <select
+                value={dropoffStationId}
+                onChange={(e) => setDropoffStationId(e.target.value)}
+                className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+              >
+                <option value="">Select Dropoff Station</option>
+                {stations.map((station) => (
+                  <option key={station.id} value={station.id}>{station.name}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-1">Available Seats</label>
+              <input
+                type="number"
+                value={avalibleSeats}
+                onChange={(e) => setAvalibleSeats(e.target.value)}
+                placeholder="Enter available seats"
+                min="1"
+                className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
               />
-            ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Section: Location Information */}
+        <div className="border p-4 rounded-lg">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Location Information</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-gray-700 mb-1">Country (From)</label>
+              <select
+                value={countryId}
+                onChange={(e) => setCountryId(e.target.value)}
+                className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+              >
+                <option value="">Select Country</option>
+                {countries.map((country) => (
+                  <option key={country.id} value={country.id}>{country.name}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-1">City (From)</label>
+              <select
+                value={cityId}
+                onChange={(e) => setCityId(e.target.value)}
+                className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+              >
+                <option value="">Select City</option>
+                {cities.map((city) => (
+                  <option key={city.id} value={city.id}>{city.name}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-1">Zone (From)</label>
+              <select
+                value={zoneId}
+                onChange={(e) => setZoneId(e.target.value)}
+                className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+              >
+                <option value="">Select Zone</option>
+                {zones.map((zone) => (
+                  <option key={zone.id} value={zone.id}>{zone.name}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-1">To Country</label>
+              <select
+                value={toCountryId}
+                onChange={(e) => setToCountryId(e.target.value)}
+                className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+              >
+                <option value="">Select To Country</option>
+                {countries.map((country) => (
+                  <option key={country.id} value={country.id}>{country.name}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-1">To City</label>
+              <select
+                value={toCityId}
+                onChange={(e) => setToCityId(e.target.value)}
+                className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+              >
+                <option value="">Select To City</option>
+                {cities.map((city) => (
+                  <option key={city.id} value={city.id}>{city.name}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-1">To Zone</label>
+              <select
+                value={toZoneId}
+                onChange={(e) => setToZoneId(e.target.value)}
+                className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+              >
+                <option value="">Select To Zone</option>
+                {zones.map((zone) => (
+                  <option key={zone.id} value={zone.id}>{zone.name}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+
+       {/* Section: Schedule */}
+        <div className="border p-4 rounded-lg">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Schedule</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-gray-700 mb-1">Date</label>
+              <input
+                type="date"
+                value={date}
+                min={new Date().toISOString().split("T")[0]}
+                onChange={(e) => setDate(e.target.value)}
+                className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-1">Departure Time</label>
+              <input
+                type="time"
+                value={deputreTime}
+                onChange={(e) => setDeputreTime(e.target.value)}
+                className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-1">Arrival Time</label>
+              <input
+                type="time"
+                value={arrivalTime}
+                onChange={(e) => setArrivalTime(e.target.value)}
+                className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-1">Max Book Date</label>
+              <input
+                type="date"
+                value={maxBookDate}
+                min={new Date().toISOString().split("T")[0]} 
+                onChange={(e) => setMaxBookDate(e.target.value)}
+                className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-1">Type</label>
+              <select
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+                className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+              >
+                {typeOptions.map((option) => (
+                  <option key={option.id} value={option.id}>{option.name}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-1">Fixed Date</label>
+              <input
+                type="date"
+                value={fixedDate}
+                min={new Date().toISOString().split("T")[0]} 
+                onChange={(e) => setFixedDate(e.target.value)}
+                className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Section: Pricing & Cancellation */}
+        <div className="border p-4 rounded-lg">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Pricing & Cancellation</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-gray-700 mb-1">Price</label>
+              <input
+                type="number"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                placeholder="Enter price"
+                className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-1">Minimum Cost</label>
+              <input
+                type="number"
+                value={minCost}
+                onChange={(e) => setMinCost(e.target.value)}
+                placeholder="Enter minimum cost"
+                className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-1">Currency</label>
+              <select
+                value={currencyId}
+                onChange={(e) => setCurrencyId(e.target.value)}
+                className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+              >
+                <option value="">Select Currency</option>
+                {currencies.map((currency) => (
+                  <option key={currency.id} value={currency.id}>{currency.name}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-1">Cancelation Date</label>
+              <input
+                type="date"
+                min={new Date().toISOString().split("T")[0]} 
+                value={cancelationDate}
+                onChange={(e) => setCancelationDate(e.target.value)}
+                className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="block text-gray-700">Cancelation Pay Amount</label>
+              <label className="cursor-pointer flex items-center">
+                <span className="mr-2">{cancelationPayAmountFixed ? "Fixed" : "Percentage"}</span>
+                <input
+                  type="checkbox"
+                  checked={cancelationPayAmountFixed}
+                  onChange={(e) => setCancelationPayAmountFixed(e.target.checked)}
+                  className="toggle toggle-primary"
+                />
+              </label>
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-1">Cancelation Pay Value</label>
+              <input
+                type="number"
+                value={cancelationPayValue}
+                onChange={(e) => setCancelationPayValue(e.target.value)}
+                placeholder="Enter cancelation pay value"
+                className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+              />
+            </div>
+          </div>
+          <div>
+              <label className="block text-gray-700 mt-3">Cancellation Policy</label>
+              <input
+                type="text"
+                value={cancellationPolicy}
+                onChange={(e) => setCancellationPolicy(e.target.value)}
+                placeholder="Enter cancellation policy"
+                className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+              />
             </div>
         </div>
-  
-      {/* Action Buttons */}
-      <div className="flex justify-end space-x-2">
-        <button
-          type="reset"
-          onClick={handleReset}
-          className="text-white btn btn-md bg-mainColor hover:bg-mainColor/90 border-none focus:outline-none focus:ring-1 focus:ring-mainColor"
-        >
-          Reset
-        </button>
-        <button
-          type="submit"
-          className="text-white btn btn-md bg-mainColor hover:bg-mainColor/90 border-none focus:outline-none focus:ring-1 focus:ring-mainColor"
-        >
-          Submit
-        </button>
-      </div>
-    </form>
+
+        {/* Section: Overall Status & Image */}
+        <div className="border p-4 rounded-lg">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Status</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Status Switch */}
+            <div className="flex items-center gap-3">
+              <label className="block text-gray-700">Status</label>
+              <label className="cursor-pointer label">
+                <input
+                  type="checkbox"
+                  checked={status === "active"}
+                  onChange={(e) => setStatus(e.target.checked ? "active" : "inactive")}
+                  className={`toggle ${status === "active" ? "bg-mainColor" : "toggle-primary"}`}
+                />
+                <span className={`label-text ml-2 ${status === "active" ? "text-green-600" : "text-gray-700"}`}>
+                  {status}
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex justify-end space-x-2">
+          <button
+            type="reset"
+            onClick={handleReset}
+            className="text-white btn btn-md bg-mainColor hover:bg-mainColor/90 border-none focus:outline-none focus:ring-1 focus:ring-mainColor"
+          >
+            Reset
+          </button>
+          <button
+            type="submit"
+            className="text-white btn btn-md bg-mainColor hover:bg-mainColor/90 border-none focus:outline-none focus:ring-1 focus:ring-mainColor"
+          >
+            Submit
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

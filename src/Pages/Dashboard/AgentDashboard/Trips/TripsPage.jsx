@@ -104,8 +104,9 @@ const TripsPage = ({ update, setUpdate }) => {
 
   // Update headers to show only important columns in the table.
   const headers = [
+    'Trip Name',
     'Trip Type',
-    'Image',
+    'Date',
     'Available Seats',
     'Price',
     'From - To',
@@ -182,19 +183,23 @@ const TripsPage = ({ update, setUpdate }) => {
                       className={`border-b ${index % 2 === 0 ? "bg-white" : "bg-gray-100"} transition hover:bg-gray-100`}
                     >
                       <td className="text-center py-2 text-gray-600">{index + 1}</td>
+                       {/* Trip Name */}
+                       <td className="text-center py-2 text-gray-600">
+                        <span className="block truncate mx-auto">
+                          {trip.trip_name || "-"}
+                        </span>
+                      </td>
                       {/* Trip Type */}
                       <td className="text-center py-2 text-gray-600">
                         <span className="block truncate mx-auto">
                           {trip.trip_type || "-"}
                         </span>
                       </td>
-                      {/* Image */}
-                      <td className="text-center py-2">
-                        {trip.image_link ? (
-                          <img src={trip.image_link} alt="trip" className="mx-auto h-10" />
-                        ) : (
-                          "-"
-                        )}
+                      {/* Trip Date */}
+                      <td className="text-center py-2 text-gray-600">
+                        <span className="block truncate mx-auto">
+                          {trip.date || "-"}
+                        </span>
                       </td>
                       {/* Available Seats */}
                       <td className="text-center py-2 text-gray-600">
@@ -312,142 +317,150 @@ const TripsPage = ({ update, setUpdate }) => {
           </div>
         </div>
       )}
-      {/* Trip Details Modal */}
       {tripDetailsModalOpen && selectedTrip && (
-        <Dialog open={tripDetailsModalOpen} onClose={() => setTripDetailsModalOpen(false)} className="relative z-50">
-            <DialogBackdrop className="fixed inset-0 bg-black opacity-50" />
-            <div className="fixed inset-0 flex items-center justify-center p-4">
-            <DialogPanel className="bg-white rounded-xl p-6 w-full max-w-4xl shadow-lg">
-                {/* Header */}
-                <div className="flex justify-between items-center mb-6 border-b pb-2">
+        <Dialog
+          open={tripDetailsModalOpen}
+          onClose={() => setTripDetailsModalOpen(false)}
+          className="relative z-50"
+        >
+          <DialogBackdrop className="fixed inset-0 bg-black opacity-50" />
+          <div className="fixed inset-0 flex items-center justify-center p-4">
+            <DialogPanel className="bg-white rounded-xl p-6 w-full max-w-3xl shadow-lg max-h-[90vh] overflow-y-auto">
+              {/* Header */}
+              <div className="flex justify-between items-center mb-6 border-b pb-2">
                 <h3 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                    <FaBus className="text-mainColor" /> Trip Details
+                  <FaBus className="text-mainColor" /> Trip Details
                 </h3>
                 <button
-                    onClick={() => setTripDetailsModalOpen(false)}
-                    className="text-gray-600 hover:text-gray-800 focus:outline-none"
+                  onClick={() => setTripDetailsModalOpen(false)}
+                  className="text-gray-600 hover:text-gray-800 focus:outline-none"
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                        d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
                 </button>
-                </div>
-                {/* Content */}
-                <div className="space-y-6">
+              </div>
+              {/* Content */}
+              <div className="space-y-6">
                 {/* Section: Schedule */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2">
                     <FaPlaneArrival className="text-mainColor" />
                     <span className="font-semibold text-gray-700">Arrival Time:</span>
                     <span className="text-gray-600">{selectedTrip.arrival_time || "-"}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
+                  </div>
+                  <div className="flex items-center gap-2">
                     <FaPlaneDeparture className="text-mainColor" />
                     <span className="font-semibold text-gray-700">Departure Time:</span>
                     <span className="text-gray-600">{selectedTrip.deputre_time || "-"}</span>
-                    </div>
+                  </div>
                 </div>
                 {/* Section: Origin & Destination */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex flex-col">
+                  <div className="flex flex-col">
                     <div className="flex items-center gap-2">
-                        <FaMapMarkerAlt className="text-mainColor" />
-                        <span className="font-semibold text-gray-700">From:</span>
+                      <FaMapMarkerAlt className="text-mainColor" />
+                      <span className="font-semibold text-gray-700">From:</span>
                     </div>
                     <div className="ml-6 text-gray-600">
-                        {selectedTrip.from_city}, {selectedTrip.from_country}
-                        <br />
-                        <span className="text-sm">Zone: {selectedTrip.from_zone || "-"}</span>
+                      {selectedTrip.from_city}, {selectedTrip.from_country}
+                      <br />
+                      <span className="text-sm">Zone: {selectedTrip.from_zone || "-"}</span>
                     </div>
-                    </div>
-                    <div className="flex flex-col">
+                  </div>
+                  <div className="flex flex-col">
                     <div className="flex items-center gap-2">
-                        <FaMapMarkerAlt className="text-mainColor" />
-                        <span className="font-semibold text-gray-700">To:</span>
+                      <FaMapMarkerAlt className="text-mainColor" />
+                      <span className="font-semibold text-gray-700">To:</span>
                     </div>
                     <div className="ml-6 text-gray-600">
-                        {selectedTrip.to_city}, {selectedTrip.to_country}
-                        <br />
-                        <span className="text-sm">Zone: {selectedTrip.to_zone || "-"}</span>
+                      {selectedTrip.to_city}, {selectedTrip.to_country}
+                      <br />
+                      <span className="text-sm">Zone: {selectedTrip.to_zone || "-"}</span>
                     </div>
-                    </div>
+                  </div>
                 </div>
                 {/* Section: Stations */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2">
                     <FaMapMarkerAlt className="text-mainColor" />
                     <span className="font-semibold text-gray-700">Pickup:</span>
                     <span className="text-gray-600">{selectedTrip.pickup_station || "-"}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
+                  </div>
+                  <div className="flex items-center gap-2">
                     <FaMapMarkerAlt className="text-mainColor" />
                     <span className="font-semibold text-gray-700">Dropoff:</span>
                     <span className="text-gray-600">{selectedTrip.dropoff_station || "-"}</span>
-                    </div>
+                  </div>
                 </div>
                 {/* Section: Bus Info */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2">
                     <FaBus className="text-mainColor" />
                     <span className="font-semibold text-gray-700">Capacity:</span>
                     <span className="text-gray-600">{selectedTrip.bus_capacity || "-"}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
+                  </div>
+                  <div className="flex items-center gap-2">
                     <FaBus className="text-mainColor" />
                     <span className="font-semibold text-gray-700">Available Seats:</span>
                     <span className="text-gray-600">{selectedTrip.avalible_seats || "-"}</span>
-                    </div>
+                  </div>
                 </div>
                 {/* Section: Pricing & Cancellation */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2">
                     <FaMoneyBillWave className="text-mainColor" />
                     <span className="font-semibold text-gray-700">Price:</span>
                     <span className="text-gray-600">
-                        {selectedTrip.price ? `${selectedTrip.price} ${selectedTrip.currency}` : "-"}
+                      {selectedTrip.price ? `${selectedTrip.price} ${selectedTrip.currency}` : "-"}
                     </span>
-                    </div>
-                    <div className="flex flex-col">
+                  </div>
+                  <div className="flex flex-col">
                     <div className="flex items-center gap-2">
-                        <FaCalendarAlt className="text-mainColor" />
-                        <span className="font-semibold text-gray-700">Cancellation Date:</span>
+                      <FaCalendarAlt className="text-mainColor" />
+                      <span className="font-semibold text-gray-700">Cancellation Date:</span>
                     </div>
-                    <div className="ml-6 text-gray-600">
-                        {selectedTrip.cancelation_date || "-"}
-                    </div>
+                    <div className="ml-6 text-gray-600">{selectedTrip.cancelation_date || "-"}</div>
                     <div className="flex items-center gap-2">
-                        <FaMoneyBillWave className="text-mainColor" />
-                        <span className="font-semibold text-gray-700">Policy:</span>
-                        <span className="text-gray-600">
+                      <FaMoneyBillWave className="text-mainColor" />
+                      <span className="font-semibold text-gray-700">Policy:</span>
+                      <span className="text-gray-600">
                         {selectedTrip.cancelation_pay_amount} ({selectedTrip.cancelation_pay_value})
-                        </span>
+                      </span>
                     </div>
-                    </div>
+                  </div>
                 </div>
                 {/* Section: Additional Info */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2">
                     <span className="font-semibold text-gray-700">Trip Type:</span>
                     <span className="text-gray-600">{selectedTrip.trip_type || "-"}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
+                  </div>
+                  <div className="flex items-center gap-2">
                     <span className="font-semibold text-gray-700">Type:</span>
                     <span className="text-gray-600">{selectedTrip.type || "-"}</span>
-                    </div>
+                  </div>
                 </div>
-                </div>
-                {/* Modal Footer */}
-                <div className="mt-8 flex justify-end">
-                <button onClick={() => setTripDetailsModalOpen(false)} className="btn btn-primary bg-mainColor text-white">
-                    Close
+              </div>
+              {/* Modal Footer */}
+              <div className="mt-8 flex justify-end">
+                <button
+                  onClick={() => setTripDetailsModalOpen(false)}
+                  className="btn btn-primary bg-mainColor text-white"
+                >
+                  Close
                 </button>
-                </div>
+              </div>
             </DialogPanel>
-            </div>
+          </div>
         </Dialog>
-        )}
+      )}
     </div>
   );
 };
