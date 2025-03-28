@@ -1,4 +1,7 @@
 //Agent
+//Profile 
+export {default as AgentProfileLayout} from './AgentLayouts/AgentProfile/AgentProfileLayout';
+
 //Cars
 export {default as CarsLayout} from './AgentLayouts/Cars/CarsLayout';
 export {default as AddCarsLayout} from './AgentLayouts/Cars/AddCarsLayout';

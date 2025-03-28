@@ -1,6 +1,8 @@
 import React from "react";
 import { FaBars, FaSignOutAlt } from "react-icons/fa";
 import { useAuth } from "../../Context/Auth";
+import { Link } from "react-router-dom";
+import { FiUser } from "react-icons/fi"; // Import the user icon
 
 const Navbar = ({ onToggleSidebar }) => {
   const auth = useAuth();
@@ -20,8 +22,10 @@ const Navbar = ({ onToggleSidebar }) => {
       </button>
       
       <div className="flex items-center space-x-4">
-        <button className="p-2 rounded hover:bg-gray-100">Profile</button>
-
+        <Link to="profile" className="flex text-secoundColor items-center gap-2 p-2 rounded hover:bg-gray-100 transition">
+          <FiUser className="text-secoundColor" /> {/* Icon */}
+          Profile
+        </Link>
         {/* Logout Button */}
         <button
           onClick={handleLogout}
