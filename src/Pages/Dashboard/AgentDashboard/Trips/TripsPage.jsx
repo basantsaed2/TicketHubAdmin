@@ -63,7 +63,8 @@ const TripsPage = ({ update, setUpdate }) => {
       const lowerSearch = searchText.toLowerCase();
       filtered = filtered.filter(trip => {
         return (
-          (trip.trip_type && trip.trip_type.toLowerCase().includes(lowerSearch)) ||
+          (trip.trip_type && trip.trip_type.toLowerCase().includes(lowerSearch)) || 
+          (trip.trip_name && trip.trip_name.toLowerCase().includes(lowerSearch)) ||
           (trip.bus_number && trip.bus_number.toLowerCase().includes(lowerSearch)) ||
           (trip.status && trip.status.toLowerCase().includes(lowerSearch)) ||
           (trip.from_city && trip.from_city.toLowerCase().includes(lowerSearch)) ||
