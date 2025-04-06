@@ -37,3 +37,7 @@ export { default as PayoutRequestPage } from './Dashboard/AgentDashboard/Payout/
 //Wallet
 export { default as WalletPage } from './Dashboard/AgentDashboard/Wallet/WalletPage';
 
+//Reports
+export { default as BookingReportsPage } from './Dashboard/AgentDashboard/Reports/BookingReportsPage';
+export { default as EarningReportsPage } from './Dashboard/AgentDashboard/Reports/EarningReportsPage';
+

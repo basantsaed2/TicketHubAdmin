@@ -10,6 +10,7 @@ import { PiWalletFill } from "react-icons/pi";
 import { MdOutlineAttachMoney } from "react-icons/md";
 import { TbReportSearch } from "react-icons/tb";
 import { MdOutlineLocalShipping } from "react-icons/md";
+import { IoIosArrowForward } from "react-icons/io";
 
 const MenuSideAgent = ({ isSidebarCollapsed, onLinkClick }) => {
   const auth = useAuth();
@@ -85,12 +86,22 @@ const MenuSideAgent = ({ isSidebarCollapsed, onLinkClick }) => {
   );
 
   /* Reports */
+  const [isOpenReports, setIsOpenReports] = useState(
+    stateLink.isOpenReports ?? false
+  );
   const [isActiveReports, setIsActiveReports] = useState(
     stateLink.isActiveReports?? false
   );
   const [isActiveReportsIcon, setIsActiveReportsIcon] = useState(
     stateLink.isActiveReportsIcon ?? false
   );
+    // Reports Lists
+    const [isActiveBookingReports, setIsActiveBookingReports] = useState(
+      stateLink.isActiveBookingReports ?? false
+    );
+    const [isActiveEarningReports, setIsActiveEarningReports] = useState(
+      stateLink.isActiveEarningReports ?? false
+    );
   
 
 // Helper function to save the current active links state 
@@ -100,7 +111,8 @@ const saveActiveLinksState = useCallback(() => {
     isActiveBuses, isActiveBusesIcon,isActiveCars,isActiveCarsIcon,
     isActiveBooking, isActiveBookingIcon,isActiveTrips,isActiveTripsIcon,
     isActiveWallet, isActiveWalletIcon,isActivePayment,isActivePaymentIcon,
-    isActiveReports, isActiveReports
+    isActiveReports, isActiveReportsIcon, isOpenReports,
+    isActiveBookingReports,isActiveEarningReports
   };
   auth.sidebar = JSON.stringify(activeLinks);
   }, [
@@ -108,7 +120,8 @@ const saveActiveLinksState = useCallback(() => {
   isActiveBuses, isActiveBusesIcon,isActiveCars,isActiveCarsIcon,
   isActiveBooking, isActiveBookingIcon,isActiveTrips,isActiveTripsIcon,
   isActiveWallet, isActiveWalletIcon,isActivePayment,isActivePaymentIcon,
-  isActiveReports, isActiveReports]);
+  isActiveReports, isActiveReportsIcon, isOpenReports,
+  isActiveBookingReports,isActiveEarningReports]);
 
   // Save state to sidebar at auth when any link state changes
   useEffect(() => {
@@ -118,8 +131,8 @@ const saveActiveLinksState = useCallback(() => {
     isActiveBuses, isActiveBusesIcon,isActiveCars,isActiveCarsIcon,
     isActiveBooking, isActiveBookingIcon,isActiveTrips,isActiveTripsIcon,
     isActiveWallet, isActiveWalletIcon,isActivePayment,isActivePaymentIcon,
-    isActiveReports, isActiveReports
-  ]);
+    isActiveReports, isActiveReportsIcon, isOpenReports,
+    isActiveBookingReports,isActiveEarningReports  ]);
 
 
   // Handler functions to manage all state
@@ -148,15 +161,27 @@ const saveActiveLinksState = useCallback(() => {
     //Payment
     setIsActivePayment(false);
     setIsActivePaymentIcon(false);
-    //Reports
+    //Reports Lists
+    // setIsActiveReports(false);
+    // setIsActiveReportsIcon(false);
+    // setIsOpenReports(false);
+    setIsActiveBookingReports(false);
+    setIsActiveEarningReports(false);
+  };
+
+  // Handler function to close the sidebar when a link is clicked
+  const handleCloseSidebar = () => {
     setIsActiveReports(false);
     setIsActiveReportsIcon(false);
-  };
+    setIsOpenReports(false);
+  }
 
   // Handler functions to manage navigation state
   /* Home */
   const handleClickHome = useCallback(() => {
     handleStateLinks();
+    handleCloseSidebar();
+    
     setIsActiveHome(true);
     setIsActiveHomeIcon(true);
   }, []);
@@ -171,6 +196,8 @@ const saveActiveLinksState = useCallback(() => {
   /* Buses */
   const handleClickBuses= useCallback(() => {
     handleStateLinks();
+    handleCloseSidebar();
+
     setIsActiveBuses(true);
     setIsActiveBusesIcon(true);
   }, []);
@@ -185,6 +212,8 @@ const saveActiveLinksState = useCallback(() => {
   /* Hices */
   const handleClickHices= useCallback(() => {
     handleStateLinks();
+    handleCloseSidebar();
+
     setIsActiveHiaces(true);
     setIsActiveHiacesIcon(true);
   }, []);
@@ -199,6 +228,8 @@ const saveActiveLinksState = useCallback(() => {
   /* Cars */
    const handleClickCar = useCallback(() => {
     handleStateLinks();
+    handleCloseSidebar();
+
     setIsActiveCars(true);
     setIsActiveCarsIcon(true);
   }, []);
@@ -213,6 +244,8 @@ const saveActiveLinksState = useCallback(() => {
   /* Trips */
   const handleClickTrips = useCallback(() => {
     handleStateLinks();
+    handleCloseSidebar();
+
     setIsActiveTrips(true);
     setIsActiveTripsIcon(true);
   }, []);
@@ -227,6 +260,8 @@ const saveActiveLinksState = useCallback(() => {
   /* Booking */
   const handleClickBooking = useCallback(() => {
     handleStateLinks();
+    handleCloseSidebar();
+
     setIsActiveBooking(true);
     setIsActiveBookingIcon(true);
   }, []);
@@ -241,6 +276,8 @@ const saveActiveLinksState = useCallback(() => {
   /* Wallet */
   const handleClickWallet = useCallback(() => {
     handleStateLinks();
+    handleCloseSidebar();
+
     setIsActiveWallet(true);
     setIsActiveWalletIcon(true);
   }, []);
@@ -255,6 +292,8 @@ const saveActiveLinksState = useCallback(() => {
   /* Payment */
   const handleClickPayment = useCallback(() => {
     handleStateLinks();
+    handleCloseSidebar();
+
     setIsActivePayment(true);
     setIsActivePaymentIcon(true);
   }, []);
@@ -269,17 +308,57 @@ const saveActiveLinksState = useCallback(() => {
   /* Reports */
   const handleClickReports = useCallback(() => {
     handleStateLinks();
-    setIsActiveReports(true);
+    setIsOpenReports((prev) => !prev); // Properly toggle dropdown
+    setIsActiveReportsIcon((prev) => !prev);
+    setIsActiveReports((prev) => !prev);
+  }, []);
+
+  // ✅ Ensure Users closes when clicking it again
+  useEffect(() => {
+    const result = pathName.split("/").slice(0, 3).join("/");
+    if (
+      result === "/dashboard_operator/reports" &&
+      ![
+        "/dashboard_operator/reports/booking_reports",
+        "/dashboard_operator/reports/earning_reports",
+      ].some((path) => pathName.startsWith(path))
+    ) {
+      if (!isOpenReports) {
+        setIsOpenReports(true);
+      }
+      navigate("/dashboard_operator/reports/booking_reports"); // Default to booking reports
+    }
+    }, [location, isOpenReports]);
+
+  // Reports Lists
+  const handleClickBookingReports = useCallback(() => {
+    handleStateLinks();
+    setIsOpenReports(true);
     setIsActiveReportsIcon(true);
+    setIsActiveReports(true);
+    setIsActiveBookingReports(true);
+    setIsActiveEarningReports(false);
+
   }, []);
   useEffect(() => {
-    const part = pathName.split("/");
-    const result = part.slice(0, 2).join("/");
-    if (result == "/reports") {
-      handleClickReports();
+    if (pathName.startsWith("/dashboard_operator/reports/booking_reports")) {
+      handleClickBookingReports();
     }
-  }, [location]);
+  }, [location, handleClickBookingReports]);
 
+  const handleClickEarningReports = useCallback(() => {
+    handleStateLinks();
+    setIsOpenReports(true);
+    setIsActiveReportsIcon(true);
+    setIsActiveReports(true);
+    setIsActiveEarningReports(true);
+    setIsActiveBookingReports(false);
+  }, []);
+  useEffect(() => {
+    if (pathName.startsWith("/dashboard_operator/reports/earning_reports")) {
+      handleClickEarningReports();
+    }
+  }, [location, handleClickEarningReports]);
  
   return (
     <div className="space-y-4 w-full h-full">
@@ -516,22 +595,25 @@ const saveActiveLinksState = useCallback(() => {
       </Link>
 
       {/* Reports */}
-      {/* <Link
-        to="/reports"
+      <Link
+        to="reports"
         onMouseMove={() => setIsActiveReportsIcon(true)}
         onMouseOut={() => setIsActiveReportsIcon(false)}
-        onClick={() => {
-          handleClickReports();
-          onLinkClick();
-        }}
+        onClick={handleClickReports}
         className={`
-            ${isActiveReports ? "active" : ""}
-           flex items-center ${
-             isSidebarCollapsed ? "justify-center" : "justify-start"
-           } hover:rounded-xl p-2 hover:bg-white hover:text-mainColor group transition-all duration-300`}
+          ${isActiveReports ? "active" : ""}
+         flex items-center 
+         ${isSidebarCollapsed ? "justify-center" : "justify-between"} 
+        hover:rounded-xl p-2 hover:bg-white hover:text-mainColor group transition-all duration-300`}
       >
         <div className="flex font-semibold text-xl items-center gap-x-2">
-          <TbReportSearch  className={`${isActiveReports|| isActiveReportsIcon ? 'text-mainColor': 'text-white'}`}/>
+          <TbReportSearch
+            className={`${
+              isActiveReportsIcon || isActiveReports
+                ? "text-mainColor"
+                : "text-white"
+            }`}
+          />
           {!isSidebarCollapsed && (
             <span
               className={`text-base transition-all duration-300 group-hover:text-mainColor font-TextFontRegular ml-2 ${
@@ -542,7 +624,58 @@ const saveActiveLinksState = useCallback(() => {
             </span>
           )}
         </div>
-      </Link> */}
+        {!isSidebarCollapsed && (
+          <IoIosArrowForward
+            className={`${
+              isActiveReports ? "text-mainColor rotate-90" : "text-white rotate-0"
+            } text-xl transition-all duration-300 group-hover:text-mainColor`}
+          />
+        )}
+      </Link>
+      <div
+        className={`${
+          isActiveReports && !isSidebarCollapsed ? "h-17" : "h-0 "
+        } overflow-hidden flex items-start justify-end  w-full transition-all duration-700`}
+      >
+        <ul className="list-disc w-full pl-10 transition-all duration-700 flex flex-col gap-y-2">
+          <Link
+            to={"reports/booking_reports"}
+            onClick={() => {
+              handleClickBookingReports();
+              onLinkClick();
+            }}
+          >
+            <li
+              className={`${
+                isActiveBookingReports
+                  ? "rounded-xl bg-white text-mainColor"
+                  : "text-white"
+              }
+                          text-xl font-TextFontLight rounded-xl px-4 py-1  hover:bg-white transition-all duration-300 hover:text-mainColor`}
+            >
+              Booking
+            </li>
+          </Link>
+          <Link
+            to={"reports/earning_reports"}
+            onClick={() => {
+              handleClickEarningReports();
+              onLinkClick();
+            }}
+          >
+            <li
+              className={`${
+                isActiveEarningReports
+                  ? "rounded-xl bg-white text-mainColor"
+                  : "text-white"
+              }
+                          text-xl font-TextFontLight rounded-xl px-4 py-1  hover:bg-white transition-all duration-300 hover:text-mainColor`}
+            >
+              Earning
+            </li>
+          </Link>
+        </ul>
+      </div>
 
   
     </div>

@@ -5,6 +5,7 @@ import { usePost } from '../../../../Hooks/usePostJson';
 import { useAuth } from '../../../../Context/Auth';
 import { useNavigate } from 'react-router-dom';
 import { IoCloudUpload } from 'react-icons/io5';
+import { set } from 'date-fns';
 
 const AddTripsPage = ({ update, setUpdate }) => {
   const apiUrl = import.meta.env.VITE_API_BASE_URL;
@@ -19,6 +20,7 @@ const AddTripsPage = ({ update, setUpdate }) => {
   const [stations, setStations] = useState([]);
   const [zones, setZones] = useState([]);
   const [buses, setBuses] = useState([]);
+  const [trains, setTrains] = useState([]);
   const [currencies, setCurrencies] = useState([]);
 
   // Hardcoded options for some selects/switches
@@ -35,6 +37,7 @@ const AddTripsPage = ({ update, setUpdate }) => {
   // Form state – keys as required by endpoint
   const [tripName, setTripName] = useState('');
   const [busId, setBusId] = useState('');
+  const [trainId, setTrainId] = useState('');
   const [pickupStationId, setPickupStationId] = useState('');
   const [dropoffStationId, setDropoffStationId] = useState('');
   const [cityId, setCityId] = useState('');
@@ -74,6 +77,7 @@ const AddTripsPage = ({ update, setUpdate }) => {
       setStations(tripList.stations);
       setZones(tripList.zones);
       setBuses(tripList.buses);
+      setTrains(tripList.trains);
       setCurrencies(tripList.currency);
     }
   }, [tripList]);
@@ -90,6 +94,7 @@ const AddTripsPage = ({ update, setUpdate }) => {
       trip_name: tripName,
       trip_type: tripType, // "hiace", "bus", "train"
       bus_id: busId,
+      train_id: trainId,
       pickup_station_id: pickupStationId,
       dropoff_station_id: dropoffStationId,
       avalible_seats: avalibleSeats,
@@ -122,6 +127,7 @@ const AddTripsPage = ({ update, setUpdate }) => {
   const handleReset = () => {
     setTripName('');
     setBusId('');
+    setTrainId('');
     setPickupStationId('');
     setDropoffStationId('');
     setCityId('');
@@ -186,7 +192,7 @@ const AddTripsPage = ({ update, setUpdate }) => {
 
         {/* Section: Bus & Station Information */}
         <div className="border p-4 rounded-lg">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Bus & Station Information</h2>
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Bus & Train & Station Information</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-gray-700 mb-1">Select Bus</label>
@@ -198,6 +204,19 @@ const AddTripsPage = ({ update, setUpdate }) => {
                 <option value="">Select Bus</option>
                 {buses.map((bus) => (
                   <option key={bus.id} value={bus.id}>{bus.bus_number}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-1">Select Train</label>
+              <select
+                value={trainId}
+                onChange={(e) => setTrainId(e.target.value)}
+                className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+              >
+                <option value="">Select Train</option>
+                {trains.map((train) => (
+                  <option key={train.id} value={train.id}>{train.name}</option>
                 ))}
               </select>
             </div>
