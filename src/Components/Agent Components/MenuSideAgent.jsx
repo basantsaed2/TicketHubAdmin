@@ -312,7 +312,6 @@ const saveActiveLinksState = useCallback(() => {
     setIsActiveReportsIcon((prev) => !prev);
     setIsActiveReports((prev) => !prev);
   }, []);
-
   // ✅ Ensure Users closes when clicking it again
   useEffect(() => {
     const result = pathName.split("/").slice(0, 3).join("/");
@@ -328,7 +327,7 @@ const saveActiveLinksState = useCallback(() => {
       }
       navigate("/dashboard_operator/reports/booking_reports"); // Default to booking reports
     }
-    }, [location, isOpenReports]);
+  }, [location, isOpenReports]);
 
   // Reports Lists
   const handleClickBookingReports = useCallback(() => {
@@ -677,7 +676,6 @@ const saveActiveLinksState = useCallback(() => {
         </ul>
       </div>
 
-  
     </div>
   );
 };
