@@ -62,7 +62,9 @@
 
 .active {
   border-radius: 12px;
-  background-color: white;
+  background-image: url('./Assets/Images/bgTap.png');
+  background-size: cover;
+  background-position: center;
   padding: 8px 8px 8px 8px;
 }
 

@@ -11,7 +11,7 @@ import { MdOutlineAttachMoney } from "react-icons/md";
 import { TbReportSearch } from "react-icons/tb";
 import { MdOutlineLocalShipping } from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
-
+import bgTap from "../../assets/Images/bgTap.png";
 const MenuSideAgent = ({ isSidebarCollapsed, onLinkClick }) => {
   const auth = useAuth();
   const navigate = useNavigate();
@@ -374,7 +374,7 @@ const saveActiveLinksState = useCallback(() => {
             ${isActiveHome ? "active" : ""}
            flex items-center ${
              isSidebarCollapsed ? "justify-center" : "justify-start"
-           } hover:rounded-xl p-2 hover:bg-white hover:text-mainColor group transition-all duration-300`}
+           } hover:rounded-xl p-2 hover:bg-tap hover:bg-cover hover:bg-center hover:text-mainColor group transition-all duration-300`}
       >
         <div className="flex font-semibold text-xl items-center gap-x-2">
         <RiHome2Line className={`${isActiveHome|| isActiveHomeIcon ? 'text-mainColor': 'text-white'}`}/>
@@ -403,7 +403,7 @@ const saveActiveLinksState = useCallback(() => {
             ${isActiveBuses ? "active" : ""}
            flex items-center ${
              isSidebarCollapsed ? "justify-center" : "justify-start"
-           } hover:rounded-xl p-2 hover:bg-white hover:text-mainColor group transition-all duration-300`}
+           } hover:rounded-xl p-2 hover:bg-tap hover:bg-cover hover:bg-center hover:text-mainColor group transition-all duration-300`}
       >
         <div className="flex font-semibold text-xl items-center gap-x-2">
         <TbBus className={`${isActiveBuses|| isActiveBusesIcon ? 'text-mainColor': 'text-white'}`}/>
@@ -432,7 +432,7 @@ const saveActiveLinksState = useCallback(() => {
             ${isActiveHiaces ? "active" : ""}
            flex items-center ${
              isSidebarCollapsed ? "justify-center" : "justify-start"
-           } hover:rounded-xl p-2 hover:bg-white hover:text-mainColor group transition-all duration-300`}
+           } hover:rounded-xl p-2 hover:bg-tap hover:bg-cover hover:bg-center hover:text-mainColor group transition-all duration-300`}
       >
         <div className="flex font-semibold text-xl items-center gap-x-2">
         <MdOutlineLocalShipping className={`${isActiveHiaces|| isActiveHiacesIcon ? 'text-mainColor': 'text-white'}`}/>
@@ -461,7 +461,7 @@ const saveActiveLinksState = useCallback(() => {
             ${isActiveCars ? "active" : ""}
            flex items-center ${
              isSidebarCollapsed ? "justify-center" : "justify-start"
-           } hover:rounded-xl p-2 hover:bg-white hover:text-mainColor group transition-all duration-300`}
+           } hover:rounded-xl p-2 hover:bg-tap hover:bg-cover hover:bg-center hover:text-mainColor group transition-all duration-300`}
       >
         <div className="flex font-semibold text-xl items-center gap-x-2">
           <FaCarAlt className={`${isActiveCars|| isActiveCarsIcon ? 'text-mainColor': 'text-white'}`}/>
@@ -490,7 +490,7 @@ const saveActiveLinksState = useCallback(() => {
             ${isActiveTrips ? "active" : ""}
            flex items-center ${
              isSidebarCollapsed ? "justify-center" : "justify-start"
-           } hover:rounded-xl p-2 hover:bg-white hover:text-mainColor group transition-all duration-300`}
+           } hover:rounded-xl p-2 hover:bg-tap hover:bg-cover hover:bg-center hover:text-mainColor group transition-all duration-300`}
       >
         <div className="flex font-semibold text-xl items-center gap-x-2">
           <IoMapOutline  className={`${isActiveTrips|| isActiveTripsIcon ? 'text-mainColor': 'text-white'}`}/>
@@ -519,7 +519,7 @@ const saveActiveLinksState = useCallback(() => {
             ${isActiveBooking ? "active" : ""}
            flex items-center ${
              isSidebarCollapsed ? "justify-center" : "justify-start"
-           } hover:rounded-xl p-2 hover:bg-white hover:text-mainColor group transition-all duration-300`}
+           } hover:rounded-xl p-2 hover:bg-tap hover:bg-cover hover:bg-center hover:text-mainColor group transition-all duration-300`}
       >
         <div className="flex font-semibold text-xl items-center gap-x-2">
           <IoCheckmarkDoneSharp  className={`${isActiveBooking|| isActiveBookingIcon ? 'text-mainColor': 'text-white'}`}/>
@@ -548,7 +548,7 @@ const saveActiveLinksState = useCallback(() => {
             ${isActiveWallet ? "active" : ""}
            flex items-center ${
              isSidebarCollapsed ? "justify-center" : "justify-start"
-           } hover:rounded-xl p-2 hover:bg-white hover:text-mainColor group transition-all duration-300`}
+           } hover:rounded-xl p-2 hover:bg-tap hover:bg-cover hover:bg-center hover:text-mainColor group transition-all duration-300`}
       >
         <div className="flex font-semibold text-xl items-center gap-x-2">
           <PiWalletFill  className={`${isActiveWallet|| isActiveWalletIcon ? 'text-mainColor': 'text-white'}`}/>
@@ -577,7 +577,7 @@ const saveActiveLinksState = useCallback(() => {
             ${isActivePayment ? "active" : ""}
            flex items-center ${
              isSidebarCollapsed ? "justify-center" : "justify-start"
-           } hover:rounded-xl p-2 hover:bg-white hover:text-mainColor group transition-all duration-300`}
+           } hover:rounded-xl p-2 hover:bg-tap hover:bg-cover hover:bg-center hover:text-mainColor group transition-all duration-300`}
       >
         <div className="flex font-semibold text-xl items-center gap-x-2">
           <MdOutlineAttachMoney  className={`${isActivePayment|| isActivePaymentIcon ? 'text-mainColor': 'text-white'}`}/>
@@ -603,7 +603,7 @@ const saveActiveLinksState = useCallback(() => {
           ${isActiveReports ? "active" : ""}
          flex items-center 
          ${isSidebarCollapsed ? "justify-center" : "justify-between"} 
-        hover:rounded-xl p-2 hover:bg-white hover:text-mainColor group transition-all duration-300`}
+        hover:rounded-xl p-2 hover:bg-tap hover:bg-cover hover:bg-center hover:text-mainColor group transition-all duration-300`}
       >
         <div className="flex font-semibold text-xl items-center gap-x-2">
           <TbReportSearch
@@ -647,10 +647,10 @@ const saveActiveLinksState = useCallback(() => {
             <li
               className={`${
                 isActiveBookingReports
-                  ? "rounded-xl bg-white text-mainColor"
+                  ? "rounded-xl bg-tap bg-cover bg-center text-mainColor"
                   : "text-white"
               }
-                          text-xl font-TextFontLight rounded-xl px-4 py-1  hover:bg-white transition-all duration-300 hover:text-mainColor`}
+                          text-xl font-TextFontLight rounded-xl px-4 py-1  hover:bg-tap hover:bg-cover hover:bg-center transition-all duration-300 hover:text-mainColor`}
             >
               Booking
             </li>
@@ -665,10 +665,10 @@ const saveActiveLinksState = useCallback(() => {
             <li
               className={`${
                 isActiveEarningReports
-                  ? "rounded-xl bg-white text-mainColor"
+                  ? "rounded-xl bg-tap bg-cover bg-center text-mainColor"
                   : "text-white"
               }
-                          text-xl font-TextFontLight rounded-xl px-4 py-1  hover:bg-white transition-all duration-300 hover:text-mainColor`}
+                          text-xl font-TextFontLight rounded-xl px-4 py-1  hover:bg-tap hover:bg-cover hover:bg-center transition-all duration-300 hover:text-mainColor`}
             >
               Earning
             </li>
