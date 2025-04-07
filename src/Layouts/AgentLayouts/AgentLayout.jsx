@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../../Components/Agent Components/Navbar";
-import SidebarAgent from "../../Components/Agent Components/SidebarAgent";
+import Navbar from "../../Components/AgentComponents/Navbar";
+import SidebarAgent from "../../Components/AgentComponents/SidebarAgent";
 import { Outlet } from "react-router-dom";
 
 const AgentLayout = () => {
