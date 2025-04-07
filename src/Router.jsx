@@ -7,7 +7,7 @@ import LoginSuper from "./Pages/Authentication/LoginSuper";
 import { AdminHomePage,AgentHomePage } from "./Pages/AllPages";
 import SuperAdminLayout from "./Layouts/SuperAdminLayouts/SuperAdminLayout";
 import AgentLayout from "./Layouts/AgentLayouts/AgentLayout";
-import { AddBusesLayout, AddCarsLayout, AddHiacesLayout, AddTripsLayout, AgentProfileLayout, BookingLayout, BusesLayout, CarsLayout, EditBusesLayout, EditCarsLayout, EditHiacesLayout, EditTripsLayout, HiacesLayout, PayoutLayout, PayoutRequestLayout, TripsLayout, WalletLayout,BookingReportsLayout,EarningReportsLayout, PrivateRequestLayout } from "./Layouts/AllLayouts";
+import { AddBusesLayout, AddCarsLayout, AddHiacesLayout, AddTripsLayout, AgentProfileLayout, BookingLayout, BusesLayout, CarsLayout, EditBusesLayout, EditCarsLayout, EditHiacesLayout, EditTripsLayout, HiacesLayout, PayoutLayout, PayoutRequestLayout, TripsLayout, WalletLayout,BookingReportsLayout,EarningReportsLayout, PrivateRequestLayout, BookingDetailsLayout } from "./Layouts/AllLayouts";
 
 const AppLayoutAdmin = () => (
   <>
@@ -31,24 +31,6 @@ export const router = createBrowserRouter([
       element: <LoginSuper />,
     },
    
-
-    /* Admin Routes*/
-    // {
-    //   element: <ProtectedRoute allowedRoles={['admin']} />,
-    //   path: '/dashboard_admin',
-    //   children: [
-    //     {
-    //       path: '',
-    //       element: <AppLayoutAdmin/>,
-    //       children: [
-    //         {
-    //           path: '',
-    //           element: <AdminHomePage/>,
-    //         },
-    //       ],
-    //     },
-    //   ]
-    // },
 
     // Agent Routes
     {
@@ -141,7 +123,17 @@ export const router = createBrowserRouter([
             },
             {
               path: 'booking',
-              element: <BookingLayout/>,
+              element: <Outlet/>,
+              children:[
+                {
+                  path: '',
+                  element: <BookingLayout/>,
+                },
+                {
+                  path: 'details/:bookingId',
+                  element: <BookingDetailsLayout/>,
+                }
+              ]
             },
             {
               path: 'payout',

@@ -23,7 +23,8 @@ export {default as AddTripsLayout} from './AgentLayouts/Trips/AddTripsLayout';
 export {default as EditTripsLayout} from './AgentLayouts/Trips/EditTripsLayout';
 
 //Booking
-export {default as BookingLayout} from './AgentLayouts/Booking/BookingLayout';4
+export {default as BookingLayout} from './AgentLayouts/Booking/BookingLayout';
+export {default as BookingDetailsLayout} from './AgentLayouts/Booking/BookingDetailsLayout';
 
 //Payout
 export {default as PayoutLayout} from './AgentLayouts/Payout/PayoutLayout';

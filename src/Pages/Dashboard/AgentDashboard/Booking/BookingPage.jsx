@@ -204,7 +204,7 @@ const BookingPage = ({ update, setUpdate }) => {
                       <td className="text-center py-2 text-gray-600">{booking?.trip_type || '-'}</td>
                       <td className="text-center py-2 text-gray-600">{booking?.operator || 0} {booking?.currency?.name}</td>
                       <td className="text-center py-2 text-secoundColor underline cursor-pointer">
-                      <Link to="details"state={{ booking }}> View </Link></td>
+                      <Link to={`details/${booking.id}`} state={{ booking }}> View </Link></td>
                       <td className="text-center py-2">
                         <div className="relative">
                           <select

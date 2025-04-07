@@ -29,6 +29,7 @@ export { default as EditTripsPage } from './Dashboard/AgentDashboard/Trips/EditT
 
 //Booking
 export { default as BookingPage } from './Dashboard/AgentDashboard/Booking/BookingPage';
+export { default as BookingDetailsPage } from './Dashboard/AgentDashboard/Booking/BookingDetailsPage';
 
 //Payout
 export { default as PayoutPage } from './Dashboard/AgentDashboard/Payout/PayoutPage';
