@@ -60,10 +60,10 @@ const HiacesPage = ({ update, setUpdate }) => {
       const lowerSearch = searchText.toLowerCase();
       filtered = filtered.filter(hiace => {
         return (
-          (hiace.bus_number && bus.bus_number.toString().toLowerCase().includes(lowerSearch)) ||
-          (hiace.status && bus.status.toLowerCase().includes(lowerSearch)) ||
-          (hiace.type && bus.type.toLowerCase().includes(lowerSearch)) ||
-          (hiace.bus_type && bus.bus_type.name && bus.bus_type.name.toLowerCase().includes(lowerSearch))
+          (hiace.bus_number && hiace.bus_number.toString().toLowerCase().includes(lowerSearch)) ||
+          (hiace.status && hiace.status.toLowerCase().includes(lowerSearch)) ||
+          (hiace.type && hiace.type.toLowerCase().includes(lowerSearch)) ||
+          (hiace.bus_type.name && hiace.bus_type.name && hiace.bus_type.name.toLowerCase().includes(lowerSearch))
           // Add any additional properties you want to search
         );
       });

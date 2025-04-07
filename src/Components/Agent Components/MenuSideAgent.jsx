@@ -12,6 +12,8 @@ import { TbReportSearch } from "react-icons/tb";
 import { MdOutlineLocalShipping } from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
 import bgTap from "../../assets/Images/bgTap.png";
+import { RiChatPrivateLine } from "react-icons/ri";
+
 const MenuSideAgent = ({ isSidebarCollapsed, onLinkClick }) => {
   const auth = useAuth();
   const navigate = useNavigate();
@@ -85,6 +87,14 @@ const MenuSideAgent = ({ isSidebarCollapsed, onLinkClick }) => {
     stateLink.isActivePaymentIcon ?? false
   );
 
+  /* PrivateRequest */
+  const [isActivePrivateRequest, setIsActivePrivateRequest] = useState(
+    stateLink.isActivePrivateRequest ?? false
+  );
+  const [isActivePrivateRequestIcon, setIsActivePrivateRequestIcon] =
+    useState(stateLink.isActivePrivateRequestIcon ?? false
+  );
+
   /* Reports */
   const [isOpenReports, setIsOpenReports] = useState(
     stateLink.isOpenReports ?? false
@@ -111,6 +121,7 @@ const saveActiveLinksState = useCallback(() => {
     isActiveBuses, isActiveBusesIcon,isActiveCars,isActiveCarsIcon,
     isActiveBooking, isActiveBookingIcon,isActiveTrips,isActiveTripsIcon,
     isActiveWallet, isActiveWalletIcon,isActivePayment,isActivePaymentIcon,
+    isActivePrivateRequest, isActivePrivateRequestIcon,
     isActiveReports, isActiveReportsIcon, isOpenReports,
     isActiveBookingReports,isActiveEarningReports
   };
@@ -120,6 +131,7 @@ const saveActiveLinksState = useCallback(() => {
   isActiveBuses, isActiveBusesIcon,isActiveCars,isActiveCarsIcon,
   isActiveBooking, isActiveBookingIcon,isActiveTrips,isActiveTripsIcon,
   isActiveWallet, isActiveWalletIcon,isActivePayment,isActivePaymentIcon,
+  isActivePrivateRequest, isActivePrivateRequestIcon,
   isActiveReports, isActiveReportsIcon, isOpenReports,
   isActiveBookingReports,isActiveEarningReports]);
 
@@ -131,6 +143,7 @@ const saveActiveLinksState = useCallback(() => {
     isActiveBuses, isActiveBusesIcon,isActiveCars,isActiveCarsIcon,
     isActiveBooking, isActiveBookingIcon,isActiveTrips,isActiveTripsIcon,
     isActiveWallet, isActiveWalletIcon,isActivePayment,isActivePaymentIcon,
+    isActivePrivateRequest, isActivePrivateRequestIcon,
     isActiveReports, isActiveReportsIcon, isOpenReports,
     isActiveBookingReports,isActiveEarningReports  ]);
 
@@ -161,6 +174,11 @@ const saveActiveLinksState = useCallback(() => {
     //Payment
     setIsActivePayment(false);
     setIsActivePaymentIcon(false);
+
+    //PrivateRequest
+    setIsActivePrivateRequest(false);
+    setIsActivePrivateRequestIcon(false);
+
     //Reports Lists
     // setIsActiveReports(false);
     // setIsActiveReportsIcon(false);
@@ -303,6 +321,22 @@ const saveActiveLinksState = useCallback(() => {
     if (result == "/dashboard_operator/payout") {
       handleClickPayment();
     }
+  }, [location]);
+
+  /* Private Request */
+  const handleClickPrivateRequest = useCallback(() => {
+    handleStateLinks();
+    handleCloseSidebar();
+
+    setIsActivePrivateRequest(true);
+    setIsActivePrivateRequestIcon(true);
+  }, []);
+  useEffect(() => {
+    const part = pathName.split("/");
+    const result = part.slice(0, 3).join("/");
+    if (result == "/dashboard_operator/private_request") {
+      handleClickPrivateRequest();
+    } 
   }, [location]);
 
   /* Reports */
@@ -588,6 +622,35 @@ const saveActiveLinksState = useCallback(() => {
               }`}
             >
               Payout
+            </span>
+          )}
+        </div>
+      </Link>
+
+      {/* Private Request */}
+      <Link
+        to="private_request"
+        onMouseMove={() => setIsActivePrivateRequestIcon(true)}
+        onMouseOut={() => setIsActivePrivateRequestIcon(false)}
+        onClick={() => {
+          handleClickPrivateRequest();
+          onLinkClick();
+        }}
+        className={`
+            ${isActivePrivateRequest ? "active" : ""}
+           flex items-center ${
+             isSidebarCollapsed ? "justify-center" : "justify-start"
+           } hover:rounded-xl p-2 hover:bg-tap hover:bg-cover hover:bg-center hover:text-mainColor group transition-all duration-300`}
+      >
+        <div className="flex font-semibold text-xl items-center gap-x-2">
+          <RiChatPrivateLine  className={`${isActivePrivateRequest|| isActivePrivateRequestIcon ? 'text-mainColor': 'text-white'}`}/>
+          {!isSidebarCollapsed && (
+            <span
+              className={`text-base transition-all duration-300 group-hover:text-mainColor font-TextFontRegular ml-2 ${
+                isActivePrivateRequest ? "text-mainColor" : "text-white"
+              }`}
+            >
+              Private Request
             </span>
           )}
         </div>

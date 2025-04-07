@@ -15,6 +15,7 @@ const BookingPage = ({ update, setUpdate }) => {
   const { deleteData, loadingDelete } = useDelete();
   const { changeState, loadingChange, responseChange } = useChangeState();
   const [searchText, setSearchText] = useState("");
+  const [filterDate, setFilterDate] = useState("");
   const auth = useAuth();
 
   // Pagination State
@@ -59,14 +60,19 @@ const BookingPage = ({ update, setUpdate }) => {
       filtered = filtered.filter(booking => {
         return (
           (booking.currency?.name && booking.currency.name.toLowerCase().includes(lowerSearch)) ||
+          (booking.trip?.trip_name && booking.trip?.trip_name.toLowerCase().includes(lowerSearch)) ||
+          (booking.user?.name && booking.user?.name.toLowerCase().includes(lowerSearch)) ||
           (booking.amount && booking.amount.toString().toLowerCase().includes(lowerSearch))
         );
       });
     }
+    if (filterDate) {
+      filtered = filtered.filter((booking) => booking.travel_date === filterDate);
+    }
     // Reset page when filtered list changes
     setCurrentPage(1);
     return filtered;
-  }, [searchText, currentBookings]);
+  }, [searchText, currentBookings,filterDate]);
 
   // Pagination Logic
   const totalPages = Math.ceil(filteredBooking.length / rowsPerPage);
@@ -89,7 +95,7 @@ const BookingPage = ({ update, setUpdate }) => {
     setCurrentPage(1);
   };
 
-  const headers = ['Date', "Seat Count", "Status"];
+  const headers = ['Trip Name','Date','Route City',"Supplier",'Type','Price','Details',"Status"];
 
   return (
     <div className="w-full pb-5 flex flex-col items-start justify-start scrollSection">
@@ -121,7 +127,7 @@ const BookingPage = ({ update, setUpdate }) => {
                 </a>
             </div>
           {/* Search & Filter Section */}
-          <div className="flex flex-wrap items-center gap-4 bg-white p-6 border border-gray-200 rounded-xl mb-6">
+          <div className="w-full flex flex-wrap items-center gap-4 bg-white p-6 border border-gray-200 rounded-xl mb-6">
             <div className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-lg w-full md:w-[280px] border border-gray-300">
               <FaSearch className="text-gray-500" />
               <input
@@ -130,6 +136,15 @@ const BookingPage = ({ update, setUpdate }) => {
                 value={searchText}
                 onChange={handleSearch}
                 className="bg-transparent outline-none w-full text-gray-700 placeholder-gray-500"
+              />
+            </div>
+            <div className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-lg w-full md:w-[280px] border border-gray-300">
+              <label className="text-gray-600 text-sm font-medium">Filter by Date :</label>
+              <input
+                type="date"
+                value={filterDate}
+                onChange={(e) => setFilterDate(e.target.value)}
+                className="bg-transparent outline-none text-gray-700"
               />
             </div>
           </div>
@@ -182,37 +197,41 @@ const BookingPage = ({ update, setUpdate }) => {
                       className={`border-b ${index % 2 === 0 ? "bg-white" : "bg-gray-100"} transition hover:bg-gray-100`}
                     >
                       <td className="text-center py-2 text-gray-600">{index + 1}</td>
-                      <td className="text-center py-2 text-gray-600">{booking?.date || "-"}</td>
-                      <td className="text-center py-2 text-gray-600">
-                        {booking?.seats_count || 0}
+                      <td className="text-center py-2 text-gray-600">{booking?.trip?.trip_name || "-"}</td>
+                      <td className="text-center py-2 text-gray-600">{booking?.travel_date || "-"}</td>
+                      <td className="text-center py-2 text-gray-600">{booking?.trip?.city?.name || "-"} → {booking?.trip?.to_city?.name || "-"}</td>
+                      <td className="text-center py-2 text-gray-600">{booking?.user?.name || "-"}</td>
+                      <td className="text-center py-2 text-gray-600">{booking?.trip_type || '-'}</td>
+                      <td className="text-center py-2 text-gray-600">{booking?.operator || 0} {booking?.currency?.name}</td>
+                      <td className="text-center py-2 text-secoundColor underline cursor-pointer">
+                      <Link to="details"state={{ booking }}> View </Link></td>
+                      <td className="text-center py-2">
+                        <div className="relative">
+                          <select
+                            value={booking?.status}
+                            onChange={(e) => handleChangeStatus(booking.id, e.target.value)}
+                            className={`px-2 py-1 border rounded-lg shadow-sm font-medium text-center 
+                                      focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all duration-200 
+                                      ${
+                                        booking?.status === "pending"
+                                          ? "bg-yellow-100 text-yellow-700 border-yellow-400"
+                                          : booking?.status === "confirmed"
+                                          ? "bg-green-100 text-green-700 border-green-400"
+                                          : "bg-red-100 text-red-700 border-red-400"
+                                      }`}
+                          >
+                            <option value="pending" className="text-yellow-700 bg-yellow-100">
+                              🟡 Pending
+                            </option>
+                            <option value="confirmed" className="text-green-700 bg-green-100">
+                              ✅ Confirmed
+                            </option>
+                            <option value="canceled" className="text-red-700 bg-red-100">
+                              ❌ Canceled
+                            </option>
+                          </select>
+                        </div>
                       </td>
-                   <td className="text-center py-2">
-                    <div className="relative">
-                      <select
-                        value={booking?.status}
-                        onChange={(e) => handleChangeStatus(booking.id, e.target.value)}
-                        className={`px-3 py-2 border rounded-lg shadow-sm font-medium text-center 
-                                  focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all duration-200 
-                                  ${
-                                    booking?.status === "pending"
-                                      ? "bg-yellow-100 text-yellow-700 border-yellow-400"
-                                      : booking?.status === "confirmed"
-                                      ? "bg-green-100 text-green-700 border-green-400"
-                                      : "bg-red-100 text-red-700 border-red-400"
-                                  }`}
-                      >
-                        <option value="pending" className="text-yellow-700 bg-yellow-100">
-                          🟡 Pending
-                        </option>
-                        <option value="confirmed" className="text-green-700 bg-green-100">
-                          ✅ Confirmed
-                        </option>
-                        <option value="canceled" className="text-red-700 bg-red-100">
-                          ❌ Canceled
-                        </option>
-                      </select>
-                    </div>
-                  </td>
                     </tr>
                   ))
                 )}

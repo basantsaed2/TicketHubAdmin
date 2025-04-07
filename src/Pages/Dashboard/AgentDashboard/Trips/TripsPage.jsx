@@ -14,6 +14,7 @@ import {
 const TripsPage = ({ update, setUpdate }) => {
   const apiUrl = import.meta.env.VITE_API_BASE_URL;
   const { refetch: refetchTrips, loading: loadingTrips, data: tripsData } = useGet({ url: `${apiUrl}/agent/trip` });
+  
   const { deleteData, loadingDelete } = useDelete();
   const [trips, setTrips] = useState([]);
   const [filteredTrips, setFilteredTrips] = useState([]); // filtered results

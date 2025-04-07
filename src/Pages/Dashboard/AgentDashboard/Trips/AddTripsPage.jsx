@@ -116,7 +116,7 @@ const AddTripsPage = ({ update, setUpdate }) => {
       cancellation_policy: cancellationPolicy,
       cancelation_pay_amount: cancelationPayAmountFixed ? "fixed" : "percentage",
       cancelation_pay_value: cancelationPayValue,
-      cancelation_date: cancelationDate,
+      cancelation_hours: cancelationDate,
       status: status, // "active" or "inactive"
     };
 
@@ -450,10 +450,10 @@ const AddTripsPage = ({ update, setUpdate }) => {
               </select>
             </div>
             <div>
-              <label className="block text-gray-700 mb-1">Cancelation Date</label>
+            <label className="block text-gray-700 mb-1">Cancelation Hours</label>
               <input
-                type="date"
-                min={new Date().toISOString().split("T")[0]} 
+                type="number"
+                placeholder="Enter cancellation hours"
                 value={cancelationDate}
                 onChange={(e) => setCancelationDate(e.target.value)}
                 className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"

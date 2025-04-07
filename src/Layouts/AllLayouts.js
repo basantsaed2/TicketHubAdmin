@@ -32,6 +32,9 @@ export {default as PayoutRequestLayout} from './AgentLayouts/Payout/PayoutReques
 //Wallet
 export {default as WalletLayout} from './AgentLayouts/Wallet/WalletLayout';
 
+//Private Request
+export {default as PrivateRequestLayout} from './AgentLayouts/PrivateRequest/PrivateRequestLayout';
+
 //Reports
 export {default as BookingReportsLayout} from './AgentLayouts/Reports/BookingReportsLayout';
 export {default as EarningReportsLayout} from './AgentLayouts/Reports/EarningReportsLayout';
