@@ -21,6 +21,8 @@ const BookingDetailsPage = () => {
   }
 
   const booking = state.booking;
+  console.log("Booking object:", booking); // ✅ This will log the booking object to the browser console
+
 
   return (
     <div className="p-6 w-full mx-auto bg-white shadow rounded-md">
@@ -30,7 +32,7 @@ const BookingDetailsPage = () => {
           <h2 className="text-lg font-semibold">
             {booking.trip.city.name} To {booking.trip.to_city.name}
           </h2>
-          <p className="text-sm">Booking ID: BW3479858</p>
+          <p className="text-sm">Booking ID : {booking.id}</p>
         </div>
         <div className="text-right">
           <p className="font-bold text-xl">
@@ -45,11 +47,11 @@ const BookingDetailsPage = () => {
       {/* Operator Info */}
       <div className="p-4 border-b">
         <h3 className="text-md font-semibold mb-2">🧾 Operator Information</h3>
-        <div className="grid grid-cols-2 gap-2 text-sm">
+        <div className="grid grid-cols-1 gap-2 text-sm">
           <p>Country: Egypt</p>
           <p>Supplier: Arab Travel Agency</p>
           <p>Operator: Super Jet</p>
-          <p>Line Name: VIP Bus-21855</p>
+          <p>Line Name: {booking.trip.trip_name}</p>
           <p>Line Type: {booking.trip.trip_type}</p>
         </div>
       </div>
@@ -57,7 +59,7 @@ const BookingDetailsPage = () => {
       {/* Departure Info */}
       <div className="p-4 bg-orange-100 border-b">
         <h3 className="text-md font-semibold mb-2">🚌 Departure Information</h3>
-        <div className="text-sm space-y-1">
+        <div className="text-sm space-y-2">
           <p>Departure Location: {booking.trip.pickup_station.name}</p>
           <p>Departure Time: {booking.travel_date} — {booking.trip.deputre_time}</p>
           <p>Arrival Location: {booking.trip.dropoff_station.name}</p>
@@ -68,7 +70,7 @@ const BookingDetailsPage = () => {
       {/* Passenger Info */}
       <div className="p-4">
         <h3 className="text-md font-semibold mb-2">👤 Passenger Details ({booking.travelers} Passenger)</h3>
-        <div className="grid grid-cols-2 gap-2 text-sm">
+        <div className="grid grid-cols-1 gap-2 text-sm">
           <p>Name: {booking.user.name}</p>
           <p>Gender: {booking.user.gender}</p>
           <p>Email: {booking.user.email}</p>

@@ -163,7 +163,17 @@ export const router = createBrowserRouter([
               children:[
                 {
                   path: 'booking_reports',
-                  element: <BookingReportsLayout/>,
+                  element: <Outlet/>,
+                  children:[
+                    {
+                      path: '',
+                      element: <BookingReportsLayout/>,
+                    },
+                    {
+                      path: 'details/:bookingId',
+                      element: <BookingDetailsLayout/>,
+                    }
+                  ]
                 },
                 {
                   path: 'earning_reports',
