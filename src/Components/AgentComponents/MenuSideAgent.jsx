@@ -11,7 +11,6 @@ import { MdOutlineAttachMoney } from "react-icons/md";
 import { TbReportSearch } from "react-icons/tb";
 import { MdOutlineLocalShipping } from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
-import bgTap from "../../assets/Images/bgTap.png";
 import { RiChatPrivateLine } from "react-icons/ri";
 
 const MenuSideAgent = ({ isSidebarCollapsed, onLinkClick }) => {
