@@ -38,6 +38,9 @@ export { default as PayoutRequestPage } from './Dashboard/AgentDashboard/Payout/
 //Wallet
 export { default as WalletPage } from './Dashboard/AgentDashboard/Wallet/WalletPage';
 
+//Payments
+export { default as PaymentsPage } from './Dashboard/AgentDashboard/Payments/PaymentsPage';
+
 //Private Request
 export { default as PrivateRequestPage } from './Dashboard/AgentDashboard/PrivateRequest/PrivateRequestPage';
 

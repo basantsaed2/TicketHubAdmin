@@ -7,7 +7,7 @@ import { TbBus } from "react-icons/tb";
 import { IoMapOutline } from "react-icons/io5";
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
 import { PiWalletFill } from "react-icons/pi";
-import { MdOutlineAttachMoney } from "react-icons/md";
+import { MdOutlineAttachMoney, MdOutlinePayments } from "react-icons/md";
 import { TbReportSearch } from "react-icons/tb";
 import { MdOutlineLocalShipping } from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
@@ -78,12 +78,20 @@ const MenuSideAgent = ({ isSidebarCollapsed, onLinkClick }) => {
     stateLink.isActiveWalletIcon ?? false
   );
 
-  /* Payment */
-  const [isActivePayment, setIsActivePayment] = useState(
-    stateLink.isActivePayment?? false
+  /* Payout */
+  const [isActivePayout, setIsActivePayout] = useState(
+    stateLink.isActivePayout?? false
   );
-  const [isActivePaymentIcon, setIsActivePaymentIcon] = useState(
-    stateLink.isActivePaymentIcon ?? false
+  const [isActivePayoutIcon, setIsActivePayoutIcon] = useState(
+    stateLink.isActivePayoutIcon ?? false
+  );
+
+  /* Payments */
+  const [isActivePayments, setIsActivePayments] = useState(
+    stateLink.isActivePayments?? false
+  );
+  const [isActivePaymentsIcon, setIsActivePaymentsIcon] = useState(
+    stateLink.isActivePaymentsIcon ?? false
   );
 
   /* PrivateRequest */
@@ -119,8 +127,8 @@ const saveActiveLinksState = useCallback(() => {
     isActiveHome, isActiveHomeIcon,isActiveHiaces,isActiveHiacesIcon,
     isActiveBuses, isActiveBusesIcon,isActiveCars,isActiveCarsIcon,
     isActiveBooking, isActiveBookingIcon,isActiveTrips,isActiveTripsIcon,
-    isActiveWallet, isActiveWalletIcon,isActivePayment,isActivePaymentIcon,
-    isActivePrivateRequest, isActivePrivateRequestIcon,
+    isActiveWallet, isActiveWalletIcon,isActivePayout,isActivePayoutIcon,
+    isActivePrivateRequest, isActivePrivateRequestIcon,isActivePayments,isActivePaymentsIcon,
     isActiveReports, isActiveReportsIcon, isOpenReports,
     isActiveBookingReports,isActiveEarningReports
   };
@@ -129,8 +137,8 @@ const saveActiveLinksState = useCallback(() => {
   isActiveHome, isActiveHomeIcon,isActiveHiaces,isActiveHiacesIcon,
   isActiveBuses, isActiveBusesIcon,isActiveCars,isActiveCarsIcon,
   isActiveBooking, isActiveBookingIcon,isActiveTrips,isActiveTripsIcon,
-  isActiveWallet, isActiveWalletIcon,isActivePayment,isActivePaymentIcon,
-  isActivePrivateRequest, isActivePrivateRequestIcon,
+  isActiveWallet, isActiveWalletIcon,isActivePayout,isActivePayoutIcon,
+  isActivePrivateRequest, isActivePrivateRequestIcon,isActivePayments,isActivePaymentsIcon,
   isActiveReports, isActiveReportsIcon, isOpenReports,
   isActiveBookingReports,isActiveEarningReports]);
 
@@ -141,8 +149,8 @@ const saveActiveLinksState = useCallback(() => {
     isActiveHome, isActiveHomeIcon,isActiveHiaces,isActiveHiacesIcon,
     isActiveBuses, isActiveBusesIcon,isActiveCars,isActiveCarsIcon,
     isActiveBooking, isActiveBookingIcon,isActiveTrips,isActiveTripsIcon,
-    isActiveWallet, isActiveWalletIcon,isActivePayment,isActivePaymentIcon,
-    isActivePrivateRequest, isActivePrivateRequestIcon,
+    isActiveWallet, isActiveWalletIcon,isActivePayout,isActivePayoutIcon,
+    isActivePrivateRequest, isActivePrivateRequestIcon,isActivePayments,isActivePaymentsIcon,
     isActiveReports, isActiveReportsIcon, isOpenReports,
     isActiveBookingReports,isActiveEarningReports  ]);
 
@@ -170,10 +178,12 @@ const saveActiveLinksState = useCallback(() => {
     //Wallet
     setIsActiveWallet(false);
     setIsActiveWalletIcon(false);
-    //Payment
-    setIsActivePayment(false);
-    setIsActivePaymentIcon(false);
-
+    //Payout
+    setIsActivePayout(false);
+    setIsActivePayoutIcon(false);
+    //Payments
+    setIsActivePayments(false);
+    setIsActivePaymentsIcon(false);
     //PrivateRequest
     setIsActivePrivateRequest(false);
     setIsActivePrivateRequestIcon(false);
@@ -306,19 +316,35 @@ const saveActiveLinksState = useCallback(() => {
     }
   }, [location]);
 
-  /* Payment */
-  const handleClickPayment = useCallback(() => {
+  /* Payout */
+  const handleClickPayout = useCallback(() => {
     handleStateLinks();
     handleCloseSidebar();
 
-    setIsActivePayment(true);
-    setIsActivePaymentIcon(true);
+    setIsActivePayout(true);
+    setIsActivePayoutIcon(true);
   }, []);
   useEffect(() => {
     const part = pathName.split("/");
     const result = part.slice(0, 3).join("/");
     if (result == "/dashboard_operator/payout") {
-      handleClickPayment();
+      handleClickPayout();
+    }
+  }, [location]);
+
+  /* Payments */
+  const handleClickPayments = useCallback(() => {
+    handleStateLinks();
+    handleCloseSidebar();
+
+    setIsActivePayments(true);
+    setIsActivePaymentsIcon(true);
+  }, []);
+  useEffect(() => {
+    const part = pathName.split("/");
+    const result = part.slice(0, 3).join("/");
+    if (result == "/dashboard_operator/payments") {
+      handleClickPayments();
     }
   }, [location]);
 
@@ -597,30 +623,59 @@ const saveActiveLinksState = useCallback(() => {
         </div>
       </Link>
 
-      {/* Payment */}
+      {/* Payout */}
       <Link
         to="payout"
-        onMouseMove={() => setIsActivePaymentIcon(true)}
-        onMouseOut={() => setIsActivePaymentIcon(false)}
+        onMouseMove={() => setIsActivePayoutIcon(true)}
+        onMouseOut={() => setIsActivePayoutIcon(false)}
         onClick={() => {
-          handleClickPayment();
+          handleClickPayout();
           onLinkClick();
         }}
         className={`
-            ${isActivePayment ? "active" : ""}
+            ${isActivePayout ? "active" : ""}
            flex items-center ${
              isSidebarCollapsed ? "justify-center" : "justify-start"
            } hover:rounded-xl p-2 hover:bg-tap hover:bg-cover hover:bg-center hover:text-mainColor group transition-all duration-300`}
       >
         <div className="flex font-semibold text-xl items-center gap-x-2">
-          <MdOutlineAttachMoney  className={`${isActivePayment|| isActivePaymentIcon ? 'text-mainColor': 'text-white'}`}/>
+          <MdOutlineAttachMoney  className={`${isActivePayout|| isActivePayoutIcon ? 'text-mainColor': 'text-white'}`}/>
           {!isSidebarCollapsed && (
             <span
               className={`text-base transition-all duration-300 group-hover:text-mainColor font-TextFontRegular ml-2 ${
-                isActivePayment ? "text-mainColor" : "text-white"
+                isActivePayout ? "text-mainColor" : "text-white"
               }`}
             >
               Payout
+            </span>
+          )}
+        </div>
+      </Link>
+
+      {/* Payments */}
+      <Link
+        to="payments"
+        onMouseMove={() => setIsActivePaymentsIcon(true)}
+        onMouseOut={() => setIsActivePaymentsIcon(false)}
+        onClick={() => {
+          handleClickPayments();
+          onLinkClick();
+        }}
+        className={`
+            ${isActivePayments ? "active" : ""}
+           flex items-center ${
+             isSidebarCollapsed ? "justify-center" : "justify-start"
+           } hover:rounded-xl p-2 hover:bg-tap hover:bg-cover hover:bg-center hover:text-mainColor group transition-all duration-300`}
+      >
+        <div className="flex font-semibold text-xl items-center gap-x-2">
+          <MdOutlinePayments  className={`${isActivePayments|| isActivePaymentsIcon ? 'text-mainColor': 'text-white'}`}/>
+          {!isSidebarCollapsed && (
+            <span
+              className={`text-base transition-all duration-300 group-hover:text-mainColor font-TextFontRegular ml-2 ${
+                isActivePayments ? "text-mainColor" : "text-white"
+              }`}
+            >
+              Payments
             </span>
           )}
         </div>

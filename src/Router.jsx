@@ -7,13 +7,8 @@ import LoginSuper from "./Pages/Authentication/LoginSuper";
 import { AdminHomePage,AgentHomePage } from "./Pages/AllPages";
 import SuperAdminLayout from "./Layouts/SuperAdminLayouts/SuperAdminLayout";
 import AgentLayout from "./Layouts/AgentLayouts/AgentLayout";
-import { AddBusesLayout, AddCarsLayout, AddHiacesLayout, AddTripsLayout, AgentProfileLayout, BookingLayout, BusesLayout, CarsLayout, EditBusesLayout, EditCarsLayout, EditHiacesLayout, EditTripsLayout, HiacesLayout, PayoutLayout, PayoutRequestLayout, TripsLayout, WalletLayout,BookingReportsLayout,EarningReportsLayout, PrivateRequestLayout, BookingDetailsLayout } from "./Layouts/AllLayouts";
+import { AddBusesLayout, AddCarsLayout, AddHiacesLayout, AddTripsLayout, AgentProfileLayout, BookingLayout, BusesLayout, CarsLayout, EditBusesLayout, EditCarsLayout, EditHiacesLayout, EditTripsLayout, HiacesLayout, PayoutLayout, PayoutRequestLayout, TripsLayout, WalletLayout,BookingReportsLayout,EarningReportsLayout, PrivateRequestLayout, BookingDetailsLayout, PaymentsLayout } from "./Layouts/AllLayouts";
 
-const AppLayoutAdmin = () => (
-  <>
-    <SuperAdminLayout/>
-  </>
-);
 const AppLayoutAgent = () => (
     <>
       <AgentLayout/>
@@ -152,6 +147,10 @@ export const router = createBrowserRouter([
             {
               path: 'wallet',
               element: <WalletLayout/>,
+            },
+            {
+              path: 'payments',
+              element: <PaymentsLayout/>,
             },
             {
               path: 'private_request',
