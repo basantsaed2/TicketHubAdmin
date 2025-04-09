@@ -6,7 +6,7 @@ import MenuSideAgent from "./MenuSideAgent";
 const SidebarAgent = ({ isSidebarCollapsed, onToggleSidebar, isSidebarVisible ,  onLinkClick}) => {
   return (
     <aside
-      className={`fixed z-50 lg:relative custom-scrollbar overflow-y-auto top-0 left-0 h-screen bg-mainColor text-white transition-all duration-300 
+      className={`fixed z-50 lg:relative custom-scrollbar overflow-y-auto overflow-x-hidden top-0 left-0 h-screen bg-mainColor text-white transition-all duration-300 
       ${isSidebarCollapsed ? "lg:w-20" : "lg:w-64"} w-64 ${isSidebarVisible ? "block" : "hidden"}`}
     >
       {/* Sidebar Header */}

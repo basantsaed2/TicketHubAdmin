@@ -208,14 +208,14 @@ const BookingPage = ({ update, setUpdate }) => {
                       <td className="text-center py-2">
                         <div className="relative">
                           <select
-                            value={booking?.status}
+                            value={booking?.travel_status}
                             onChange={(e) => handleChangeStatus(booking.id, e.target.value)}
                             className={`px-2 py-1 border rounded-lg shadow-sm font-medium text-center 
                                       focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all duration-200 
                                       ${
-                                        booking?.status === "pending"
+                                        booking?.travel_status === "pending"
                                           ? "bg-yellow-100 text-yellow-700 border-yellow-400"
-                                          : booking?.status === "confirmed"
+                                          : booking?.travel_status === "confirmed"
                                           ? "bg-green-100 text-green-700 border-green-400"
                                           : "bg-red-100 text-red-700 border-red-400"
                                       }`}
