@@ -97,7 +97,7 @@ const HiacesPage = ({ update, setUpdate }) => {
     setCurrentPage(1);
   };
 
-  const headers = ['Type', "Image", 'Capacity', 'Available Seats', "Number", "Amenities", "Status", "Action"];
+  const headers = ['Type', "Image", 'Capacity', "Number", "Amenities", "Status", "Action"];
 
   return (
     <div className="w-full pb-5 flex items-start justify-start scrollSection">
@@ -180,7 +180,7 @@ const HiacesPage = ({ update, setUpdate }) => {
                         )}
                       </td>
                       <td className="text-center py-2 text-gray-600">{bus?.capacity || "-"}</td>
-                      <td className="text-center py-2 text-gray-600">{bus?.bus_type?.seats_count || 0}</td>
+                      {/* <td className="text-center py-2 text-gray-600">{bus?.bus_type?.seats_count || 0}</td> */}
                       <td className="text-center py-2 text-gray-600">{bus?.bus_number || "-"}</td>
                       {/* Amenities Column */}
                       <td className="text-center py-2">

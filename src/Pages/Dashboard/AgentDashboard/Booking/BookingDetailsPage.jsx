@@ -46,13 +46,11 @@ const BookingDetailsPage = () => {
 
       {/* Operator Info */}
       <div className="p-4 border-b">
-        <h3 className="text-md font-semibold mb-2">🧾 Operator Information</h3>
+        <h3 className="text-md font-semibold mb-2">🧾 User Information</h3>
         <div className="grid grid-cols-1 gap-2 text-sm">
-          <p>Country: Egypt</p>
-          <p>Supplier: Arab Travel Agency</p>
-          <p>Operator: Super Jet</p>
-          <p>Line Name: {booking.trip.trip_name}</p>
-          <p>Line Type: {booking.trip.trip_type}</p>
+          <p>Name: {booking.user.name}</p>
+          <p>Phone: {booking.user.phone}</p>
+          <p>Number Of Traverlers: {booking.travelers}</p>
         </div>
       </div>
 
@@ -60,9 +58,13 @@ const BookingDetailsPage = () => {
       <div className="p-4 bg-orange-100 border-b">
         <h3 className="text-md font-semibold mb-2">🚌 Departure Information</h3>
         <div className="text-sm space-y-2">
+          <p>Trip Name : {booking.trip.trip_name}</p>
+          <p>Trip Type : {booking.trip.trip_type}</p>
+          <p>Departure City: {booking.trip.city.name}</p>
           <p>Departure Location: {booking.trip.pickup_station.name}</p>
           <p>Departure Time: {booking.travel_date} — {booking.trip.deputre_time}</p>
           <p>Arrival Location: {booking.trip.dropoff_station.name}</p>
+          <p>Arrival City: {booking.trip.to_city.name}</p>
           <p>Arrival Time: {booking.travel_date} — {booking.trip.arrival_time}</p>
         </div>
       </div>
@@ -71,11 +73,8 @@ const BookingDetailsPage = () => {
       <div className="p-4">
         <h3 className="text-md font-semibold mb-2">👤 Passenger Details ({booking.travelers} Passenger)</h3>
         <div className="grid grid-cols-1 gap-2 text-sm">
-          <p>Name: {booking.user.name}</p>
-          <p>Gender: {booking.user.gender}</p>
-          <p>Email: {booking.user.email}</p>
-          <p>Phone: {booking.user.phone}</p>
-          <p>Country of Residence: {booking.user.country}</p>
+          {/* <p>Name: {booking.passenger.name || '-'}</p> */}
+          {/* <p>Phone: {booking.passenger.phone}</p> */}
         </div>
       </div>
     </div>

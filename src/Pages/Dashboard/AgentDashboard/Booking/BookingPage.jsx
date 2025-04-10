@@ -107,25 +107,28 @@ const BookingPage = ({ update, setUpdate }) => {
         <div className="w-full sm:min-w-0">
           {/* Tabs */}
           <div className="tabs mb-4 flex gap-5">
-                <a
-                    className={`tab tab-bordered rounded-lg bg-secoundColor text-white font-semibold hover:bg-secoundColor/80 ${activeTab === "pending" ? "tab-active" : ""}`}
-                    onClick={() => setActiveTab("pending")}
-                >
-                    Pending
-                </a>
-                <a
-                    className={`tab tab-bordered rounded-lg bg-secoundColor text-white font-semibold hover:bg-secoundColor/80 ${activeTab === "confirmed" ? "tab-active" : ""}`}
-                    onClick={() => setActiveTab("confirmed")}
-                >
-                    Confirmed
-                </a>
-                <a
-                    className={`tab tab-bordered rounded-lg bg-secoundColor text-white font-semibold hover:bg-secoundColor/80 ${activeTab === "canceled" ? "tab-active" : ""}`}
-                    onClick={() => setActiveTab("canceled")}
-                >
-                    Cancellation
-                </a>
-            </div>
+            <a
+              className={`tab tab-bordered rounded-lg bg-white text-[#1E1E2F] font-medium py-2 px-4 shadow-md hover:bg-[#F58220] hover:text-white transition-all duration-300 ease-in-out transform hover:scale-105 ${activeTab === "pending" ? "tab-active bg-[#F58220] text-secoundColor shadow-lg" : ""}`}
+              onClick={() => setActiveTab("pending")}
+            >
+              Pending
+            </a>
+            <a
+              className={`tab tab-bordered rounded-lg bg-white text-[#1E1E2F] font-medium py-2 px-4 shadow-md hover:bg-[#F58220] hover:text-white transition-all duration-300 ease-in-out transform hover:scale-105 ${activeTab === "confirmed" ? "tab-active bg-[#F58220] text-secoundColor shadow-lg" : ""}`}
+              onClick={() => setActiveTab("confirmed")}
+            >
+              Confirmed
+            </a>
+            <a
+              className={`tab tab-bordered rounded-lg bg-white text-[#1E1E2F] font-medium py-2 px-4 shadow-md hover:bg-[#F58220] hover:text-white transition-all duration-300 ease-in-out transform hover:scale-105 ${activeTab === "canceled" ? "tab-active bg-[#F58220] text-secoundColor shadow-lg" : ""}`}
+              onClick={() => setActiveTab("canceled")}
+            >
+              Cancellation
+            </a>
+          </div>
+
+
+
           {/* Search & Filter Section */}
           <div className="w-full flex flex-wrap items-center gap-4 bg-white p-6 border border-gray-200 rounded-xl mb-6">
             <div className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-lg w-full md:w-[280px] border border-gray-300">

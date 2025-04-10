@@ -5,6 +5,7 @@ import { usePost } from '../../../../Hooks/usePostJson';
 import { useAuth } from '../../../../Context/Auth';
 import { useNavigate, useParams } from 'react-router-dom';
 import { IoCloudUpload } from 'react-icons/io5';
+import Select from 'react-select';
 
 const EditHiacesPage = ({ update, setUpdate }) => {
     const { hiaceId } = useParams();
@@ -117,90 +118,75 @@ const EditHiacesPage = ({ update, setUpdate }) => {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {/* Type Select */}
-        <div>
-          <label className="block text-gray-700 mb-1">Type</label>
-          <select
-            value={selectedHiaceType}
-            onChange={(e) => setSelectedHiaceType(e.target.value)}
-            className="select select-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
-          >
-            <option value="">Select Type</option>
-            {hiaceType.map((type) => (
-              <option key={type.id} value={type.id}>
-                {type.name}
-              </option>
-            ))}
-          </select>
-        </div>
-  
-        {/* Amenities Multi-Select */}
         <div className="w-full">
-          <label className="block text-gray-700 mb-1">Amenities</label>
-          <div className="dropdown w-full">
-            {/* Dropdown button with placeholder */}
-            <label
-              tabIndex="0"
-              className="btn btn-bordered w-full flex justify-between items-center rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
-            >
-              <span
-                className={`truncate ${
-                  selectedHiaceAminities.length === 0 ? "text-gray-500" : ""
-                }`}
-              >
-                {selectedHiaceAminities.length > 0
-                  ? selectedHiaceAminities
-                      .map((id) => {
-                        const amenity = hiaceAminities.find((a) => a.id === id);
-                        return amenity ? amenity.name : "";
-                      })
-                      .join(", ")
-                  : "Select Amenities"}
-              </span>
-              <svg
-                className="fill-current"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-              >
-                <path d="M7 10l5 5 5-5z" />
-              </svg>
-            </label>
-            {/* Dropdown menu */}
-            <ul
-              tabIndex="0"
-              className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-full max-h-60 overflow-y-auto"
-            >
-              {hiaceAminities.map((amenity) => (
-                <li key={amenity.id}>
-                  <label className="cursor-pointer flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={selectedHiaceAminities.includes(amenity.id)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setSelectedHiaceAminities((prev) => [
-                            ...prev,
-                            amenity.id,
-                          ]);
-                        } else {
-                          setSelectedHiaceAminities((prev) =>
-                            prev.filter((id) => id !== amenity.id)
-                          );
-                        }
-                      }}
-                      // Set accent color to mainColor (ensure --mainColor is defined in your CSS)
-                      style={{ accentColor: "var(--mainColor)" }}
-                      className="checkbox"
-                    />
-                    <span>{amenity.name}</span>
-                  </label>
-                </li>
-              ))}
-            </ul>
-          </div>
+  <label className="block text-gray-700 mb-1">Type</label>
+  <Select
+    options={hiaceType.map((type) => ({
+      value: type.id,
+      label: type.name,
+    }))}
+    value={
+      selectedHiaceType
+        ? {
+            value: selectedHiaceType,
+            label: hiaceType.find((type) => type.id === selectedHiaceType)?.name,
+          }
+        : null
+    }
+    onChange={(option) => setSelectedHiaceType(option?.value || '')}
+    placeholder="Select Type"
+    isClearable
+    className="react-select-container w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
+    classNamePrefix="react-select"
+    styles={{
+      control: (provided, state) => ({
+        ...provided,
+        borderColor: state.isFocused ? '#1E1E2F' : '#e5e7eb',
+        boxShadow: state.isFocused ? '0 0 0 1px #1E1E2F' : 'none',
+        '&:hover': {
+          borderColor: '#1E1E2F',
+        },
+      }),
+    }}
+  />
+      </div>
+
+        {/* // 🔹 Amenities Multi-Select */}
+        <div className="w-full">
+  <label className="block text-gray-700 mb-1">Amenities</label>
+  <Select
+    options={hiaceAminities.map((amenity) => ({
+      value: amenity.id,
+      label: amenity.name,
+    }))}
+    value={hiaceAminities
+      .filter((amenity) => selectedHiaceAminities.includes(amenity.id))
+      .map((amenity) => ({
+        value: amenity.id,
+        label: amenity.name,
+      }))}
+    onChange={(selectedOptions) => {
+      setSelectedHiaceAminities(
+        selectedOptions ? selectedOptions.map((option) => option.value) : []
+      );
+    }}
+    placeholder="Select Amenities"
+    isMulti
+    isSearchable
+    className="react-select-container w-full"
+    classNamePrefix="react-select"
+    styles={{
+      control: (provided, state) => ({
+        ...provided,
+        borderColor: state.isFocused ? '#1E1E2F' : '#e5e7eb',
+        boxShadow: state.isFocused ? '0 0 0 1px #1E1E2F' : 'none',
+        '&:hover': {
+          borderColor: '#1E1E2F',
+        },
+      }),
+    }}
+  />
         </div>
-  
         {/* Hiace Capacity Input */}
         <div>
           <label className="block text-gray-700 mb-1">Hiace Capacity</label>
