@@ -9,6 +9,7 @@ export const usePost = ({ url, login = false, type = false }) => {
        // const user = useSelector(state => state.user)
        const [loadingPost, setLoadingPost] = useState(false);
        const [response, setResponse] = useState(null);
+       const [error, setError] = useState(null);
 
        const postData = async (data, name) => {
               setLoadingPost(true);
@@ -46,7 +47,7 @@ export const usePost = ({ url, login = false, type = false }) => {
               // } 
               catch (error) {
                      console.error('Error post JSON:', error);
-                   
+                    setError(error)
                      // Check if the error response contains 'errors' or just a message
                      if (error?.response?.data?.errors) {
                        // Check if errors are an object (field-based errors)
@@ -80,5 +81,5 @@ export const usePost = ({ url, login = false, type = false }) => {
               }
        };
 
-       return { postData, loadingPost, response };
+       return { postData, loadingPost, response ,error};
 };

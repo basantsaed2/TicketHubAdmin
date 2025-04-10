@@ -4,7 +4,7 @@ import SidebarAgent from "../../Components/AgentComponents/SidebarAgent";
 import { Outlet } from "react-router-dom";
 
 const AgentLayout = () => {
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 740);
 
   const handleToggleSidebar = () => {

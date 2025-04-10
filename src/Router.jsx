@@ -154,16 +154,22 @@ export const router = createBrowserRouter([
                 {
                   path: '',
                   element: <PayoutLayout/>,
-                },
-                {
-                  path:'payout_request',
-                  element: <PayoutRequestLayout/>
                 }
               ]
             },
             {
               path: 'wallet',
-              element: <WalletLayout/>,
+              element: <Outlet/>,
+              children: [
+                {
+                  path: '',
+                  element: <WalletLayout/>,
+                },
+                {
+                  path:'payout_request/:walletId',
+                  element: <PayoutRequestLayout/>
+                }
+              ]
             },
             {
               path: 'payments',

@@ -393,12 +393,13 @@ const saveActiveLinksState = useCallback(() => {
   }, [location]);
 
   /* Reports */
-  const handleClickReports = useCallback(() => {
+    const handleClickReports = (e) => {
+      e.preventDefault();
     handleStateLinks();
-    setIsOpenReports((prev) => !prev); // Properly toggle dropdown
+    setIsOpenReports((prev) => !prev); 
     setIsActiveReportsIcon((prev) => !prev);
     setIsActiveReports((prev) => !prev);
-  }, []);
+  }
   // ✅ Ensure Users closes when clicking it again
   useEffect(() => {
     const result = pathName.split("/").slice(0, 3).join("/");
@@ -423,7 +424,6 @@ const saveActiveLinksState = useCallback(() => {
     setIsActiveReportsIcon(true);
     setIsActiveReports(true);
     setIsActiveBookingReports(true);
-    setIsActiveEarningReports(false);
 
   }, []);
   useEffect(() => {
@@ -438,7 +438,6 @@ const saveActiveLinksState = useCallback(() => {
     setIsActiveReportsIcon(true);
     setIsActiveReports(true);
     setIsActiveEarningReports(true);
-    setIsActiveBookingReports(false);
   }, []);
   useEffect(() => {
     if (pathName.startsWith("/dashboard_operator/reports/earning_reports")) {
@@ -467,7 +466,7 @@ const saveActiveLinksState = useCallback(() => {
         <RiHome2Line className={`${isActiveHome|| isActiveHomeIcon ? 'text-mainColor': 'text-white'}`}/>
           {!isSidebarCollapsed && (
             <span
-              className={`text-base transition-all duration-300 group-hover:text-mainColor font-TextFontRegular ml-2 ${
+              className={`text-base transition-all duration-300 group-hover:text-mainColor ml-2 ${
                 isActiveHome ? "text-mainColor" : "text-white"
               }`}
             >
@@ -496,7 +495,7 @@ const saveActiveLinksState = useCallback(() => {
         <TbBus className={`${isActiveBuses|| isActiveBusesIcon ? 'text-mainColor': 'text-white'}`}/>
           {!isSidebarCollapsed && (
             <span
-              className={`text-base transition-all duration-300 group-hover:text-mainColor font-TextFontRegular ml-2 ${
+              className={`text-base transition-all duration-300 group-hover:text-mainColor  ml-2 ${
                 isActiveBuses ? "text-mainColor" : "text-white"
               }`}
             >
@@ -525,7 +524,7 @@ const saveActiveLinksState = useCallback(() => {
         <MdOutlineLocalShipping className={`${isActiveHiaces|| isActiveHiacesIcon ? 'text-mainColor': 'text-white'}`}/>
           {!isSidebarCollapsed && (
             <span
-              className={`text-base transition-all duration-300 group-hover:text-mainColor font-TextFontRegular ml-2 ${
+              className={`text-base transition-all duration-300 group-hover:text-mainColor  ml-2 ${
                 isActiveHiaces ? "text-mainColor" : "text-white"
               }`}
             >
@@ -554,7 +553,7 @@ const saveActiveLinksState = useCallback(() => {
           <FaCarAlt className={`${isActiveCars|| isActiveCarsIcon ? 'text-mainColor': 'text-white'}`}/>
           {!isSidebarCollapsed && (
             <span
-              className={`text-base transition-all duration-300 group-hover:text-mainColor font-TextFontRegular ml-2 ${
+              className={`text-base transition-all duration-300 group-hover:text-mainColor  ml-2 ${
                 isActiveCars ? "text-mainColor" : "text-white"
               }`}
             >
@@ -583,7 +582,7 @@ const saveActiveLinksState = useCallback(() => {
           <TbTrain className={`${isActiveTrains|| isActiveTrainsIcon ? 'text-mainColor': 'text-white'}`}/>
           {!isSidebarCollapsed && (
             <span
-              className={`text-base transition-all duration-300 group-hover:text-mainColor font-TextFontRegular ml-2 ${
+              className={`text-base transition-all duration-300 group-hover:text-mainColor  ml-2 ${
                 isActiveTrains ? "text-mainColor" : "text-white"
               }`}
             >
@@ -612,7 +611,7 @@ const saveActiveLinksState = useCallback(() => {
           <IoMapOutline  className={`${isActiveTrips|| isActiveTripsIcon ? 'text-mainColor': 'text-white'}`}/>
           {!isSidebarCollapsed && (
             <span
-              className={`text-base transition-all duration-300 group-hover:text-mainColor font-TextFontRegular ml-2 ${
+              className={`text-base transition-all duration-300 group-hover:text-mainColor  ml-2 ${
                 isActiveTrips ? "text-mainColor" : "text-white"
               }`}
             >
@@ -641,7 +640,7 @@ const saveActiveLinksState = useCallback(() => {
           <IoCheckmarkDoneSharp  className={`${isActiveBooking|| isActiveBookingIcon ? 'text-mainColor': 'text-white'}`}/>
           {!isSidebarCollapsed && (
             <span
-              className={`text-base transition-all duration-300 group-hover:text-mainColor font-TextFontRegular ml-2 ${
+              className={`text-base transition-all duration-300 group-hover:text-mainColor  ml-2 ${
                 isActiveBooking ? "text-mainColor" : "text-white"
               }`}
             >
@@ -670,7 +669,7 @@ const saveActiveLinksState = useCallback(() => {
           <PiWalletFill  className={`${isActiveWallet|| isActiveWalletIcon ? 'text-mainColor': 'text-white'}`}/>
           {!isSidebarCollapsed && (
             <span
-              className={`text-base transition-all duration-300 group-hover:text-mainColor font-TextFontRegular ml-2 ${
+              className={`text-base transition-all duration-300 group-hover:text-mainColor  ml-2 ${
                 isActiveWallet ? "text-mainColor" : "text-white"
               }`}
             >
@@ -699,7 +698,7 @@ const saveActiveLinksState = useCallback(() => {
           <MdOutlineAttachMoney  className={`${isActivePayout|| isActivePayoutIcon ? 'text-mainColor': 'text-white'}`}/>
           {!isSidebarCollapsed && (
             <span
-              className={`text-base transition-all duration-300 group-hover:text-mainColor font-TextFontRegular ml-2 ${
+              className={`text-base transition-all duration-300 group-hover:text-mainColor  ml-2 ${
                 isActivePayout ? "text-mainColor" : "text-white"
               }`}
             >
@@ -728,7 +727,7 @@ const saveActiveLinksState = useCallback(() => {
           <MdOutlinePayments  className={`${isActivePayments|| isActivePaymentsIcon ? 'text-mainColor': 'text-white'}`}/>
           {!isSidebarCollapsed && (
             <span
-              className={`text-base transition-all duration-300 group-hover:text-mainColor font-TextFontRegular ml-2 ${
+              className={`text-base transition-all duration-300 group-hover:text-mainColor  ml-2 ${
                 isActivePayments ? "text-mainColor" : "text-white"
               }`}
             >
@@ -757,7 +756,7 @@ const saveActiveLinksState = useCallback(() => {
           <RiChatPrivateLine  className={`${isActivePrivateRequest|| isActivePrivateRequestIcon ? 'text-mainColor': 'text-white'}`}/>
           {!isSidebarCollapsed && (
             <span
-              className={`text-base transition-all duration-300 group-hover:text-mainColor font-TextFontRegular ml-2 ${
+              className={`text-base transition-all duration-300 group-hover:text-mainColor  ml-2 ${
                 isActivePrivateRequest ? "text-mainColor" : "text-white"
               }`}
             >
@@ -789,7 +788,7 @@ const saveActiveLinksState = useCallback(() => {
           />
           {!isSidebarCollapsed && (
             <span
-              className={`text-base transition-all duration-300 group-hover:text-mainColor font-TextFontRegular ml-2 ${
+              className={`text-base transition-all duration-300 group-hover:text-mainColor  ml-2 ${
                 isActiveReports ? "text-mainColor" : "text-white"
               }`}
             >
@@ -807,7 +806,7 @@ const saveActiveLinksState = useCallback(() => {
       </Link>
       <div
         className={`${
-          isActiveReports && !isSidebarCollapsed ? "h-17" : "h-0 "
+          isOpenReports && !isSidebarCollapsed ? "h-17" : "h-0 "
         } overflow-hidden flex items-start justify-end  w-full transition-all duration-700`}
       >
         <ul className="list-disc w-full pl-10 transition-all duration-700 flex flex-col gap-y-2">
@@ -824,7 +823,7 @@ const saveActiveLinksState = useCallback(() => {
                   ? "rounded-xl bg-tap bg-cover bg-center text-mainColor"
                   : "text-white"
               }
-                          text-xl font-TextFontLight rounded-xl px-4 py-1  hover:bg-tap hover:bg-cover hover:bg-center transition-all duration-300 hover:text-mainColor`}
+                       font-semibold  text-base rounded-xl px-4 py-1  hover:bg-tap hover:bg-cover hover:bg-center transition-all duration-300 hover:text-mainColor`}
             >
               Booking
             </li>
@@ -842,7 +841,7 @@ const saveActiveLinksState = useCallback(() => {
                   ? "rounded-xl bg-tap bg-cover bg-center text-mainColor"
                   : "text-white"
               }
-                          text-xl font-TextFontLight rounded-xl px-4 py-1  hover:bg-tap hover:bg-cover hover:bg-center transition-all duration-300 hover:text-mainColor`}
+                        font-semibold  text-base rounded-xl px-4 py-1  hover:bg-tap hover:bg-cover hover:bg-center transition-all duration-300 hover:text-mainColor`}
             >
               Earning
             </li>
