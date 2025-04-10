@@ -4,10 +4,9 @@ import { Navigate, Outlet, createBrowserRouter } from "react-router-dom";
 import ProtectedRoute from "./ProtectedData/ProtectedRoute";
 import LoginAgent from "./Pages/Authentication/LoginAgent";
 import LoginSuper from "./Pages/Authentication/LoginSuper";
-import { AdminHomePage,AgentHomePage } from "./Pages/AllPages";
-import SuperAdminLayout from "./Layouts/SuperAdminLayouts/SuperAdminLayout";
+import { AgentHomePage } from "./Pages/AllPages";
 import AgentLayout from "./Layouts/AgentLayouts/AgentLayout";
-import { AddBusesLayout, AddCarsLayout, AddHiacesLayout, AddTripsLayout, AgentProfileLayout, BookingLayout, BusesLayout, CarsLayout, EditBusesLayout, EditCarsLayout, EditHiacesLayout, EditTripsLayout, HiacesLayout, PayoutLayout, PayoutRequestLayout, TripsLayout, WalletLayout,BookingReportsLayout,EarningReportsLayout, PrivateRequestLayout, BookingDetailsLayout, PaymentsLayout } from "./Layouts/AllLayouts";
+import { AddBusesLayout, AddCarsLayout, AddHiacesLayout, AddTripsLayout, AgentProfileLayout, BookingLayout, BusesLayout, CarsLayout, EditBusesLayout, EditCarsLayout, EditHiacesLayout, EditTripsLayout, HiacesLayout, PayoutLayout, PayoutRequestLayout, TripsLayout, WalletLayout,BookingReportsLayout,EarningReportsLayout, PrivateRequestLayout, BookingDetailsLayout, PaymentsLayout, TrainsLayout, AddTrainsLayout, EditTrainsLayout } from "./Layouts/AllLayouts";
 
 const AppLayoutAgent = () => (
     <>
@@ -95,6 +94,24 @@ export const router = createBrowserRouter([
                 {
                   path: 'edit/:hiaceId',
                   element:<EditHiacesLayout/>
+                }
+              ]          
+            },
+            {
+              path:'trains',
+              element: <Outlet/>,
+              children: [
+                {
+                  path: '',
+                  element: <TrainsLayout/>
+                },
+                {
+                  path: 'add',
+                  element:<AddTrainsLayout/>
+                },
+                {
+                  path: 'edit/:trainId',
+                  element:<EditTrainsLayout/>
                 }
               ]          
             },

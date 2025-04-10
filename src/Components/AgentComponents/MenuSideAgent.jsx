@@ -12,6 +12,7 @@ import { TbReportSearch } from "react-icons/tb";
 import { MdOutlineLocalShipping } from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
 import { RiChatPrivateLine } from "react-icons/ri";
+import { TbTrain } from "react-icons/tb";
 
 const MenuSideAgent = ({ isSidebarCollapsed, onLinkClick }) => {
   const auth = useAuth();
@@ -44,6 +45,14 @@ const MenuSideAgent = ({ isSidebarCollapsed, onLinkClick }) => {
   );
   const [isActiveHiacesIcon, setIsActiveHiacesIcon] = useState(
     stateLink.isActiveHiacesIcon ?? false
+  );
+
+  /* Trains */
+  const [isActiveTrains, setIsActiveTrains] = useState(
+    stateLink.isActiveTrains ?? false
+  );
+  const [isActiveTrainsIcon, setIsActiveTrainsIcon] = useState(
+    stateLink.isActiveTrainsIcon ?? false
   );
 
   /* Cars */
@@ -125,7 +134,7 @@ const MenuSideAgent = ({ isSidebarCollapsed, onLinkClick }) => {
 const saveActiveLinksState = useCallback(() => {
   const activeLinks = { 
     isActiveHome, isActiveHomeIcon,isActiveHiaces,isActiveHiacesIcon,
-    isActiveBuses, isActiveBusesIcon,isActiveCars,isActiveCarsIcon,
+    isActiveBuses, isActiveBusesIcon,isActiveCars,isActiveCarsIcon,isActiveTrains,isActiveTrainsIcon,
     isActiveBooking, isActiveBookingIcon,isActiveTrips,isActiveTripsIcon,
     isActiveWallet, isActiveWalletIcon,isActivePayout,isActivePayoutIcon,
     isActivePrivateRequest, isActivePrivateRequestIcon,isActivePayments,isActivePaymentsIcon,
@@ -135,7 +144,7 @@ const saveActiveLinksState = useCallback(() => {
   auth.sidebar = JSON.stringify(activeLinks);
   }, [
   isActiveHome, isActiveHomeIcon,isActiveHiaces,isActiveHiacesIcon,
-  isActiveBuses, isActiveBusesIcon,isActiveCars,isActiveCarsIcon,
+  isActiveBuses, isActiveBusesIcon,isActiveCars,isActiveCarsIcon,isActiveTrains,isActiveTrainsIcon,
   isActiveBooking, isActiveBookingIcon,isActiveTrips,isActiveTripsIcon,
   isActiveWallet, isActiveWalletIcon,isActivePayout,isActivePayoutIcon,
   isActivePrivateRequest, isActivePrivateRequestIcon,isActivePayments,isActivePaymentsIcon,
@@ -147,7 +156,7 @@ const saveActiveLinksState = useCallback(() => {
     saveActiveLinksState();
   }, [
     isActiveHome, isActiveHomeIcon,isActiveHiaces,isActiveHiacesIcon,
-    isActiveBuses, isActiveBusesIcon,isActiveCars,isActiveCarsIcon,
+    isActiveBuses, isActiveBusesIcon,isActiveCars,isActiveCarsIcon,isActiveTrains,isActiveTrainsIcon,
     isActiveBooking, isActiveBookingIcon,isActiveTrips,isActiveTripsIcon,
     isActiveWallet, isActiveWalletIcon,isActivePayout,isActivePayoutIcon,
     isActivePrivateRequest, isActivePrivateRequestIcon,isActivePayments,isActivePaymentsIcon,
@@ -169,6 +178,9 @@ const saveActiveLinksState = useCallback(() => {
     //Cars
     setIsActiveCars(false);
     setIsActiveCarsIcon(false);
+    //Trains
+    setIsActiveTrains(false);
+    setIsActiveTrainsIcon(false);
     //Trips
     setIsActiveTrips(false);
     setIsActiveTripsIcon(false);
@@ -253,7 +265,7 @@ const saveActiveLinksState = useCallback(() => {
   }, [location]);
 
   /* Cars */
-   const handleClickCar = useCallback(() => {
+  const handleClickCar = useCallback(() => {
     handleStateLinks();
     handleCloseSidebar();
 
@@ -265,6 +277,22 @@ const saveActiveLinksState = useCallback(() => {
     const result = part.slice(0, 3).join("/");
     if (result == "/dashboard_operator/cars") {
       handleClickCar();
+    }
+  }, [location]);
+
+  /* Trains */
+  const handleClickTrains = useCallback(() => {
+    handleStateLinks();
+    handleCloseSidebar();
+
+    setIsActiveTrains(true);
+    setIsActiveTrainsIcon(true);
+  }, []);
+  useEffect(() => {
+    const part = pathName.split("/");
+    const result = part.slice(0, 3).join("/");
+    if (result == "/dashboard_operator/trains") {
+      handleClickTrains();
     }
   }, [location]);
 
@@ -531,6 +559,35 @@ const saveActiveLinksState = useCallback(() => {
               }`}
             >
               Cars
+            </span>
+          )}
+        </div>
+      </Link>
+
+      {/* Train */}
+      <Link
+        to="trains"
+        onMouseMove={() => setIsActiveTrainsIcon(true)}
+        onMouseOut={() => setIsActiveTrainsIcon(false)}
+        onClick={() => {
+          handleClickTrains();
+          onLinkClick();
+        }}
+        className={`
+            ${isActiveTrains ? "active" : ""}
+           flex items-center ${
+             isSidebarCollapsed ? "justify-center" : "justify-start"
+           } hover:rounded-xl p-2 hover:bg-tap hover:bg-cover hover:bg-center hover:text-mainColor group transition-all duration-300`}
+      >
+        <div className="flex font-semibold text-xl items-center gap-x-2">
+          <TbTrain className={`${isActiveTrains|| isActiveTrainsIcon ? 'text-mainColor': 'text-white'}`}/>
+          {!isSidebarCollapsed && (
+            <span
+              className={`text-base transition-all duration-300 group-hover:text-mainColor font-TextFontRegular ml-2 ${
+                isActiveTrains ? "text-mainColor" : "text-white"
+              }`}
+            >
+              Trains
             </span>
           )}
         </div>

@@ -1,6 +1,3 @@
-//Admin
-export { default as AdminHomePage } from './Dashboard/SuperAdminDashboard/Home/AdminHomePage';
-
 //Agent
 export { default as AgentHomePage } from './Dashboard/AgentDashboard/Home/AgentHomePage';
 
@@ -21,6 +18,11 @@ export { default as EditBusesPage } from './Dashboard/AgentDashboard/Buses/EditB
 export { default as HiacesPage } from './Dashboard/AgentDashboard/Hiaces/HiacesPage';
 export { default as AddHiacesPage } from './Dashboard/AgentDashboard/Hiaces/AddHiacesPage';
 export { default as EditHiacesPage } from './Dashboard/AgentDashboard/Hiaces/EditHiacesPage';
+
+//Trains
+export { default as TrainsPage } from './Dashboard/AgentDashboard/Trains/TrainsPage';
+export { default as AddTrainsPage } from './Dashboard/AgentDashboard/Trains/AddTrainsPage';
+export { default as EditTrainsPage } from './Dashboard/AgentDashboard/Trains/EditTrainsPage';
 
 //Trips
 export { default as TripsPage } from './Dashboard/AgentDashboard/Trips/TripsPage';

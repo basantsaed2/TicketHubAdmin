@@ -17,6 +17,11 @@ export {default as HiacesLayout} from './AgentLayouts/Hiaces/HiacesLayout';
 export {default as AddHiacesLayout} from './AgentLayouts/Hiaces/AddHiacesLayout';
 export {default as EditHiacesLayout} from './AgentLayouts/Hiaces/EditHiacesLayout';
 
+//Trains
+export {default as TrainsLayout} from './AgentLayouts/Trains/TrainsLayout';
+export {default as AddTrainsLayout} from './AgentLayouts/Trains/AddTrainsLayout';
+export {default as EditTrainsLayout} from './AgentLayouts/Trains/EditTrainsLayout';
+
 //Trips
 export {default as TripsLayout} from './AgentLayouts/Trips/TripsLayout';
 export {default as AddTripsLayout} from './AgentLayouts/Trips/AddTripsLayout';
