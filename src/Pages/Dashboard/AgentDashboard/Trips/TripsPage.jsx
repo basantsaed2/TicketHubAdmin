@@ -200,7 +200,7 @@ const TripsPage = ({ update, setUpdate }) => {
                       {/* Trip Date */}
                       <td className="text-center py-2 text-gray-600">
                         <span className="block truncate mx-auto">
-                          {trip.date || "-"}
+                          {trip.date ?trip.date : trip.start_date}
                         </span>
                       </td>
                       {/* Available Seats */}
