@@ -463,27 +463,27 @@ const customStyles = {
   <h2 className="text-xl font-bold text-gray-800 mb-4">Schedule</h2>
 
   {/* Radio: Schedule Type */}
-  <div className="mb-4 flex items-center gap-6">
-    <label className="text-gray-700 font-medium">Schedule Type:</label>
-    <label className="flex items-center gap-2">
-      <input
-        type="radio"
-        value="one_time"
-        checked={scheduleType === "one_time"}
-        onChange={(e) => setScheduleType(e.target.value)}
-      />
-      One Time
-    </label>
-    <label className="flex items-center gap-2">
-      <input
-        type="radio"
-        value="recurrent"
-        checked={scheduleType === "recurrent"}
-        onChange={(e) => setScheduleType(e.target.value)}
-      />
-      Recurrent
-    </label>
-  </div>
+    <div className="mb-4 flex items-center gap-6">
+      <label className="text-gray-700 font-medium">Schedule Type:</label>
+      <label className="flex items-center gap-2">
+        <input
+          type="radio"
+          value="one_time"
+          checked={scheduleType === "one_time"}
+          onChange={(e) => setScheduleType(e.target.value)}
+        />
+        One Time
+      </label>
+      <label className="flex items-center gap-2">
+        <input
+          type="radio"
+          value="recurrent"
+          checked={scheduleType === "recurrent"}
+          onChange={(e) => setScheduleType(e.target.value)}
+        />
+        Recurrent
+      </label>
+    </div>
 
   {/* One Time Fields */}
   {scheduleType === "one_time" && (
