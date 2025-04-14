@@ -114,7 +114,7 @@ const AddTripsPage = ({ update, setUpdate }) => {
     let data = {
       trip_name: tripName,
       trip_type: tripType, // "hiace", "bus", "train"
-      bus_id: busId,
+      bus_id: busId || hiaceId,
       train_id: trainId,
       pickup_station_id: pickupStationId,
       dropoff_station_id: dropoffStationId,

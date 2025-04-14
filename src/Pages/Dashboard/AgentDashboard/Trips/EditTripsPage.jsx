@@ -113,6 +113,7 @@ const EditTripsPage = ({ update, setUpdate }) => {
       setTripType(trip.trip_type || 'hiace');
       setBusId(trip.bus_id || '');
       setTrainId(trip.train_id || '');
+      setHiaceId(trip.bus_id || '');
       setPickupStationId(trip.pickup_station_id || '');
       setDropoffStationId(trip.dropoff_station_id || '');
       setAvalibleSeats(trip.avalible_seats || '');
@@ -178,7 +179,7 @@ const EditTripsPage = ({ update, setUpdate }) => {
     let data = {
       trip_name: tripName,
       trip_type: tripType, // "hiace", "bus", "train"
-      bus_id: busId,
+      bus_id: busId || hiaceId,
       train_id: trainId,
       pickup_station_id: pickupStationId,
       dropoff_station_id: dropoffStationId,
