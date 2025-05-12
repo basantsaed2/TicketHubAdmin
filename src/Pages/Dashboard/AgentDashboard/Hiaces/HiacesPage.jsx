@@ -97,7 +97,7 @@ const HiacesPage = ({ update, setUpdate }) => {
     setCurrentPage(1);
   };
 
-  const headers = ['Type', "Image", 'Capacity', "Number", "Amenities", "Status", "Action"];
+  const headers = ["Image", 'Capacity', "Number", "Amenities", "Status", "Action"];
 
   return (
     <div className="w-full pb-5 flex items-start justify-start scrollSection">
@@ -167,11 +167,11 @@ const HiacesPage = ({ update, setUpdate }) => {
                       className={`border-b ${index % 2 === 0 ? "bg-white" : "bg-gray-100"} transition hover:bg-gray-100`}
                     >
                       <td className="text-center py-2 text-gray-600">{index + 1}</td>
-                      <td className="text-center py-2 text-gray-600">
+                      {/* <td className="text-center py-2 text-gray-600">
                         <span className="block max-w-[150px] truncate mx-auto cursor-pointer">
                           {bus?.bus_type?.name || "-"}
                         </span>
-                      </td>
+                      </td> */}
                       <td className="text-center py-2">
                         {bus?.image_link ? (
                           <img src={bus.image_link} alt="bus" className="mx-auto h-10" />

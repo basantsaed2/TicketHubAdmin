@@ -100,7 +100,7 @@ const CarsPage = ({ update, setUpdate }) => {
         setCurrentPage(1);
       };
         
-      const headers = ['Name',"Image",'Brand','Category',"Number","Color","Status","Action"];
+      const headers = ['Name',"Image",'Brand','Category',"Capacity","Number","Color","Status","Action"];
 
   return (
     <div className="w-full pb-5 flex items-start justify-start scrollSection">
@@ -145,13 +145,13 @@ const CarsPage = ({ update, setUpdate }) => {
               <table className="w-full min-w-[600px]">
                 <thead className="bg-gray-200 text-gray-700">
                   <tr className="border-t-2 border-b-2">
-                    <th className="w-[50px] text-mainColor bg-mainBgColor text-center font-medium sm:text-sm lg:text-base xl:text-lg p-2 border-b-2">
+                    <th className="w-[20px] text-mainColor bg-mainBgColor text-center font-medium sm:text-sm lg:text-base xl:text-lg p-2 border-b-2">
                       SL
                     </th>
                     {headers.map((name, index) => (
                       <th
                         key={index}
-                        className="min-w-[120px] text-mainColor bg-mainBgColor text-center font-medium sm:text-sm lg:text-base xl:text-lg py-3 border-b-2"
+                        className="min-w-[100px] text-mainColor bg-mainBgColor text-center font-medium sm:text-sm lg:text-base xl:text-lg py-3 border-b-2"
                       >
                         {name}
                       </th>
@@ -191,6 +191,7 @@ const CarsPage = ({ update, setUpdate }) => {
                       </td>
                       <td className="text-center py-2 text-gray-600">{car?.brand?.name || "-"}</td>
                       <td className="text-center py-2 text-gray-600">{car?.category?.name || "-"}</td>
+                      <td className="text-center py-2 text-gray-600">{car?.capacity || "-"}</td>
                       <td className="text-center py-2 text-gray-600">{car?.car_number || "-"}</td>
                       <td className="text-center py-2 text-gray-600">{car?.car_color || "-"}</td>
                       <td className="text-center py-2">

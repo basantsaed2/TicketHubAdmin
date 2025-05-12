@@ -44,7 +44,7 @@ const EditHiacesPage = ({ update, setUpdate }) => {
   useEffect(() => {
     if (HiaceData && HiaceData.hiace) {
       const hiace = HiaceData.hiace;
-      setSelectedHiaceType(hiace.bus_type_id || '');
+      // setSelectedHiaceType(hiace.bus_type_id || '');
       setHiaceNumber(hiace.bus_number || '');
       setHiaceCapacity(hiace.capacity || '');
       setStatus(hiace.status || 'active');
@@ -86,7 +86,7 @@ const EditHiacesPage = ({ update, setUpdate }) => {
 
     const data = {
         bus_image:imageFile,
-        bus_type_id: selectedHiaceType,
+        // bus_type_id: selectedHiaceType,
         aminities: selectedHiaceAminities,
         capacity: hiaceCapacity,
         bus_number: hiaceNumber,
@@ -96,7 +96,7 @@ const EditHiacesPage = ({ update, setUpdate }) => {
   };
 
   const handleReset = () => {
-    setSelectedHiaceType('');
+    // setSelectedHiaceType('');
     setSelectedHiaceAminities('');
     setHiaceNumber('');
     setHiaceCapacity('');
@@ -118,7 +118,7 @@ const EditHiacesPage = ({ update, setUpdate }) => {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {/* Type Select */}
-        <div className="w-full">
+        {/* <div className="w-full">
   <label className="block text-gray-700 mb-1">Type</label>
   <Select
     options={hiaceType.map((type) => ({
@@ -149,7 +149,7 @@ const EditHiacesPage = ({ update, setUpdate }) => {
       }),
     }}
   />
-      </div>
+      </div> */}
 
         {/* // 🔹 Amenities Multi-Select */}
         <div className="w-full">

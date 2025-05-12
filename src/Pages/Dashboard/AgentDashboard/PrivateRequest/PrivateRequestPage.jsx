@@ -99,7 +99,7 @@ const PrivateRequestPage = ({ update, setUpdate }) => {
         setCurrentPage(1);
       };
         
-      const headers = ["Date",'Category','Country','City','Address','Status','Action'];   
+      const headers = ["User Name","Phone","Email","Date",'Category','Country','City','Address','Status','Action'];   
 
   return (
     <div className="w-full pb-5 flex items-start justify-start scrollSection">
@@ -171,6 +171,9 @@ const PrivateRequestPage = ({ update, setUpdate }) => {
                       className={`border-b ${index % 2 === 0 ? "bg-white" : "bg-gray-100"} transition hover:bg-gray-100`}
                     >
                         <td className="text-center py-2 text-gray-600">{index + 1}</td>
+                        <td className="text-center py-2 text-gray-600">{request?.user.name || ''}</td>
+                        <td className="text-center py-2 text-gray-600">{request?.user.phone || ''}</td>
+                        <td className="text-center py-2 text-gray-600">{request?.user.email || ''}</td>
                         <td className="text-center py-2 text-gray-600">{request?.date || ''}</td>
                         <td className="text-center py-2 text-gray-600">{request?.category?.name || '-'}</td>
                         <td className="text-center py-2 text-gray-600">{request?.from_country?.name || ''} → {request?.to_country?.name || '-'}</td> 

@@ -353,14 +353,14 @@ const TripsPage = ({ update, setUpdate }) => {
                 {/* Section: Schedule */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex items-center gap-2">
-                    <FaPlaneArrival className="text-mainColor" />
-                    <span className="font-semibold text-gray-700">Arrival Time:</span>
-                    <span className="text-gray-600">{selectedTrip.arrival_time || "-"}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
                     <FaPlaneDeparture className="text-mainColor" />
                     <span className="font-semibold text-gray-700">Departure Time:</span>
                     <span className="text-gray-600">{selectedTrip.deputre_time || "-"}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <FaPlaneArrival className="text-mainColor" />
+                    <span className="font-semibold text-gray-700">Arrival Time:</span>
+                    <span className="text-gray-600">{selectedTrip.arrival_time || "-"}</span>
                   </div>
                 </div>
                 {/* Section: Origin & Destination */}
@@ -371,7 +371,7 @@ const TripsPage = ({ update, setUpdate }) => {
                       <span className="font-semibold text-gray-700">From:</span>
                     </div>
                     <div className="ml-6 text-gray-600">
-                      {selectedTrip.from_city}, {selectedTrip.from_country}
+                    {selectedTrip.from_country} , {selectedTrip.from_city}
                       <br />
                       <span className="text-sm">Zone: {selectedTrip.from_zone || "-"}</span>
                     </div>
@@ -382,7 +382,7 @@ const TripsPage = ({ update, setUpdate }) => {
                       <span className="font-semibold text-gray-700">To:</span>
                     </div>
                     <div className="ml-6 text-gray-600">
-                      {selectedTrip.to_city}, {selectedTrip.to_country}
+                    {selectedTrip.to_country} , {selectedTrip.to_city}
                       <br />
                       <span className="text-sm">Zone: {selectedTrip.to_zone || "-"}</span>
                     </div>
@@ -415,38 +415,36 @@ const TripsPage = ({ update, setUpdate }) => {
                   </div>
                 </div>
                 {/* Section: Pricing & Cancellation */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex items-center gap-2">
-                    <FaMoneyBillWave className="text-mainColor" />
-                    <span className="font-semibold text-gray-700">Price:</span>
-                    <span className="text-gray-600">
-                      {selectedTrip.price ? `${selectedTrip.price} ${selectedTrip.currency}` : "-"}
-                    </span>
-                  </div>
-                  <div className="flex flex-col">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="flex items-center gap-2">
                       <FaCalendarAlt className="text-mainColor" />
-                      <span className="font-semibold text-gray-700">Cancellation Date:</span>
+                      <span className="font-semibold text-gray-700">Cancellation Hours:</span>
+                      <div className="text-gray-600">{selectedTrip.cancelation_hours || "-"}</div>
                     </div>
-                    <div className="ml-6 text-gray-600">{selectedTrip.cancelation_date || "-"}</div>
                     <div className="flex items-center gap-2">
                       <FaMoneyBillWave className="text-mainColor" />
-                      <span className="font-semibold text-gray-700">Policy:</span>
+                      <span className="font-semibold text-gray-700">Cancelation Amount:</span>
                       <span className="text-gray-600">
-                        {selectedTrip.cancelation_pay_amount} ({selectedTrip.cancelation_pay_value})
+                        {selectedTrip.cancelation_pay_value}
                       </span>
                     </div>
                   </div>
-                </div>
                 {/* Section: Additional Info */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex items-center gap-2">
                     <span className="font-semibold text-gray-700">Trip Type:</span>
                     <span className="text-gray-600">{selectedTrip.trip_type || "-"}</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  {/* <div className="flex items-center gap-2">
                     <span className="font-semibold text-gray-700">Type:</span>
                     <span className="text-gray-600">{selectedTrip.type || "-"}</span>
+                  </div> */}
+                  <div className="flex items-center gap-2">
+                    <FaMoneyBillWave className="text-mainColor" />
+                    <span className="font-semibold text-gray-700">Price:</span>
+                    <span className="text-gray-600">
+                      {selectedTrip.price ? `${selectedTrip.price} ${selectedTrip.currency}` : "-"}
+                    </span>
                   </div>
                 </div>
               </div>
