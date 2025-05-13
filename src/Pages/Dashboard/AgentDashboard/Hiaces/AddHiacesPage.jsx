@@ -170,12 +170,12 @@ const AddHiacesPage = ({ update, setUpdate }) => {
 
           {/* Hiace Capacity Input */}
           <div>
-            <label className="block text-gray-700 mb-1">Hiace Capacity</label>
+            <label className="block text-gray-700 mb-1">Mini Van Capacity</label>
             <input
               type="number"
               value={hiaceCapacity}
               onChange={(e) => setHiaceCapacity(e.target.value)}
-              placeholder="Enter Hiace capacity"
+              placeholder="Enter Mini Van capacity"
               min="1"
               className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
             />
@@ -183,12 +183,12 @@ const AddHiacesPage = ({ update, setUpdate }) => {
 
           {/* Hiace Number Input */}
           <div>
-            <label className="block text-gray-700 mb-1">Hiace Number</label>
+            <label className="block text-gray-700 mb-1">Mini Van Number</label>
             <input
               type="text"
               value={hiaceNumber}
               onChange={(e) => setHiaceNumber(e.target.value)}
-              placeholder="Enter Hiace number"
+              placeholder="Enter Mini Van number"
               className="input input-bordered w-full rounded-lg focus:outline-none focus:ring-1 focus:ring-mainColor"
             />
           </div>
@@ -220,7 +220,7 @@ const AddHiacesPage = ({ update, setUpdate }) => {
           {/* Hidden file input */}
           <div className='w-full md:w-2/6 flex items-center gap-3'>
             <div className='w-full flex flex-col gap-2'>
-              <label className="text-gray-700 ">Upload Hiace Image</label>
+              <label className="text-gray-700 ">Upload Mini Van Image</label>
               <input
                 type="file"
                 ref={ImageRef}
