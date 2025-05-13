@@ -404,7 +404,7 @@ const AddTripsPage = ({ update, setUpdate }) => {
                   }))}
                   value={hiaceId ? { value: hiaceId, label: hiaces.find((h) => h.id === hiaceId)?.bus_type?.name } : null}
                   onChange={(option) => setHiaceId(option?.value || '')}
-                  placeholder="Select Hiace"
+                  placeholder="Select Mini Van"
                   isClearable
                   classNamePrefix="react-select"
                   styles={customStyles}

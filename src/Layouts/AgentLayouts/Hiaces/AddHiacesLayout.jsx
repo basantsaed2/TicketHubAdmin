@@ -16,7 +16,7 @@ const AddHiacesLayout = () => {
         >
         <MdArrowBackIosNew/>
     </button>
-    <TitlePage text={'Add Hiace'} />
+    <TitlePage text={'Add Mini Van'} />
     
     </div>
     <AddHiacesPage update={update} setUpdate={setUpdate} />

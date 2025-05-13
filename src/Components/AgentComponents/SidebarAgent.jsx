@@ -11,14 +11,14 @@ const SidebarAgent = ({ isSidebarCollapsed, onToggleSidebar, isSidebarVisible , 
     >
       {/* Sidebar Header */}
       <div className={`flex items-center justify-between ${isSidebarCollapsed ? "px-2" : "px-4"} py-2 border-b border-white`}>
-        <div className="flex items-center space-x-2">
-          {isSidebarVisible && (
+        <div className="flex w-full items-center space-x-2">
+          {/* {isSidebarVisible && (
             <span className="text-2xl font-semibold block lg:hidden">Ticket Hub</span>
           )}
           {!isSidebarCollapsed && (
             <span className="text-2xl font-semibold hidden lg:block ">Ticket Hub</span>
-          )}
-           <div className="w-16 h-14 rounded-full flex items-center justify-center">
+          )} */}
+           <div className="w-full h-16 rounded-full flex items-center justify-center">
               <img src={Logo} className='rounded-full object-cover w-full h-full' alt="Main Icon" />
             </div> 
         </div>

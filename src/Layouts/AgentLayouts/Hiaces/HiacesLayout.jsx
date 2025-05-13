@@ -9,7 +9,7 @@ const HiacesLayout = () => {
   return (
     <>
     <div className='flex justify-between items-center mb-2'>
-    <TitlePage text={'Hiace Table'} />
+    <TitlePage text={'Mini Van Table'} />
     <Link to='add'>
         <AddButton />
       </Link>

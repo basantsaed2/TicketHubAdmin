@@ -528,7 +528,7 @@ const saveActiveLinksState = useCallback(() => {
                 isActiveHiaces ? "text-mainColor" : "text-white"
               }`}
             >
-              Hiaces
+              Mini Vans
             </span>
           )}
         </div>

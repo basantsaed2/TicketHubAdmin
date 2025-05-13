@@ -157,7 +157,7 @@ const HiacesPage = ({ update, setUpdate }) => {
                 {currentRows.length === 0 ? (
                   <tr>
                     <td colSpan="8" className="text-center text-xl text-gray-500 py-4">
-                      No Hiaces Found
+                      No Mini Vans Found
                     </td>
                   </tr>
                 ) : (
