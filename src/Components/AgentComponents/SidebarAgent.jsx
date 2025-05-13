@@ -18,9 +18,9 @@ const SidebarAgent = ({ isSidebarCollapsed, onToggleSidebar, isSidebarVisible , 
           {!isSidebarCollapsed && (
             <span className="text-2xl font-semibold hidden lg:block ">Ticket Hub</span>
           )}
-          <div className="w-14 h-14 rounded-full flex items-center justify-center">
-            <img src={Logo} className='rounded-full w-full h-full' alt="Main Icon" />
-          </div>
+           <div className="w-16 h-14 rounded-full flex items-center justify-center">
+              <img src={Logo} className='rounded-full object-cover w-full h-full' alt="Main Icon" />
+            </div> 
         </div>
         {/* Close Sidebar Button */}
         <button className="lg:hidden text-white text-2xl" onClick={onToggleSidebar}>
