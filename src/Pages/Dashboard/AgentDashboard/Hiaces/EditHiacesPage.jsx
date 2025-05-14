@@ -79,11 +79,6 @@ const EditHiacesPage = ({ update, setUpdate }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!selectedHiaceType) {
-      auth.toastError('Please Select Type');
-      return;
-    }
-
     const data = {
         bus_image:imageFile,
         // bus_type_id: selectedHiaceType,
@@ -92,7 +87,7 @@ const EditHiacesPage = ({ update, setUpdate }) => {
         bus_number: hiaceNumber,
         status: status,
     };
-      postData(data, 'Hiace Added Success');
+      postData(data, 'Mini Van Added Success');
   };
 
   const handleReset = () => {
@@ -263,11 +258,11 @@ const EditHiacesPage = ({ update, setUpdate }) => {
               </div>
           {imageFile &&
             (typeof imageFile === "string" ? (
-              <img src={imageFile} alt="Hiace" className="mt-2 w-32 h-auto" />
+              <img src={imageFile} alt="Mini Van" className="mt-2 w-32 h-auto" />
             ) : (
               <img
                 src={URL.createObjectURL(imageFile)}
-                alt="Hiace"
+                alt="Mini Van"
                 className="mt-2 w-32 h-auto"
               />
             ))}

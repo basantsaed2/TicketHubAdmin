@@ -28,7 +28,7 @@ const EditTripsPage = ({ update, setUpdate }) => {
 
   // Hardcoded options for some selects/switches
   const tripTypes = [
-    { id: "hiace", name: "Hiace" },
+    { id: "hiace", name: "Mini Van" },
     { id: "bus", name: "Bus" },
     { id: "train", name: "Train" },
   ];
@@ -87,31 +87,113 @@ const EditTripsPage = ({ update, setUpdate }) => {
   // Overall trip status: using a switch (active/inactive)
   const [status, setStatus] = useState('active');
 
+  const [toCities, setToCities] = useState([]);
+  const [toZones, setToZones] = useState([]);
+  const [toStations, setToStations] = useState([]);
+
   useEffect(() => {
     refetchTripList();
     refetchTripData();
   }, [refetchTripList, update]);
 
   useEffect(() => {
-    if (tripList && tripList.countries && tripList.cities && tripList.stations && tripList.zones && tripList.buses && tripList.currency) {
-      console.log("tripList:", tripList);
-      setCountries(tripList.countries);
-      setCities(tripList.cities);
-      setStations(tripList.stations);
-      setZones(tripList.zones);
-      setBuses(tripList.buses);
-      setTrains(tripList.trains);
-      setCurrencies(tripList.currency);
-      setHiaces(tripList.hiaces)
+    if (tripList) {
+      console.log('tripList:', tripList);
+      setCountries(tripList.countries || []);
+      setCurrencies(tripList.currency || []);
+      setBuses(tripList.buses || []);
+      setTrains(tripList.trains || []);
+      setHiaces(tripList.hiaces || []);
+
+      // Filter "from" cities based on countryId
+      const filteredCities = countryId
+        ? (tripList.cities || []).filter(city => city.country_id === countryId)
+        : tripList.cities || [];
+      setCities(filteredCities);
+
+      // Filter "from" zones based on cityId
+      const filteredZones = cityId
+        ? (tripList.zones || []).filter(zone => zone.city_id === cityId)
+        : tripList.zones || [];
+      setZones(filteredZones);
+
+      // Filter "from" stations based on countryId, cityId, and zoneId
+      let filteredStations = tripList.stations || [];
+      if (countryId) {
+        filteredStations = filteredStations.filter(station => station.country_id === countryId);
+        if (cityId) {
+          filteredStations = filteredStations.filter(station => station.city_id === cityId);
+          if (zoneId) {
+            filteredStations = filteredStations.filter(station => station.zone_id === zoneId);
+          }
+        }
+      }
+      setStations(filteredStations);
+
+      // Filter "to" cities based on toCountryId
+      const filteredToCities = toCountryId
+        ? (tripList.cities || []).filter(city => city.country_id === toCountryId)
+        : tripList.cities || [];
+      setToCities(filteredToCities);
+
+      // Filter "to" zones based on toCityId
+      const filteredToZones = toCityId
+        ? (tripList.zones || []).filter(zone => zone.city_id === toCityId)
+        : tripList.zones || [];
+      setToZones(filteredToZones);
+
+      // Filter "to" stations based on toCountryId, toCityId, and toZoneId
+      let filteredToStations = tripList.stations || [];
+      if (toCountryId) {
+        filteredToStations = filteredToStations.filter(station => station.country_id === toCountryId);
+        if (toCityId) {
+          filteredToStations = filteredToStations.filter(station => station.city_id === toCityId);
+          if (toZoneId) {
+            filteredToStations = filteredToStations.filter(station => station.zone_id === toZoneId);
+          }
+        }
+      }
+      setToStations(filteredToStations);
     }
-  }, [tripList]);
+  }, [tripList, countryId, cityId, zoneId, toCountryId, toCityId, toZoneId]);
+
+  // Reset dependent fields
+  useEffect(() => {
+    setCityId('');
+    setZoneId('');
+    setPickupStationId('');
+  }, [countryId]);
+
+  useEffect(() => {
+    setZoneId('');
+    setPickupStationId('');
+  }, [cityId]);
+
+  useEffect(() => {
+    setPickupStationId('');
+  }, [zoneId]);
+
+  useEffect(() => {
+    setToCityId('');
+    setToZoneId('');
+    setDropoffStationId('');
+  }, [toCountryId]);
+
+  useEffect(() => {
+    setToZoneId('');
+    setDropoffStationId('');
+  }, [toCityId]);
+
+  useEffect(() => {
+    setDropoffStationId('');
+  }, [toZoneId]);
 
   useEffect(() => {
     // Populate form fields when TripData is available
     if (TripData?.trip) {
       const trip = TripData.trip;
       setTripName(trip.trip_name || '');
-      setTripType(trip.trip_type || 'hiace');
+      setTripType(trip.trip_type === "mini_van" ? 'hiace' : trip.trip_typ);
       setBusId(trip.bus_id || '');
       setTrainId(trip.train_id || '');
       setHiaceId(trip.bus_id || '');
@@ -287,7 +369,7 @@ const EditTripsPage = ({ update, setUpdate }) => {
         {/* Section: Trip Information */}
         <div className="border p-4 rounded-lg">
           <h2 className="text-xl font-bold text-gray-800 mb-4">Trip Information</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             <div>
               <label className="block text-gray-700 mb-1">Trip Name</label>
               <input
@@ -316,7 +398,7 @@ const EditTripsPage = ({ update, setUpdate }) => {
         {/* Section: Location Information */}
         <div className="border p-4 rounded-lg">
           <h2 className="text-xl font-bold text-gray-800 mb-4">Location Information</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
 
             <div>
               <label className="block text-gray-700 mb-1">Country (From)</label>
@@ -347,6 +429,7 @@ const EditTripsPage = ({ update, setUpdate }) => {
                 isClearable
                 classNamePrefix="react-select"
                 styles={customStyles}
+                isDisabled={!countryId} // Disable if no country selected
               />
             </div>
 
@@ -363,6 +446,7 @@ const EditTripsPage = ({ update, setUpdate }) => {
                 isClearable
                 classNamePrefix="react-select"
                 styles={customStyles}
+                isDisabled={!cityId} // Disable if no city selected
               />
             </div>
 
@@ -385,32 +469,34 @@ const EditTripsPage = ({ update, setUpdate }) => {
             <div>
               <label className="block text-gray-700 mb-1">To City</label>
               <Select
-                options={cities.map(city => ({
+                options={toCities.map(city => ({
                   value: city.id,
                   label: city.name
                 }))}
-                value={toCityId ? { value: toCityId, label: cities.find(c => c.id === toCityId)?.name } : null}
+                value={toCityId ? { value: toCityId, label: toCities.find(c => c.id === toCityId)?.name } : null}
                 onChange={option => setToCityId(option?.value || '')}
                 placeholder="Select To City"
                 isClearable
                 classNamePrefix="react-select"
                 styles={customStyles}
+                isDisabled={!toCountryId}
               />
             </div>
 
             <div>
               <label className="block text-gray-700 mb-1">To Zone</label>
               <Select
-                options={zones.map(zone => ({
+                options={toZones.map(zone => ({
                   value: zone.id,
                   label: zone.name
                 }))}
-                value={toZoneId ? { value: toZoneId, label: zones.find(z => z.id === toZoneId)?.name } : null}
+                value={toZoneId ? { value: toZoneId, label: toZones.find(z => z.id === toZoneId)?.name } : null}
                 onChange={option => setToZoneId(option?.value || '')}
                 placeholder="Select To Zone"
                 isClearable
                 classNamePrefix="react-select"
                 styles={customStyles}
+                isDisabled={!toCityId}
               />
             </div>
 
@@ -420,7 +506,7 @@ const EditTripsPage = ({ update, setUpdate }) => {
         {/* Section: Bus & Station Information */}
         <div className="border p-4 rounded-lg">
           <h2 className="text-xl font-bold text-gray-800 mb-4">PickUp & DropOff Information</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
 
             {tripType === "bus" && (
               <div>
@@ -460,13 +546,13 @@ const EditTripsPage = ({ update, setUpdate }) => {
 
             {tripType === "hiace" && (
               <div>
-                <label className="block text-gray-700 mb-1">Select Hiace</label>
+                <label className="block text-gray-700 mb-1">Select Mini Van</label>
                 <Select
                   options={hiaces.map((hiace) => ({
                     value: hiace.id,
-                    label: hiace.bus_type?.name,
+                    label: hiace.bus_number,
                   }))}
-                  value={hiaceId ? { value: hiaceId, label: hiaces.find((h) => h.id === hiaceId)?.bus_type?.name } : null}
+                  value={hiaceId ? { value: hiaceId, label: hiaces.find((h) => h.id === hiaceId)?.bus_number } : null}
                   onChange={(option) => setHiaceId(option?.value || '')}
                   placeholder="Select Mini Van"
                   isClearable
@@ -489,22 +575,24 @@ const EditTripsPage = ({ update, setUpdate }) => {
                 isClearable
                 classNamePrefix="react-select"
                 styles={customStyles}
+                isDisabled={!countryId} // Enable if any field is selected
               />
             </div>
 
             <div>
               <label className="block text-gray-700 mb-1">Dropoff Station</label>
               <Select
-                options={stations.map((station) => ({
+                options={toStations.map((station) => ({
                   value: station.id,
                   label: station.name,
                 }))}
-                value={dropoffStationId ? { value: dropoffStationId, label: stations.find((s) => s.id === dropoffStationId)?.name } : null}
+                value={dropoffStationId ? { value: dropoffStationId, label: toStations.find((s) => s.id === dropoffStationId)?.name } : null}
                 onChange={(option) => setDropoffStationId(option?.value || '')}
                 placeholder="Select Dropoff Station"
                 isClearable
                 classNamePrefix="react-select"
                 styles={customStyles}
+                isDisabled={!toCountryId}
               />
             </div>
 
@@ -522,7 +610,6 @@ const EditTripsPage = ({ update, setUpdate }) => {
 
           </div>
         </div>
-
 
         {/* Section: Schedule */}
         <div className="border p-4 rounded-lg">
@@ -695,7 +782,6 @@ const EditTripsPage = ({ update, setUpdate }) => {
             </>
           )}
         </div>
-
 
         {/* Section: Pricing & Cancellation */}
         <div className="border p-4 rounded-lg">

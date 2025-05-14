@@ -259,7 +259,7 @@ const saveActiveLinksState = useCallback(() => {
   useEffect(() => {
     const part = pathName.split("/");
     const result = part.slice(0, 3).join("/");
-    if (result == "/dashboard_operator/hiaces") {
+    if (result == "/dashboard_operator/mini_vans") {
       handleClickHices();
     }
   }, [location]);
@@ -477,6 +477,7 @@ const saveActiveLinksState = useCallback(() => {
       </Link>
 
       {/* Bus */}
+      {auth.user?.modules.some(module => module.module === 'bus') && (
       <Link
         to="buses"
         onMouseMove={() => setIsActiveBusesIcon(true)}
@@ -504,10 +505,12 @@ const saveActiveLinksState = useCallback(() => {
           )}
         </div>
       </Link>
+      )}
 
       {/* Hices */}
+      {auth.user?.modules.some(module => module.module === 'hiace') && (
       <Link
-        to="hiaces"
+        to="mini_vans"
         onMouseMove={() => setIsActiveHiacesIcon(true)}
         onMouseOut={() => setIsActiveHiacesIcon(false)}
         onClick={() => {
@@ -533,8 +536,10 @@ const saveActiveLinksState = useCallback(() => {
           )}
         </div>
       </Link>
+      )}
 
       {/* Car */}
+      {auth.user?.modules.some(module => module.module === 'private') && (
       <Link
         to="cars"
         onMouseMove={() => setIsActiveCarsIcon(true)}
@@ -562,8 +567,10 @@ const saveActiveLinksState = useCallback(() => {
           )}
         </div>
       </Link>
+      )}
 
       {/* Train */}
+      {auth.user?.modules.some(module => module.module === 'train') && (
       <Link
         to="trains"
         onMouseMove={() => setIsActiveTrainsIcon(true)}
@@ -591,6 +598,7 @@ const saveActiveLinksState = useCallback(() => {
           )}
         </div>
       </Link>
+      )}
 
       {/* Trips */}
       <Link
@@ -738,6 +746,7 @@ const saveActiveLinksState = useCallback(() => {
       </Link>
 
       {/* Private Request */}
+      {auth.user?.modules.some(module => module.module === 'private') && (
       <Link
         to="private_request"
         onMouseMove={() => setIsActivePrivateRequestIcon(true)}
@@ -765,6 +774,7 @@ const saveActiveLinksState = useCallback(() => {
           )}
         </div>
       </Link>
+      )}
 
       {/* Reports */}
       <Link
